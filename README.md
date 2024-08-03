@@ -28,6 +28,15 @@ Now it doesn't automatically load TMUX by default.
 
 In order to start TMUX automatically, just configure the launchers (desktop icons and keyboard shortcuts) to include an `exec` (`fork`) of the `tmux` command. The main requirement is that the process is replaced by `tmux` (instead of becoming a nested shell).
 
+Current configuration (GNOME custom shortcut using `CTRL+ALT+T`):
+
+```
+gnome-terminal -- bash -c "exec tmux"
+```
+
+Note that the `xfce4-terminal` has a weird focusing behavior after it's launched (the window doesn't get automatically focused, and I can't type) which makes it useless for me, so I decided to just use `gnome-terminal`, which works well.
+
+
 ## Input Remapper
 
 https://github.com/sezanzeb/input-remapper
