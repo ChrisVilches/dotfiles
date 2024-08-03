@@ -2,6 +2,13 @@
 
 ## Neovim
 
+Working Neovim version:
+
+```sh
+nvim -v
+NVIM v0.10.1
+```
+
 1. https://github.com/BurntSushi/ripgrep
 2. https://github.com/sharkdp/fd
 3. Install Nerd Font
