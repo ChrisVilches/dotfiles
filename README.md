@@ -36,6 +36,7 @@ Setup a custom shortcut using `CTRL+ALT+T` (e.g. in Gnome):
 | --- | --- | --- | --- |
 | Terminator | OK | OK | terminator -x tmux |
 | Gnome Terminal | - | OK | gnome-terminal -- bash -c "exec tmux" |
+| xfce4-terminal | OK | Bad | (Don't use) |
 
 ## Input Remapper
 
