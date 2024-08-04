@@ -34,9 +34,9 @@ Setup a custom shortcut using `CTRL+ALT+T` (e.g. in Gnome):
 
 | Terminal name | Transparency | Focusing | Launcher
 | --- | --- | --- | --- |
-| Terminator | OK | OK | terminator -x tmux |
-| Gnome Terminal | Bad | OK | gnome-terminal -- bash -c "exec tmux" |
-| xfce4-terminal | OK | Bad | (Don't use) |
+| Terminator | ✅ | ✅ | terminator -x tmux |
+| Gnome Terminal | ❌ | ✅ | gnome-terminal -- bash -c "exec tmux" |
+| xfce4-terminal | ✅ | ❌ | (Don't use) |
 
 ## Input Remapper
 
