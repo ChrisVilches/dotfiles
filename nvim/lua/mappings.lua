@@ -4,9 +4,20 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 
+-- Remove default insert mode movement mappings (nvchad).
+-- A way to navigate using hjkl as arrows should be configured in the keyboard
+-- globally, not just here in vim.
+-- (For example if holding ESC enters the keyboard movement layer, then I have
+-- both ESC and CTRL for the same thing, which makes it confusing so in that case just use ESC)
+vim.keymap.del("i", "<C-h>")
+vim.keymap.del("i", "<C-j>")
+vim.keymap.del("i", "<C-k>")
+vim.keymap.del("i", "<C-l>")
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
-map("i", "kj", "<ESC>")
+-- These are a bit meh so I removed them (I never use them)
+-- map("i", "jk", "<ESC>")
+-- map("i", "kj", "<ESC>")
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.
 map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })

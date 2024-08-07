@@ -38,15 +38,10 @@ Setup a custom shortcut using `CTRL+ALT+T` (e.g. in Gnome):
 | Gnome Terminal | ❌ | ✅ | gnome-terminal -- bash -c "exec tmux" |
 | xfce4-terminal | ✅ | ❌ | (Don't use) |
 
-## Input Remapper
+## Keyd
 
-https://github.com/sezanzeb/input-remapper
+Keyboard mapping.
 
-Setup the `systemctl` service. Use the files in the `input-remapper` folder as presets.
+Install `keyd`, then put the config file where it should go.
 
-As of now the location where the file should be is (example):
-
-```
-~/.config/input-remapper-2/presets/Logitech\ MX\ Keys/escape-and-arrows.json
-```
-
+Remember to enable the service.

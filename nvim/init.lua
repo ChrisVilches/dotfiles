@@ -40,7 +40,7 @@ end)
 
 vim.wo.relativenumber = true
 
-if require("util").current_dir_is_git_repo() then
+if require("utils").current_dir_is_git_repo() then
   vim.cmd "noautocmd NvimTreeToggle"
 
   require "notify" "Github repository. Opening tree"
