@@ -14,6 +14,8 @@ vim.keymap.del("i", "<C-j>")
 vim.keymap.del("i", "<C-k>")
 vim.keymap.del("i", "<C-l>")
 
+map("n", "<leader>e", require("utils").toggle_tree_code, { desc = "toggle tree/code" })
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
 -- These are a bit meh so I removed them (I never use them)
 -- map("i", "jk", "<ESC>")
