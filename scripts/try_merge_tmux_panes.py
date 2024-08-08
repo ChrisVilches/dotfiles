@@ -2,10 +2,10 @@
 import subprocess
 
 pane_ids_result = subprocess.run(
-    ["tmux", "list-panes", "-a", "-F", "#{pane_id}"], capture_output=True)
+    ["tmux", "list-panes", "-a", "-F", "#{pane_id}"], capture_output=True, encoding="utf-8")
 
 if pane_ids_result.returncode != 0:
-    raise f"Error: {pane_ids_result.stderr}"
+    raise RuntimeError(pane_ids_result.stderr)
 
 pane_ids = pane_ids_result.stdout.split()
 
