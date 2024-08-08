@@ -51,6 +51,7 @@ return {
         "html-lsp",
         "css-lsp",
         "prettier",
+        "autopep8",
         "rust",
       },
     },

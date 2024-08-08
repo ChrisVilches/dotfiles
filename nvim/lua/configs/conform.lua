@@ -4,6 +4,7 @@ local options = {
     json = { "jq" },
     lua = { "stylua" },
     cpp = { "clang-format" },
+    python = { "autopep8" },
     -- css = { "prettier" },
     -- html = { "prettier" },
   },
