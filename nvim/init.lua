@@ -39,9 +39,5 @@ vim.schedule(function()
 end)
 
 vim.wo.relativenumber = true
-
-if require("utils").current_dir_is_git_repo() then
-  vim.cmd "noautocmd NvimTreeToggle"
-
-  require "notify" "Github repository. Opening tree"
-end
+vim.wo.wrap = false
+vim.opt.scrolloff = 8

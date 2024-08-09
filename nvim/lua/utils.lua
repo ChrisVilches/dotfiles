@@ -5,16 +5,21 @@ return {
     return #res > 0
   end,
 
-  -- TODO: Beta, but so far it works.
-  -- Maybe there are some corner cases where the tree accesses some other window like a popup, and then
-  -- executing this would toggle the popup, ... I don't know.
+  restore_nvim_tree = function()
+    local nvim_tree_api = require "nvim-tree.api"
+    nvim_tree_api.tree.open()
+    nvim_tree_api.tree.change_root(vim.fn.getcwd())
+    nvim_tree_api.tree.reload()
+  end,
+
+  -- TODO: Keep testing.
   toggle_tree_code = function()
-    local curr_id = vim.api.nvim_get_current_win()
+    local curr_winid = vim.api.nvim_get_current_win()
     local tree = require("nvim-tree.api").tree
 
-    if curr_id == tree.winid() then
-      local prev_winid = vim.fn.win_getid(vim.fn.winnr "#")
-      vim.api.nvim_set_current_win(prev_winid)
+    if curr_winid == tree.winid() then
+      -- NOTE: Only works if the code is to the right.
+      vim.api.nvim_command "wincmd l"
     else
       tree.focus()
     end

@@ -1,10 +1,9 @@
--- EXAMPLE
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls" }
+local servers = { "html", "cssls", "pyright", "rust_analyzer" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -14,16 +13,6 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
-
-require("lspconfig").rust_analyzer.setup {
-  settings = {
-    ["rust-analyzer"] = {
-      diagnostics = {
-        enable = false,
-      },
-    },
-  },
-}
 
 lspconfig.clangd.setup {
   -- on_attach = function(client, bufnr)

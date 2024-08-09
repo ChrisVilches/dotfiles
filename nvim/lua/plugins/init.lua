@@ -7,10 +7,11 @@ return {
     "mg979/vim-visual-multi",
     event = "VeryLazy",
   },
-  {
-    "slim-template/vim-slim",
-    ft = "slim",
-  },
+  -- TODO: This should be a Mason formatter or something like that.
+  -- {
+  --   "slim-template/vim-slim",
+  --   ft = "slim",
+  -- },
   {
     "stevearc/conform.nvim",
     event = "BufWritePre",
@@ -42,6 +43,8 @@ return {
     end,
   },
   {
+    -- TODO: It's a bit hard to see what is being required by which plugin, and
+    --       to which category they belong (LSP, linter, formatter), so make sure to understand all that.
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
@@ -52,11 +55,15 @@ return {
         "css-lsp",
         "prettier",
         "autopep8",
+        "pyright",
         "rust",
       },
     },
   },
   -- Not sure what this does
+  -- TODO: Does this even work? I don't have Python enabled, but it still
+  -- highlights it. Maybe it does things other than highlighting as well??
+  -- TODO: And another question... does this use Mason internally?
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -68,7 +75,42 @@ return {
         "javascript",
         "html",
         "css",
+        "json",
       },
     },
   },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    event = "VeryLazy",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require "configs.harpoon"
+    end,
+  },
+  {
+    "antosha417/nvim-lsp-file-operations",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-tree.lua",
+    },
+    event = "VeryLazy",
+    config = function()
+      require("lsp-file-operations").setup()
+    end,
+  },
+  {
+    "rmagatti/auto-session",
+    lazy = false,
+    dependencies = {
+      "nvim-telescope/telescope.nvim", -- Only needed if you want to use sesssion lens
+    },
+    config = function()
+      require "configs.auto-session"
+    end,
+  },
+  -- TODO: Try in the future:
+  -- https://github.com/folke/trouble.nvim
+  -- https://github.com/mbbill/undotree
+  -- https://github.com/tpope/vim-fugitive
 }
