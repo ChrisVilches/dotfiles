@@ -60,7 +60,7 @@ map("n", "<leader>RX", "#``cgN", { desc = "replace under cursor (backwards)" })
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 -- TODO: Practice this one. This one pastes without adding the replaced text to the register.
-map("x", "<leader>p", '"_dP')
+map("x", "<leader>p", '"_dP', { desc = "paste and keep content" })
 
 -- TODO: See from 27:15 (the yanking keybindings), and copy some.
 -- https://www.youtube.com/watch?v=w7i4amO_zaE

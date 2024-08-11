@@ -100,6 +100,8 @@ return {
     end,
   },
   {
+    -- TODO: Restoring the session doesn't open automatically the LSP plugin.
+    --       Setup the event more correctly.
     "rmagatti/auto-session",
     lazy = false,
     dependencies = {
