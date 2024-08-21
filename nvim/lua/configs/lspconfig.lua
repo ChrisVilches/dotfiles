@@ -3,7 +3,15 @@ local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls", "pyright", "rust_analyzer" }
+local servers = {
+  "html",
+  "cssls",
+  "pyright",
+  "rust_analyzer",
+  "gopls",
+  "tsserver",
+  "clangd",
+}
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -13,19 +21,3 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
-
-lspconfig.clangd.setup {
-  -- on_attach = function(client, bufnr)
-  --   client.server_capabilities.signatureHelpProvider = false
-  --   on_attach(client, bufnr)
-  -- end,
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
-
--- typescript
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-}

@@ -15,22 +15,21 @@ vim.keymap.del("n", "<leader>v") -- Remove terminal launcher (nvchad)
 
 map("n", "<leader>e", require("utils").toggle_tree_code, { desc = "toggle tree/code" })
 
-map("n", ";", ":", { desc = "CMD enter command mode" })
+map({ "n", "x" }, ";", ":", { desc = "CMD enter command mode" })
 -- These are a bit meh so I removed them (I never use them)
--- map("i", "jk", "<ESC>")
--- map("i", "kj", "<ESC>")
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.
 map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })
 
 -- Find and replace
-map("n", "<leader>frl", ":s//g<Left><Left>", { desc = "find and replace (line)" })
-map("n", "<leader>frg", ":%s//g<Left><Left>", { desc = "find and replace (global)" })
+map("n", "<leader>frl", ":s///g<Left><Left><Left>", { desc = "find and replace (line)" })
+map("n", "<leader>frg", ":%s///g<Left><Left><Left>", { desc = "find and replace (global)" })
 
 -- TODO: Shortcut for copying the file relative path.
 
 -- Move tabs (a bit trash, because the entire sequence has to be pressed to do
 -- multiple tab moves)
+-- TODO: The new shit is to stop using tabs. I have some plugins to check that may work better than tabs.
 map("n", "<leader><tab>", function()
   require("nvchad.tabufline").move_buf(1)
 end, { desc = "move tab ▶" })
@@ -44,22 +43,11 @@ end, { desc = "move tab ◀" })
 map("n", "<leader>rx", "*``cgn", { desc = "replace under cursor" })
 map("n", "<leader>RX", "#``cgN", { desc = "replace under cursor (backwards)" })
 
--- Word deletions (The CTRL-Backspace has to be C-H, but this conflicts
--- with the movement in insert mode). I'd prefer to not add these for now.
--- map("i", "<C-Del>", "<C-o>de", { silent = true, desc = "delete from cursor to ending word" })
--- map("i", "<C-Backspace>", "<C-w>")
--- map("n", "<C-Del>", "de", { silent = true, desc = "delete from cursor to ending word" })
--- map("n", "<C-Backspace>", "db")
-
--- TODO: Add these?
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
--- map("i", "<C-BS>", "<C-w>", { silent = true, desc = "delete from cursor to ending word" })
-
--- TODO: Should these be "v"? or "x"???
 -- Move selected text.
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
--- TODO: Practice this one. This one pastes without adding the replaced text to the register.
+-- TODO: I think this one doesn't work, because the sequence conflicts with a longer one.
+-- I think that won't work sometimes if some plugins haven't been lazy-initialized.
 map("x", "<leader>p", '"_dP', { desc = "paste and keep content" })
 
 -- TODO: See from 27:15 (the yanking keybindings), and copy some.

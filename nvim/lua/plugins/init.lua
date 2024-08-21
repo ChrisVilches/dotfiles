@@ -1,3 +1,10 @@
+-- TODO: Move all plugins to an individual file like how I did with treesitter,
+-- but do this after I commit some previous changes. I want to know what is a config change
+-- and what is simply a file move.
+-- Then also restructure the folders to remove unused or redundant nesting, etc.
+-- TODO: Telescope, sort files by most accessed????
+-- check this out: https://www.youtube.com/watch?v=Qr-vX51gB8g
+-- (video title: Sort files in telescope by showing the most accessed files first)
 return {
   {
     "tpope/vim-surround",
@@ -29,6 +36,10 @@ return {
     end,
   },
   {
+    -- TODO: ruby activates linting but the notifying thingy starts appearing
+    -- on tabs for any other language as well. It should only work for the specified
+    -- formats, not for other formats. How to reproduce: There's a difference before and
+    -- after opening a Ruby buffer.
     "mfussenegger/nvim-lint",
     ft = { "ruby" },
     config = function()
@@ -53,40 +64,13 @@ return {
         "stylua",
         "html-lsp",
         "css-lsp",
+        "gopls",
         "prettier",
         "autopep8",
         "pyright",
         "rust",
       },
     },
-  },
-  -- Not sure what this does
-  -- TODO: Does this even work? I don't have Python enabled, but it still
-  -- highlights it. Maybe it does things other than highlighting as well??
-  -- TODO: And another question... does this use Mason internally?
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "vim",
-        "lua",
-        "vimdoc",
-        "cpp",
-        "javascript",
-        "html",
-        "css",
-        "json",
-      },
-    },
-  },
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    event = "VeryLazy",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require "configs.harpoon"
-    end,
   },
   {
     "antosha417/nvim-lsp-file-operations",
@@ -99,20 +83,12 @@ return {
       require("lsp-file-operations").setup()
     end,
   },
-  {
-    -- TODO: Restoring the session doesn't open automatically the LSP plugin.
-    --       Setup the event more correctly.
-    "rmagatti/auto-session",
-    lazy = false,
-    dependencies = {
-      "nvim-telescope/telescope.nvim", -- Only needed if you want to use sesssion lens
-    },
-    config = function()
-      require "configs.auto-session"
-    end,
-  },
+
   -- TODO: Try in the future:
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
   -- https://github.com/tpope/vim-fugitive
+  -- https://github.com/folke/noice.nvim
+  -- This one is for stopping using tabs
+  -- https://github.com/j-morano/buffer_manager.nvim
 }
