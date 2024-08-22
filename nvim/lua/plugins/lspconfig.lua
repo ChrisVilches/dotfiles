@@ -14,6 +14,7 @@ local servers = {
 
 return {
   "neovim/nvim-lspconfig",
+  event = "BufEnter",
   config = function()
     local lspconfig = require "lspconfig"
 

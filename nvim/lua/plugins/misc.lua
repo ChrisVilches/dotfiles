@@ -3,12 +3,22 @@
 -- (video title: Sort files in telescope by showing the most accessed files first)
 return {
   {
+    "lewis6991/gitsigns.nvim",
+    event = "BufEnter",
+  },
+  {
     "tpope/vim-surround",
-    event = "VeryLazy",
+    event = "BufEnter",
   },
   {
     "mg979/vim-visual-multi",
-    event = "VeryLazy",
+    event = "BufEnter",
+  },
+  {
+    -- TODO: Nice, but keep in mind tab order and the order in this plugin may be different, which makes it
+    --       a bit confusing sometimes. If I get used to it, remove this TODO comment.
+    "j-morano/buffer_manager.nvim",
+    event = "BufEnter",
   },
   {
     "rcarriga/nvim-notify",
@@ -21,10 +31,9 @@ return {
   },
 
   -- TODO: Try in the future:
+  -- Friendly snippets (currently I only use it for Lua because it's the default, but
+  -- do it for other languages as well)
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
-  -- https://github.com/tpope/vim-fugitive
   -- https://github.com/folke/noice.nvim
-  -- This one is for stopping using tabs
-  -- https://github.com/j-morano/buffer_manager.nvim
 }
