@@ -12,6 +12,7 @@ return {
     nvim_tree_api.tree.reload()
   end,
 
+  -- TODO: Deprecated, I guess.
   toggle_tree_code = function()
     local curr_winid = vim.api.nvim_get_current_win()
     local tree = require("nvim-tree.api").tree

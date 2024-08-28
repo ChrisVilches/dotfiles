@@ -12,8 +12,11 @@ vim.keymap.del("i", "<C-j>")
 vim.keymap.del("i", "<C-k>")
 vim.keymap.del("i", "<C-l>")
 vim.keymap.del("n", "<leader>v") -- Remove terminal launcher (nvchad)
-
-map("n", "<leader>e", require("utils").toggle_tree_code, { desc = "toggle tree/code" })
+vim.keymap.del("n", "<leader>e") -- Remove file explorer binding (nvchad)
+-- Get used to using ctrl+w plus arrows for window navigation. TODO: Remove this comment.
+-- the reason is that sometimes there are more windows visible, such as popups, debugger panels,
+-- and stuff. and those windows can only be accessed with the arrows, not with a toggle thingy.
+-- map("n", "<leader>e", require("utils").toggle_tree_code, { desc = "toggle tree/code" })
 
 map({ "n", "x" }, ";", ":", { desc = "CMD enter command mode" })
 
@@ -48,3 +51,7 @@ map("x", "(", '""s(<C-r>")<Esc>')
 -- All the extra stuff is for removing the empty line that sometimes arises.
 local remove_empty_line = [[:if getline('.') == '' | execute 'normal! "_ddk' | endif]]
 map("x", "{", '""s{\n<C-r>"\n}<Esc>va{V=%k' .. remove_empty_line .. "<CR>", { silent = true })
+
+-- Debugging stuff
+map("n", "<leader>db", require("dap").toggle_breakpoint, { desc = "toggle breakpoint" })
+map("n", "<leader>dc", require("dap").continue, { desc = "continue" })
