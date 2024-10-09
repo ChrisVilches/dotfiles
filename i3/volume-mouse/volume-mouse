@@ -1,0 +1,69 @@
+#!/bin/sh
+
+get_volume() {
+    pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '[0-9]{1,3}(?=%)' | head -1
+}
+
+get_mute_status() {
+    pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}'
+}
+
+display_volume() {
+    volume=$(get_volume)
+    mute_status=$(get_mute_status)
+
+    # TODO: Maybe change mute icon. Make it similar to the speaker one.
+    if [ "$mute_status" = "yes" ]; then
+        echo -e "<span color=\"#ff0000\">🔇 Muted</span>"
+    else
+        if [ "$volume" -gt 100 ]; then
+            color="#FF0000"
+            icon="\uF028"
+        elif [ "$volume" -gt 50 ]; then
+            color="#FFFFFF"
+            icon="\uF028"
+        elif [ "$volume" -gt 20 ]; then
+            color="#DDDDDD"
+            icon="\UF027"
+        else
+            color="#999999"
+            icon="\UF026"
+        fi
+
+        echo -e "<span color=\"$color\">${icon}  ${volume}%</span>"
+    fi
+}
+
+vol_up() {
+  pactl set-sink-volume @DEFAULT_SINK@ +5%
+}
+
+vol_down() {
+  pactl set-sink-volume @DEFAULT_SINK@ -5%
+}
+
+handle_volume_change() {
+    case $1 in
+        1) vol_down ;;
+        2) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
+        3) vol_up ;;
+        4) vol_up ;;
+        5) vol_down ;;
+    esac
+}
+
+read_mouse_events() {
+  while IFS= read -r line; do
+    handle_volume_change $line
+  done
+}
+
+subscribe() {
+  pactl subscribe | grep --line-buffered "sink" | while read -r LINE; do
+    display_volume
+  done
+}
+
+display_volume
+subscribe &
+read_mouse_events
