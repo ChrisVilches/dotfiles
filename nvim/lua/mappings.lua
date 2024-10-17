@@ -1,24 +1,23 @@
-require "nvchad.mappings"
+require "chad_mappings"
+-- TODO: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
+-- This page has a lot of builtin Telescope finders.
+-- But it's worth trying the other ones and see if I find a gem (I'm not talking about Ruby btw).
+
+-- One in particular that I find interesting is probably this one: builtin.grep_string
+-- TODO: This superuser exchange answer has some nice mappings for navigation while in insertion mode,
+-- it has some that I already do, such as CTRL+a, CTRL+e, etc
+-- https://superuser.com/questions/706674/moving-to-the-beginning-of-line-within-vim-insert-mode#:~:text=Ctrl%20%2B%20a%20%3A%20Go%20to%20beginning,Normal%20Mode%20%26%26%20Insert%20Mode%5D
+-- Maybe try to add some?
 
 local map = vim.keymap.set
 
--- Remove default insert mode movement mappings (nvchad).
--- A way to navigate using hjkl as arrows should be configured in the keyboard
--- globally, not just here in vim.
--- (For example if holding ESC enters the keyboard movement layer, then I have
--- both ESC and CTRL for the same thing, which makes it confusing so in that case just use ESC)
-vim.keymap.del("i", "<C-h>")
-vim.keymap.del("i", "<C-j>")
-vim.keymap.del("i", "<C-k>")
-vim.keymap.del("i", "<C-l>")
-vim.keymap.del("n", "<leader>v") -- Remove terminal launcher (nvchad)
-vim.keymap.del("n", "<leader>e") -- Remove file explorer binding (nvchad)
--- Get used to using ctrl+w plus arrows for window navigation. TODO: Remove this comment.
--- the reason is that sometimes there are more windows visible, such as popups, debugger panels,
--- and stuff. and those windows can only be accessed with the arrows, not with a toggle thingy.
--- map("n", "<leader>e", require("utils").toggle_tree_code, { desc = "toggle tree/code" })
+map("n", "<leader>tx", "<cmd> BufferLineCloseOthers <CR>", { desc = "close all tabs except current and unsaved" })
 
-map({ "n", "x" }, ";", ":", { desc = "CMD enter command mode" })
+-- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
+-- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
+-- get used to doing that motion both in Neovim and the terminal.
+map("i", "<C-e>", "<End>", { desc = "move end of line" })
+map("i", "<C-a>", "<ESC>I", { desc = "move beginning of line" })
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.
 map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })
@@ -26,9 +25,12 @@ map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })
 -- Find and replace
 map("n", "<leader>frl", ":s///g<Left><Left><Left>", { desc = "find and replace (line)" })
 map("n", "<leader>frg", ":%s///g<Left><Left><Left>", { desc = "find and replace (global)" })
+map("n", "<leader>ff", "<cmd> Telescope frecency workspace=CWD <CR>", { desc = "find files (frecency)" })
 
 map("n", "<leader><tab>", function()
-  require("buffer_manager.ui").toggle_quick_menu()
+  require("telescope.builtin").buffers {
+    initial_mode = "normal",
+  }
 end)
 
 -- Replace word under cursor, then continue replacing instances
@@ -39,13 +41,8 @@ map("n", "<leader>RX", "#``cgN", { desc = "replace under cursor (backwards)" })
 -- Move selected text.
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
--- TODO: Sometimes it removes a space before the pasted word.
 map("x", "<leader>pp", '"_dP', { desc = "paste and keep content" })
 
--- TODO: See from 27:15 (the yanking keybindings), and copy some.
--- https://www.youtube.com/watch?v=w7i4amO_zaE
-
--- Dope as hell. Now testing. TODO: Keep testing, remove comment in the future.
 -- Can then be removed using "tpope/vim-surround"
 map("x", "(", '""s(<C-r>")<Esc>')
 -- All the extra stuff is for removing the empty line that sometimes arises.

@@ -1,10 +1,30 @@
--- TODO: Telescope, sort files by most accessed????
--- check this out: https://www.youtube.com/watch?v=Qr-vX51gB8g
--- (video title: Sort files in telescope by showing the most accessed files first)
 return {
   {
-    "lewis6991/gitsigns.nvim",
-    event = "BufEnter",
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    opts = {
+      term_colors = true,
+      transparent_background = true,
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme "catppuccin"
+    end,
+  },
+  -- TODO: This looks useful, but doesn't work. The usage with lualine requires more steps.
+  -- {
+  --   'linrongbin16/lsp-progress.nvim',
+  --   lazy = false,
+  --   config = function()
+  --     require('lsp-progress').setup()
+  --   end
+  -- },
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    config = true,
   },
   {
     "tpope/vim-surround",
@@ -12,12 +32,6 @@ return {
   },
   {
     "mg979/vim-visual-multi",
-    event = "BufEnter",
-  },
-  {
-    -- TODO: Nice, but keep in mind tab order and the order in this plugin may be different, which makes it
-    --       a bit confusing sometimes. If I get used to it, remove this TODO comment.
-    "j-morano/buffer_manager.nvim",
     event = "BufEnter",
   },
   {
@@ -36,4 +50,5 @@ return {
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
   -- https://github.com/folke/noice.nvim
+  -- https://github.com/gbprod/substitute.nvim
 }

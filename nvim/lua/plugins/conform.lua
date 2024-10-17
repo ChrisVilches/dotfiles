@@ -9,6 +9,7 @@ return {
         lua = { "stylua" },
         cpp = { "clang-format" },
         python = { "autopep8" },
+        -- php = { "php-cs-fixer" },
         -- css = { "prettier" },
         -- html = { "prettier" },
       },
@@ -16,6 +17,7 @@ return {
       format_on_save = {
         -- These options will be passed to conform.format()
         timeout_ms = 500,
+        async = false,
         lsp_fallback = true,
       },
     }

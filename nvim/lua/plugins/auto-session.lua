@@ -3,6 +3,7 @@ local utils = require "utils"
 return {
   -- TODO: Restoring the session doesn't open automatically the LSP plugin.
   --       Setup the event more correctly.
+  --       This one is probably fixed since I revamped the LSP.
   "rmagatti/auto-session",
   lazy = false,
   dependencies = {

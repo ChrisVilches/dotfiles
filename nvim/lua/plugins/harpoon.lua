@@ -41,6 +41,7 @@ return {
     end, { desc = "Harpoon Open telescope" })
 
     -- The non-telescope one allows deletions (use 'dd' and save buffer).
+    -- (Note: There's a trick to delete buffers using Telescope, but it requires a bunch of custom code)
     vim.keymap.set("n", "<leader>H", function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
     end, { desc = "Harpoon Open vanilla window" })

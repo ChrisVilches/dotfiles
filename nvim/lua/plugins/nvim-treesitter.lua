@@ -3,7 +3,6 @@ return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
   event = { "BufReadPre", "BufNewFile" },
-  -- TODO: Maybe put these opts inside the config file
   config = function()
     require("nvim-treesitter.configs").setup {
       highlight = {
