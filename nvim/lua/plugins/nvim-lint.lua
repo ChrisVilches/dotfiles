@@ -5,10 +5,11 @@ return {
   -- after opening a Ruby buffer.
   "mfussenegger/nvim-lint",
   event = { "BufReadPre", "BufNewFile" },
-  ft = { "ruby" },
+  -- ft = { "ruby", "go" },
   config = function()
     require("lint").linters_by_ft = {
       ruby = { "rubocop" },
+      go = { "revive" },
     }
 
     -- TODO: This configuration isn't very good. Watch some tutorials or something.

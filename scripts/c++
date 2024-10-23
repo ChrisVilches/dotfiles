@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# A bash utility for quickly running a simple C++ file using:
+# c++ my_file.cpp
+#
+# Features:
+# * stderr output becomes red (use std::cerr or fprintf(stderr, ...) to debug).
+# * Caches the compiled file based on the code content (if the file doesn't change,
+#   it will run the same pre-compiled binary).
+#
+# Instructions:
+# Save as ~/bin/c++ (add to path)
+# Speed up compile time when using #include <bits/stdc++.h>
+# https://codeforces.com/blog/entry/53909 (precompile the header using the same flags as below),
+# note that the compilation can be done in the same folder as the original header (no need to create a copy).
+
+BIN_TEMP="/tmp/c++-bin-tmp"
+COMPILE_FLAGS="-pedantic -O2 -Wall  -Wextra -std=c++17"
+BIN_PREFIX="c++_"
+
+color-stderr()(set -o pipefail;"$@" 2>&1>&3|sed $'s,.*,\e[31m&\e[m,'>&2)3>&1
+
+# Clean temp folder if there are too many files
+clean_temp_dir() {
+  BIN_TEMP_LIMIT_FILES=30
+  FILES_IN_BIN_TEMP=$(ls $BIN_TEMP 2>/dev/null | wc -l)
+
+  if [[ $FILES_IN_BIN_TEMP -ge $BIN_TEMP_LIMIT_FILES ]]; then
+    rm $BIN_TEMP/*
+  fi
+}
+
+if [ -z "$1" ]
+then
+  echo "File path missing" >&2
+  exit 1
+fi
+
+clean_temp_dir
+
+HASH=$(sha1sum $1 | cut -d ' ' -f 1)
+
+OUT_FILE="$BIN_TEMP/$BIN_PREFIX$HASH"
+
+if [ ! -f $OUT_FILE ]
+then
+  mkdir -p $BIN_TEMP
+  g++ $1 $COMPILE_FLAGS -o $OUT_FILE
+fi
+
+if [ $? -eq 0 ]; then
+  # time color-stderr $OUT_FILE
+  color-stderr $OUT_FILE
+fi
+

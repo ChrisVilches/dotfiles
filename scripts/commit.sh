@@ -6,7 +6,12 @@ BRANCH=$(git branch --show-current)
 
 if [ -n "$BRANCH" ]; then
   git status
-  tmux send-keys "git commit -m \"[$BRANCH] \"" Left
+
+  if [ "$BRANCH" == "main" ]; then
+    tmux send-keys "git commit -m \"\"" Left
+  else
+    tmux send-keys "git commit -m \"[$BRANCH] \"" Left
+  fi
 else
   return 1
 fi

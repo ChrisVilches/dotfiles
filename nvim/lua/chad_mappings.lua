@@ -33,6 +33,8 @@ map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" }
 
 -- telescope
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
+-- TODO: Isn't this the same one as the <leader><tab> I had already configured?
+-- Remove this one????
 map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
 map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })

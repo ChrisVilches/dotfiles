@@ -2,6 +2,10 @@
 -- each other, and it seems it's a stackoverflow error (due to infinite recursion).
 -- I fixed it by moving some parts to other files.
 
+-- TODO: I have an idea... Maybe add the ensure_installed for each category (LSP, linters, formatters, etc)
+-- in the plugin file they belong to. So that means the Mason plugin would just contain the "config = true"
+-- and nothing else. The things to download would be located in the LSP plugin file, linter plugin file,
+-- and formatter plugin file.
 return {
   -- TODO: It's a bit hard to see what is being required by which plugin, and
   --       to which category they belong (LSP, linter, formatter), so make sure to understand all that.
@@ -19,14 +23,15 @@ return {
     require("mason-tool-installer").setup {
       ensure_installed = {
         "autopep8",
-        "css-lsp",
         "clangd",
+        "css-lsp",
+        "eslint",
         "gopls",
-        "lua-language-server",
-        "pyright",
         "html-lsp",
+        "lua-language-server",
         "php-cs-fixer",
         "prettier",
+        "pyright",
         "rust-analyzer",
         "stylua",
       },
