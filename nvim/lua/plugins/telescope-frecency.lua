@@ -9,10 +9,10 @@ return {
     require("telescope").setup {
       extensions = {
         frecency = {
-          -- TODO: Adding this line removed the default prompt "A" but after the first time, it stopped appearing,
-          -- so I don't need it anymore, it seems. Add it again if the default prompt problem arises again.
+          -- This flag solves the following issue:
           -- https://github.com/nvim-telescope/telescope-frecency.nvim/issues/270
-          -- db_safe_mode = false,
+          -- Also documented here: (Search help) telescope-frecency-faq
+          db_safe_mode = false,
           show_scores = true,
           show_unindexed = true,
         },

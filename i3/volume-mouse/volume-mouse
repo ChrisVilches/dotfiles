@@ -8,16 +8,28 @@ get_mute_status() {
     pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}'
 }
 
+pad_zeros() {
+  if [ "$1" -ge 100 ]; then
+    echo $1
+  elif [ "$1" -ge 10 ]; then
+    echo " $1"
+  else
+    echo "  $1"
+  fi
+}
+
 display_volume() {
-    volume=$(get_volume)
+    volume=$(pad_zeros $(get_volume))
     mute_status=$(get_mute_status)
 
-    # TODO: Maybe change mute icon. Make it similar to the speaker one.
     if [ "$mute_status" = "yes" ]; then
-        echo -e "<span color=\"#ff0000\">🔇 Muted</span>"
+        echo -e "<span color=\"#ff0000\">\uf026 $volume% (Muted)</span>"
     else
-        if [ "$volume" -gt 100 ]; then
+        if [ "$volume" -gt 130 ]; then
             color="#FF0000"
+            icon="\uF028"
+        elif [ "$volume" -gt 100 ]; then
+            color="#FFA500"
             icon="\uF028"
         elif [ "$volume" -gt 50 ]; then
             color="#FFFFFF"
