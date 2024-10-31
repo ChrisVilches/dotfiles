@@ -23,8 +23,8 @@ map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic locli
 
 -- Tabs
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
-map("n", "<tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "buffer goto next" })
-map("n", "<S-tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "buffer goto prev" })
+-- map("n", "<tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "buffer goto next" })
+-- map("n", "<S-tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "buffer goto prev" })
 -- TODO: This one is a bit trash... it removes the buffer, and then goes to the first one to the right.
 -- It should move to a tab that's adjacent to the deleted one.
 map("n", "<leader>x", "<cmd>bd<CR><cmd>bn<CR>", { desc = "buffer close" })
