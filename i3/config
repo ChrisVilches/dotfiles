@@ -37,7 +37,8 @@ exec --no-startup-id dex --autostart --environment i3
 
 set $lock_color '110100'
 
-# TODO: I think this setup locks screen twice if I lock it manually, and then the timer goes off (which locks + suspends). Low priority.
+# Bug (just get used to it):
+# This setup locks screen twice if I lock it first manually, and then it suspends automatically.
 # Remove X screensaver to avoid confusion.
 exec --no-startup-id xset s off
 
@@ -109,11 +110,6 @@ bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
-
-# Experiment to have bindings similar to tmux/chrome (by moving to the prev/next tab)
-# TODO: Never used these, remove if I'm sure they aren't necessary at all.
-# bindsym $mod+Control+Prior workspace prev
-# bindsym $mod+Control+Next workspace next
 
 # switch to workspace
 bindsym $mod+1 workspace number 1

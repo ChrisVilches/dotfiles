@@ -19,8 +19,6 @@ end, { desc = "general format file" })
 -- global lsp mappings
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
 
--- TODO: Learn this one. Seems useful. It allows you to move in a Vim-like way and copy stuff in the terminal.
--- But perhaps it's hard to manipulate the terminal when CTRL+C is mapped to "copy all lines".
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 local terminal = require("toggleterm.terminal").Terminal:new { direction = "float" }
