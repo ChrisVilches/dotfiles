@@ -48,9 +48,11 @@ require("lazy").setup {
 }
 
 vim.schedule(function()
-  require "options"
   require "autocmds"
-  require "mappings"
-  require "mappings/navigation"
   require "commands"
+  require "mappings/editing"
+  require "mappings/misc"
+  require "mappings/navigation"
+  require "mappings/telescope"
+  require "options"
 end)
