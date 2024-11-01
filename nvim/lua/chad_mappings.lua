@@ -1,9 +1,8 @@
+-- TODO: No longer "chad" since I modified it quite a bit. Merge it with the other mappings file,
+-- or split the mappings into multiple files, but don't call it "chad".
+-- At least move this to the mappings folder after the next commit (not right away because that makes
+-- it difficult to know what changes.)
 local map = vim.keymap.set
-
-map("n", "<C-h>", "<C-w>h", { desc = "switch window left" })
-map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
-map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
-map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 
@@ -32,7 +31,26 @@ end
 -- map("n", "<S-tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "buffer goto prev" })
 -- TODO: This one is a bit trash... it removes the buffer, and then goes to the first one to the right.
 -- It should move to a tab that's adjacent to the deleted one.
-map("n", "<leader>x", "<cmd>bd<CR><cmd>bn<CR>", { desc = "buffer close" })
+-- map("n", "<leader>x", "<cmd>bd<CR><cmd>bn<CR>", { desc = "buffer close" })
+-- TODO: I think this one is not trash. It focuses on an adjacent tab. Beta version. Test more.
+map("n", "<leader>x", function()
+  local n = vim.fn.bufnr()
+
+  if vim.bo[n].modified then
+    vim.api.nvim_err_writeln "Needs to save before closing a buffer"
+    return
+  end
+
+  -- TODO: Nice, however when the last tab has been closed, it goes to the first one!!
+  -- Fixed. I fixed it because "move" doesn't cycle, therefore it's possible to move one position
+  -- so that the one to delete is never the last, and then manipulate the order to close one that
+  -- prevents the weird cycling. Still beta and needs a bit more tests anyway.
+
+  local buf = require "bufferline"
+  buf.move(1)
+  buf.cycle(-1)
+  vim.api.nvim_buf_delete(n, {})
+end, { desc = "buffer close" })
 
 map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 

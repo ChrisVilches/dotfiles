@@ -51,5 +51,6 @@ vim.schedule(function()
   require "options"
   require "autocmds"
   require "mappings"
+  require "mappings/navigation"
   require "commands"
 end)

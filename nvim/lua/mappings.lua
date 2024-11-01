@@ -11,8 +11,6 @@ require "chad_mappings"
 
 local map = vim.keymap.set
 
-map("n", "<leader>tx", "<cmd> BufferLineCloseOthers <CR>", { desc = "close all tabs except current and unsaved" })
-
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
 -- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
 -- get used to doing that motion both in Neovim and the terminal.
