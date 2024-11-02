@@ -29,7 +29,12 @@ map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" }
 map("n", "<leader><C-h>", "<cmd>BufferLineMovePrev<CR>", { desc = "buffer move prev" })
 map("n", "<leader><C-l>", "<cmd>BufferLineMoveNext<CR>", { desc = "buffer move next" })
 
-map("n", "<leader>tx", "<cmd> BufferLineCloseOthers <CR>", { desc = "close all tabs except current and unsaved" })
+map(
+  "n",
+  "<leader>tx",
+  require("utils").close_other_except_unsaved,
+  { desc = "close all tabs except current and unsaved" }
+)
 
 map("n", "<leader>x", function()
   local n = vim.fn.bufnr()
