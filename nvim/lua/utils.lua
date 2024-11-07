@@ -41,4 +41,24 @@ return {
 
     return false
   end,
+
+  close_buffer = function(opts)
+    local n = vim.fn.bufnr()
+    local force = opts["force"]
+
+    if not force and vim.bo[n].modified then
+      local name = vim.api.nvim_buf_get_name(n)
+
+      if name == nil or name == "" then
+        name = "unnamed"
+      end
+      vim.api.nvim_err_writeln("Needs to save before closing a buffer (" .. name .. ")")
+      return
+    end
+
+    local buf = require "bufferline"
+    buf.move(1)
+    buf.cycle(-1)
+    vim.api.nvim_buf_delete(n, { force = force })
+  end,
 }

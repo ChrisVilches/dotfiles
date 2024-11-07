@@ -16,8 +16,8 @@ map("n", "<C-h>", function()
   end
 end, { desc = "navigate left (smart)" })
 
-map("n", "<C-j>", "<C-w>j", { desc = "navigate down" })
-map("n", "<C-k>", "<C-w>k", { desc = "navigate up" })
+map({ "n", "x" }, "<C-j>", "6j")
+map({ "n", "x" }, "<C-k>", "6k")
 
 for i = 1, 6, 1 do
   map("n", "<leader>" .. i, "<cmd>BufferLineGoToBuffer " .. i .. "<CR>", { desc = "tab " .. i })
@@ -37,15 +37,9 @@ map(
 )
 
 map("n", "<leader>x", function()
-  local n = vim.fn.bufnr()
-
-  if vim.bo[n].modified then
-    vim.api.nvim_err_writeln "Needs to save before closing a buffer"
-    return
-  end
-
-  local buf = require "bufferline"
-  buf.move(1)
-  buf.cycle(-1)
-  vim.api.nvim_buf_delete(n, {})
+  require("utils").close_buffer { force = false }
 end, { desc = "buffer close" })
+
+map("n", "<leader>X", function()
+  require("utils").close_buffer { force = true }
+end, { desc = "buffer close (force)" })
