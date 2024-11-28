@@ -1,18 +1,4 @@
 return {
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    lazy = false,
-    priority = 1000,
-    opts = {
-      term_colors = true,
-      transparent_background = true,
-    },
-    config = function(_, opts)
-      require("catppuccin").setup(opts)
-      vim.cmd.colorscheme "catppuccin"
-    end,
-  },
   -- TODO: This looks useful, but doesn't work. The usage with lualine requires more steps.
   -- {
   --   'linrongbin16/lsp-progress.nvim',

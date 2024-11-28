@@ -6,11 +6,57 @@ local current_buffers = function()
   end, vim.api.nvim_list_bufs())
 end
 
+local load_json = function(file_path)
+  local file = io.open(file_path, "r")
+  if not file then
+    return nil
+  end
+
+  local content = file:read "*all"
+  file:close()
+  local success, result = pcall(vim.fn.json_decode, content)
+
+  if success then
+    return result
+  else
+    return nil
+  end
+end
+
+local save_file = function(file_path, data)
+  local file = io.open(file_path, "w")
+  if not file then
+    error("Could not open file for writing: " .. file_path)
+    return
+  end
+  file:write(data .. "\n")
+  file:close()
+end
+
 return {
   current_dir_is_git_repo = function()
     local cwd = vim.fn.getcwd()
     local res = vim.fn.glob(cwd .. "/.git/")
     return #res > 0
+  end,
+
+  save_theme = function(theme)
+    local themepath = vim.fn.stdpath "data" .. "/selected-theme"
+    local curr = load_json(themepath) or {}
+    local project = vim.fn.getcwd()
+    curr[project] = theme
+    save_file(themepath, vim.fn.json_encode(curr))
+  end,
+
+  load_theme = function()
+    local themepath = vim.fn.stdpath "data" .. "/selected-theme"
+    local project = vim.fn.getcwd()
+    local all_themes = load_json(themepath)
+    if all_themes == nil then
+      return nil
+    end
+
+    return all_themes[project]
   end,
 
   restore_nvim_tree = function()
@@ -53,12 +99,13 @@ return {
         name = "unnamed"
       end
       vim.api.nvim_err_writeln("Needs to save before closing a buffer (" .. name .. ")")
-      return
+      return false
     end
 
     local buf = require "bufferline"
     buf.move(1)
     buf.cycle(-1)
     vim.api.nvim_buf_delete(n, { force = force })
+    return true
   end,
 }

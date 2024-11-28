@@ -47,6 +47,14 @@ require("lazy").setup {
   },
 }
 
+local theme = require("utils").load_theme()
+
+if theme ~= nil then
+  vim.cmd("colorscheme " .. theme)
+else
+  require "notify" "No theme"
+end
+
 vim.schedule(function()
   require "autocmds"
   require "commands"
