@@ -26,7 +26,7 @@ default_border pixel 0
 #font pango:DejaVu Sans Mono 8
 
 # Red tint.
-exec --no-startup-id redshift -x && redshift -t 6500:2000 -l 35.682839:139.759455
+exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
 
 # For Japanese input.
 exec --no-startup-id ibus-daemon -drx

@@ -50,9 +50,13 @@ require("lazy").setup {
 local theme = require("utils").load_theme()
 
 if theme ~= nil then
-  vim.cmd("colorscheme " .. theme)
+  if not pcall(function()
+    vim.cmd("colorscheme " .. theme)
+  end) then
+    require "notify"(string.format("Theme %q not found", theme), "error")
+  end
 else
-  require "notify" "No theme"
+  require "notify"("No theme", "error")
 end
 
 vim.schedule(function()
@@ -62,5 +66,6 @@ vim.schedule(function()
   require "mappings/misc"
   require "mappings/navigation"
   require "mappings/telescope"
+  require "mappings/themes"
   require "options"
 end)

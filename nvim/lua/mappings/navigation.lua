@@ -63,6 +63,7 @@ end, { desc = "buffer close (force)" })
 
 map("n", "<leader>tr", function()
   if closed_files:is_empty() then
+    -- TODO: vvvv this error is fixed
     -- TODO: This error appears even if I have closed some files
     vim.api.nvim_err_writeln "No files to re-open"
     return

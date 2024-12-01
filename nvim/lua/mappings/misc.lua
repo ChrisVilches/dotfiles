@@ -33,25 +33,3 @@ map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
 map("n", "<leader>wk", function()
   vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
 end, { desc = "whichkey query lookup" })
-
--- themes
-map("n", "<leader>th", function()
-  local actions = require "telescope.actions"
-  local action_state = require "telescope.actions.state"
-
-  require("telescope.builtin").colorscheme {
-    initial_mode = "normal",
-    enable_preview = true,
-    attach_mappings = function(_, map_key)
-      -- TODO: Mind this only works for "enter on normal mode". Not any other way of submitting the selected option.
-      map_key("n", "<CR>", function(prompt_bufnr)
-        local selection = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        vim.cmd("colorscheme " .. selection.value)
-        -- TODO: Should I use vim.schedule here??
-        require("utils").save_theme(selection.value)
-      end)
-      return true
-    end,
-  }
-end, { desc = "themes" })
