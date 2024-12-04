@@ -8,6 +8,7 @@ return {
   },
   config = function()
     local telescope = require "telescope"
+    local action_set = require "telescope.actions.set"
     telescope.setup {
       defaults = {
         sorting_strategy = "ascending",
@@ -15,6 +16,16 @@ return {
           prompt_position = "top",
         },
         path_display = { "smart" },
+        mappings = {
+          n = {
+            ["<C-j>"] = function(prompt_bufnr)
+              action_set.shift_selection(prompt_bufnr, 6)
+            end,
+            ["<C-k>"] = function(prompt_bufnr)
+              action_set.shift_selection(prompt_bufnr, -6)
+            end,
+          },
+        },
       },
     }
 

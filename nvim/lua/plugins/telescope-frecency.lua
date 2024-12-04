@@ -9,6 +9,7 @@ return {
     require("telescope").setup {
       extensions = {
         frecency = {
+          matcher = "fuzzy",
           -- This flag solves the following issue:
           -- https://github.com/nvim-telescope/telescope-frecency.nvim/issues/270
           -- Also documented here: (Search help) telescope-frecency-faq

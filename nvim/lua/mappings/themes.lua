@@ -2,21 +2,13 @@ local map = vim.keymap.set
 
 map("n", "<leader>th", function()
   local actions = require "telescope.actions"
-  local action_set = require "telescope.actions.set"
   local action_state = require "telescope.actions.state"
 
   require("telescope.builtin").colorscheme {
     initial_mode = "normal",
     enable_preview = true,
-    attach_mappings = function(prompt_bufnr, map_key)
-      map_key("n", "<C-j>", function()
-        action_set.shift_selection(prompt_bufnr, 6)
-      end)
-      map_key("n", "<C-k>", function()
-        action_set.shift_selection(prompt_bufnr, -6)
-      end)
-
-      actions.select_default:replace(function()
+    attach_mappings = function()
+      actions.select_default:replace(function(prompt_bufnr)
         local selection = action_state.get_selected_entry()
         actions.close(prompt_bufnr)
         require("utils").save_theme(selection.value)
@@ -29,8 +21,8 @@ end, { desc = "theme picker" })
 
 local fav_themes = {
   "ayu",
-  "borland",
   "blue",
+  "retroblue",
   "catppuccin-mocha",
   "catppuccin-frappe",
   "catppuccin-macchiato",

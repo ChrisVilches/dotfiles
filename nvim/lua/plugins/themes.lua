@@ -5,8 +5,6 @@ local themes = {
       require("catppuccin").setup(opts)
     end,
   },
-  -- TODO: Kinda works, but the default "blue" one is better. It has more colors.
-  { "luckydev/150colors" },
   {
     "Shatur/neovim-ayu",
     config = function()

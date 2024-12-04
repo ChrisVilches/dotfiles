@@ -8,8 +8,15 @@ map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = 
 map("n", "<leader>cm", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
 map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
 map("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
--- TODO: Pay attention to this one, it's being overriden below. Delete it and commit.
--- map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
+-- This kinda works (shows the full diagnostic message) but still truncates it most of the times.
+-- At least it's much better than before.
+map(
+  "n",
+  "<leader>ds",
+  "<cmd>:Telescope diagnostics wrap_results=true line_width=1000000<CR>",
+  { desc = "telescope diagnostics" }
+)
+
 map(
   "n",
   "<leader>fa",

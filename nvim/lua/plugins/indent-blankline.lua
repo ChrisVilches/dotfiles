@@ -15,9 +15,15 @@ return {
       indent = {
         char = "▏",
       },
-      -- scope = {
-      --   highlight = highlight,
-      -- },
+      scope = {
+        -- Remove the annoying underline.
+        -- A highlight would be better, but maybe it's not possible
+        -- to display that with this plugin.
+        show_start = false,
+        show_end = false,
+        -- enabled = false,
+        -- highlight = highlight,
+      },
     }
   end,
 }

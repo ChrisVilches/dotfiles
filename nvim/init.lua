@@ -47,6 +47,11 @@ require("lazy").setup {
   },
 }
 
+-- TODO: The theme loads wrong sometimes.
+-- How to reproduce: Set catppuccin-macchiato to daijob5 project
+-- re-open project. The icons in the tabs look a bit wrong.
+-- Change to next theme, and then to previous one to go back to catppuccin-macchiato,
+-- and it will look good.
 local theme = require("utils").load_theme()
 
 if theme ~= nil then
