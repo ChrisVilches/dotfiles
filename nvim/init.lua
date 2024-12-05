@@ -47,17 +47,22 @@ require("lazy").setup {
   },
 }
 
--- TODO: The theme loads wrong sometimes.
--- How to reproduce: Set catppuccin-macchiato to daijob5 project
--- re-open project. The icons in the tabs look a bit wrong.
--- Change to next theme, and then to previous one to go back to catppuccin-macchiato,
--- and it will look good.
 local theme = require("utils").load_theme()
 
 if theme ~= nil then
-  if not pcall(function()
-    vim.cmd("colorscheme " .. theme)
-  end) then
+  if
+    not pcall(function()
+      -- If I only execute colorscheme once, the tab styles get messed up.
+      -- A hacky workaround is to execute it twice.
+      -- https://www.reddit.com/r/neovim/comments/11m9f02/new_to_nvim_and_lua_having_a_bit_of_an_issue_with/
+      -- read this reddit.
+      -- It seems the problem is because of the order in which plugins load.
+      vim.cmd("colorscheme " .. theme)
+      vim.schedule(function()
+        vim.cmd("colorscheme " .. theme)
+      end)
+    end)
+  then
     require "notify"(string.format("Theme %q not found", theme), "error")
   end
 else

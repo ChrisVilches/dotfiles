@@ -21,8 +21,8 @@ end, { desc = "theme picker" })
 
 local fav_themes = {
   "ayu",
-  "blue",
   "retroblue",
+  "retroblue-darker",
   "catppuccin-mocha",
   "catppuccin-frappe",
   "catppuccin-macchiato",
@@ -39,7 +39,7 @@ local fav_themes = {
 
 local fav_theme_idx = -1
 
-local function cycle_themes(is_next)
+local function cycle_fav_themes(is_next)
   -- Try to find the current theme (only happens once)
   -- After that, if you change the theme manually but then use this function,
   -- it will still use this variable to know which theme to choose next.
@@ -68,9 +68,27 @@ local function cycle_themes(is_next)
 end
 
 map("n", "<leader>tn", function()
-  cycle_themes(true)
-end)
+  cycle_fav_themes(true)
+end, { desc = "theme favorite next" })
 
 map("n", "<leader>tp", function()
-  cycle_themes(false)
-end)
+  cycle_fav_themes(false)
+end, { desc = "theme favorite prev" })
+
+map("n", "<leader>tu", function()
+  -- Only remove from required cache files that match these patterns.
+  local whitelist_remove_cache_patterns = {
+    "retroblue",
+  }
+
+  for key, _ in pairs(package.loaded) do
+    for _, pattern in ipairs(whitelist_remove_cache_patterns) do
+      if key:match(pattern) then
+        package.loaded[key] = false
+        break
+      end
+    end
+  end
+
+  vim.cmd("colorscheme " .. vim.g.colors_name)
+end, { desc = "theme update (reload current theme)" })

@@ -32,6 +32,8 @@ def cpp_output_value(var_name, type)
 
   when :number_array
     "for (auto x : #{var_name}) { cout << x << ' '; }; cout << endl;"
+  when :number_nested_array
+    "for(auto& row : #{var_name}) { for(auto x : row) { cout << x << ' ';}; cout<<endl;}"
   else
     raise "CPP cannot output type: #{type}"
   end
@@ -70,6 +72,8 @@ def expected_answer_to_plain_file(value)
     value ? 'true' : 'false'
   when :number_array
     value.join ' '
+  when :number_nested_array
+    value.map { _1.join ' ' }.join "\n"
   else
     raise "Cannot serialize type to plain file: #{type}"
   end
