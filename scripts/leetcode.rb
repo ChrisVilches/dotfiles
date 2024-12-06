@@ -25,11 +25,10 @@ def cpp_output_value(var_name, type)
   case type
   when :number
     "cout << #{var_name} << endl;"
-  # when :string
-  #   "cout << "#{var_name}" << endl;"
+  when :string
+    "cout << #{var_name} << endl;"
   when :bool
     'cout << (res ? "true" : "false") << endl;'
-
   when :number_array
     "for (auto x : #{var_name}) { cout << x << ' '; }; cout << endl;"
   when :number_nested_array
@@ -66,8 +65,8 @@ def expected_answer_to_plain_file(value)
   case type
   when :number
     value
-  # when :string
-  #   "cout << "#{value}" << endl;"
+  when :string
+    value
   when :bool
     value ? 'true' : 'false'
   when :number_array
