@@ -14,7 +14,7 @@ map("i", "<C-d>", "<ESC><Right>ce")
 -- but keep in mind this never happens in C++ due to the semicolon requirement.
 -- Removing the 'c' flag kinda works, but adds a new problem (some parentheses that are together get skipped)
 -- TODO: Bug fixed (by adding Left).
-map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>")
+map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.
 map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })

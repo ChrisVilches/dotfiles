@@ -1,21 +1,19 @@
 local map = vim.keymap.set
 
-map("n", "<C-l>", function()
-  if require("utils").is_buffer_in_bufferline() then
-    vim.cmd "BufferLineCycleNext"
-  else
-    vim.cmd "wincmd l"
-  end
-end, { desc = "navigate right (smart)" })
+-- Be careful if you add dot (.) since it matches any character (must escape it somehow).
+local find_symbols = { "{", "}", "\\[", "\\]", "(", ")", "," }
+local pattern = table.concat(find_symbols, "\\|")
 
-map("n", "<C-h>", function()
-  if require("utils").is_buffer_in_bufferline() then
-    vim.cmd "BufferLineCyclePrev"
-  else
-    vim.cmd "wincmd h"
-  end
-end, { desc = "navigate left (smart)" })
+-- TODO: Am I going to use these searching bindings? Feels a bit weird.
+map({ "n", "v" }, "<C-h>", function()
+  vim.cmd(":call search('" .. pattern .. "', 'Wb')")
+end, { silent = true })
 
+map({ "n", "v" }, "<C-l>", function()
+  vim.cmd(":call search('" .. pattern .. "', 'W')")
+end, { silent = true })
+
+-- TODO: Try doing this in visual mode as well. Seems useful for selecting text.
 map({ "n", "x" }, "<C-j>", "6j")
 map({ "n", "x" }, "<C-k>", "6k")
 
@@ -26,6 +24,8 @@ end
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
 map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 
+map("n", "<leader>h", "<cmd>BufferLineCyclePrev<cr>", { desc = "tab prev" })
+map("n", "<leader>l", "<cmd>BufferLineCycleNext<cr>", { desc = "tab next" })
 map("n", "<leader><C-h>", "<cmd>BufferLineMovePrev<CR>", { desc = "buffer move prev" })
 map("n", "<leader><C-l>", "<cmd>BufferLineMoveNext<CR>", { desc = "buffer move next" })
 

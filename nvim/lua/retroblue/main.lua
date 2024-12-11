@@ -1,3 +1,9 @@
+-- TODO: I think one of the worst colors is the function color, it looks too similar to the
+-- background color, and it's hard to see. It should look more snappy.
+--     for example in this C++ code (the `sort`)
+--     sort(events.begin(), events.end());
+--  (I'm talking about the lighter variant)
+
 local function hi(group, opts)
   -- For more:
   -- :h nvim_set_hl

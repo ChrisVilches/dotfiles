@@ -64,7 +64,7 @@ return {
       print("Harpoon: added '" .. path .. "'")
     end, { desc = "Harpoon Add" })
 
-    vim.keymap.set("n", "<leader>h", function()
+    vim.keymap.set("n", "<leader>fp", function()
       toggle_telescope()
     end, { desc = "Harpoon Open telescope" })
 

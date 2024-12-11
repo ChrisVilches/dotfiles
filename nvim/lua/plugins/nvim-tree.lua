@@ -8,6 +8,10 @@ local function on_attach(bufnr)
   -- default mappings
   api.config.mappings.default_on_attach(bufnr)
 
+  vim.keymap.set("n", "<esc>", function()
+    vim.cmd "wincmd l"
+  end)
+
   -- custom mappings
   -- Make the info popup and navigation similar to the one in the code editor.
   vim.keymap.set("n", "K", api.node.show_info_popup, opts "Show information")

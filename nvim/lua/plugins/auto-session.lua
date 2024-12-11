@@ -17,8 +17,8 @@ return {
     end
 
     require("auto-session").setup {
+      auto_create = utils.current_dir_is_git_repo,
       post_restore_cmds = { handle_restore },
-      auto_session_create_enabled = utils.current_dir_is_git_repo,
     }
   end,
 }

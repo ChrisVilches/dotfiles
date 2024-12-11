@@ -76,18 +76,6 @@ return {
     end
   end,
 
-  is_buffer_in_bufferline = function()
-    local current_buf = vim.api.nvim_get_current_buf()
-
-    for _, buf in ipairs(current_buffers()) do
-      if buf == current_buf then
-        return true
-      end
-    end
-
-    return false
-  end,
-
   close_buffer = function(opts)
     local n = vim.fn.bufnr()
     local force = opts["force"]
