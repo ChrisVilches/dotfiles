@@ -6,6 +6,9 @@ opt.termguicolors = true
 vim.wo.wrap = false
 opt.scrolloff = 8
 
+-- Recommended by auto-session plugin
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 -------------------------------------- options ------------------------------------------
 o.laststatus = 3
 o.showmode = false

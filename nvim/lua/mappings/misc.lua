@@ -1,8 +1,6 @@
 -- Each plugin file may also have some mappings.
 local map = vim.keymap.set
 
--- TODO: This doesn't work... (it's from neovim chad)
--- map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<leader>wt", function()
   vim.wo.wrap = not vim.wo.wrap
 end, { desc = "wrap toggle" })
