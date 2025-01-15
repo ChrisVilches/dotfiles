@@ -8,7 +8,7 @@ return {
     local conf = require("telescope.config").values
     harpoon:setup {}
 
-    local removed_files = require("stack").Stack()
+    local removed_files = require("stack").Stack:new()
 
     local make_finder = function()
       local file_paths = {}

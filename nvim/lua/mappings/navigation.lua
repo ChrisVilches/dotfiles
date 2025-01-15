@@ -42,7 +42,7 @@ map(
 -- Actually it's pretty useful when I want to re-open several closed tabs in the order I closed them, so maybe
 -- do implement the stack based approach.
 
-local closed_files = require("stack").Stack()
+local closed_files = require("stack").Stack:new()
 
 local close_buffer_wrapper = function(force)
   local name = vim.api.nvim_buf_get_name(0)

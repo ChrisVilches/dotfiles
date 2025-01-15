@@ -6,9 +6,9 @@ return {
   --       This one is probably fixed since I revamped the LSP.
   "rmagatti/auto-session",
   lazy = false,
-  dependencies = {
-    "nvim-telescope/telescope.nvim", -- Only needed if you want to use session lens
-  },
+  -- dependencies = {
+  --   "nvim-telescope/telescope.nvim", -- Only needed if you want to use session lens
+  -- },
   config = function()
     local function handle_restore()
       if utils.current_dir_is_git_repo() then
