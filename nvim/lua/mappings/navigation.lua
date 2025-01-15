@@ -13,7 +13,6 @@ map({ "n", "v" }, "<C-l>", function()
   vim.cmd(":call search('" .. pattern .. "', 'W')")
 end, { silent = true })
 
--- TODO: Try doing this in visual mode as well. Seems useful for selecting text.
 map({ "n", "x" }, "<C-j>", "6j")
 map({ "n", "x" }, "<C-k>", "6k")
 
@@ -36,12 +35,6 @@ map(
   { desc = "close all tabs except current and unsaved" }
 )
 
--- TODO: This should be implemented as a stack (pushing latest closed tabs, and popping when I re-open them)
--- The behavior is a bit weird if I try to re-open the same file multiple times or if it's already opened.
--- But this is VERY low priority, so maybe triage.
--- Actually it's pretty useful when I want to re-open several closed tabs in the order I closed them, so maybe
--- do implement the stack based approach.
-
 local closed_files = require("stack").Stack:new()
 
 local close_buffer_wrapper = function(force)
@@ -63,8 +56,6 @@ end, { desc = "buffer close (force)" })
 
 map("n", "<leader>tr", function()
   if closed_files:is_empty() then
-    -- TODO: vvvv this error is fixed
-    -- TODO: This error appears even if I have closed some files
     vim.api.nvim_err_writeln "No files to re-open"
     return
   end
