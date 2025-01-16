@@ -9,11 +9,6 @@ map("i", "<C-a>", "<ESC>I", { desc = "move beginning of line" })
 map("i", "<C-d>", "<ESC><Right>ce")
 
 -- Exit parentheses while editing.
--- TODO: It has a slight bug. Since block ending braces } never have a trailing space, this will
--- find the next brace at the same position twice. it7s kinda weird. Maybe this happens with lines ending in parentehses
--- but keep in mind this never happens in C++ due to the semicolon requirement.
--- Removing the 'c' flag kinda works, but adds a new problem (some parentheses that are together get skipped)
--- TODO: Bug fixed (by adding Left).
 map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.

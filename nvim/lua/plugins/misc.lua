@@ -1,12 +1,11 @@
 return {
-  -- TODO: This looks useful, but doesn't work. The usage with lualine requires more steps.
-  -- {
-  --   'linrongbin16/lsp-progress.nvim',
-  --   lazy = false,
-  --   config = function()
-  --     require('lsp-progress').setup()
-  --   end
-  -- },
+  {
+    "linrongbin16/lsp-progress.nvim",
+    lazy = false,
+    config = function()
+      require("lsp-progress").setup()
+    end,
+  },
   {
     "akinsho/toggleterm.nvim",
     version = "*",

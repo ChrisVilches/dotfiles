@@ -20,10 +20,6 @@ map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
 
--- global lsp mappings
--- TODO: Moved to telescope using the builtin diagnostic picker. Remove later.
--- map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
-
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 local terminal = require("toggleterm.terminal").Terminal:new { direction = "float" }
