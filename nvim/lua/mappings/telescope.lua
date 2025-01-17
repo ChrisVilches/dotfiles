@@ -1,6 +1,8 @@
 local map = vim.keymap.set
 
+-- More pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
+map("n", "<leader>fg", "<cmd>Telescope grep_string<CR>", { desc = "telescope grep string" })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
 map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
 map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
@@ -31,8 +33,3 @@ map("n", "<leader><tab>", function()
     initial_mode = "normal",
   }
 end)
-
--- TODO: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
--- This page has a lot of builtin Telescope finders.
--- But it's worth trying the other ones and see if I find a gem (I'm not talking about Ruby btw).
--- One in particular that I find interesting is probably this one: builtin.grep_string
