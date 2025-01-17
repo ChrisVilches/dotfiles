@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mem="$(free -th)"
+
+get_memory_line() {
+  # It turns Gi into G (by removing the "i")
+  echo "$mem" | sed -n "$1 p" | sed s/i//g | awk '{printf "%s %s/%s\n", $1, $3, $2}'
+}
+
+echo "$(get_memory_line 2) ($(get_memory_line 3))" | sed s/Mem://g
