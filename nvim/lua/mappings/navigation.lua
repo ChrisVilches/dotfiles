@@ -4,7 +4,6 @@ local map = vim.keymap.set
 local find_symbols = { "{", "}", "\\[", "\\]", "(", ")", "," }
 local pattern = table.concat(find_symbols, "\\|")
 
--- TODO: Am I going to use these searching bindings? Feels a bit weird.
 map({ "n", "v" }, "<C-h>", function()
   vim.cmd(":call search('" .. pattern .. "', 'Wb')")
 end, { silent = true })
