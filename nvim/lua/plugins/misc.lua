@@ -34,6 +34,10 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     config = true,
   },
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+  },
 
   -- TODO: Try in the future:
   -- Friendly snippets (currently I only use it for Lua because it's the default, but
