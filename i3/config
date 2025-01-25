@@ -31,6 +31,10 @@ exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.75945
 # For Japanese input.
 exec --no-startup-id ibus-daemon -drx
 
+# dunst - a customizable and lightweight notification-daemon
+# To show notify-send messages.
+exec --no-startup-id dunst
+
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
@@ -110,6 +114,10 @@ bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
+
+# NOTE: Make sure the PID can be found using pidof (there are no name collisions).
+bindsym $mod+y exec echo 1 > /proc/$(pidof -s timebox)/fd/0
+bindsym $mod+u exec echo 3 > /proc/$(pidof -s timebox)/fd/0
 
 # switch to workspace
 bindsym $mod+1 workspace number 1
