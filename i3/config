@@ -29,6 +29,11 @@ default_border pixel 0
 exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
 
 # For Japanese/Chinese input.
+# NOTE: (Troubleshooting) On my Arch Linux system, removing ibus caused multiple issues with fcitx5.
+# Although ibus is a separate input method framework, it appears to provide dependencies or configurations
+# that fcitx5 relies on. Reinstalling ibus resolved the errors without needing to run it—just having it installed was sufficient.
+# TODO: I think it'd be nice to eventually be able to remove ibus (turn this into a NOTE
+# since I'll probably not act on this anytime soon).
 exec --no-startup-id fcitx5 -d
 
 # dunst - a customizable and lightweight notification-daemon
