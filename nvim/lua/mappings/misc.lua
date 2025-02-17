@@ -1,9 +1,7 @@
 -- Each plugin file may also have some mappings.
 local map = vim.keymap.set
 
-map("n", "<leader>wt", function()
-  vim.wo.wrap = not vim.wo.wrap
-end, { desc = "wrap toggle" })
+map("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "wrap toggle" })
 
 -- Debugging stuff
 map("n", "<leader>db", require("dap").toggle_breakpoint, { desc = "toggle breakpoint" })
@@ -12,10 +10,6 @@ map("n", "<leader>dc", require("dap").continue, { desc = "continue" })
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<C-s>", "<cmd>w<CR>", { desc = "general save file" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
-
--- TODO: Maybe I don't need these (I never use them). Remove??
--- map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
--- map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 
 map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
