@@ -11,12 +11,20 @@ local function on_attach(bufnr)
   vim.keymap.set("n", "<esc>", function()
     vim.cmd "noh"
     vim.cmd "wincmd l"
-  end, { buffer = bufnr, desc = "change to right window (and clear highlights)" })
+  end, opts "change to right window (and clear highlights)")
 
   -- custom mappings
   -- Make the info popup and navigation similar to the one in the code editor.
   vim.keymap.set("n", "K", api.node.show_info_popup, opts "Show information")
   vim.keymap.del("n", "<C-k>", { buffer = bufnr })
+
+  vim.keymap.set("n", "p", function()
+    local node = api.tree.get_node_under_cursor()
+
+    if node and node.absolute_path and vim.fn.isdirectory(node.absolute_path) ~= 1 then
+      require("utils").preview_file_floating_window(node.absolute_path)
+    end
+  end, opts "Preview selected file in a floating window")
 end
 
 return {
