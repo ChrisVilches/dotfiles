@@ -30,9 +30,6 @@ map("x", "<leader>pp", '"_dP', { desc = "paste and keep content" })
 
 -- Wrap text inside () or {}
 -- Can then be removed using "tpope/vim-surround"
--- TODO: Consider adding <leader> prefix.
--- Lately I've been using the { and } motions (move to the next/prev empty line), so
--- maybe I might start doing that in visual/select/line-select modes.
 map("x", "<leader>(", '"zs(<C-r>z)<Esc>')
 map("x", "<leader>{", '"zs{\n<C-r>z\n}<Esc>')
 
