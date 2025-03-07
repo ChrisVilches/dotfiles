@@ -45,13 +45,32 @@ return {
         },
       },
     },
+    -- TODO: This plugin has the problem that the raw text becomes
+    -- visible when the cursor is on the line, which makes it
+    -- annoying because the entire text moves and it's hard to read.
+    -- {
+    --   "MeanderingProgrammer/render-markdown.nvim",
+    --   opts = {
+    --     file_types = { "markdown", "Avante" },
+    --     anti_conceal = { enabled = true },
+    --   },
+    --   ft = { "markdown", "Avante" },
+    -- },
     {
-      -- Make sure to set this up properly if you have lazy=true
-      "MeanderingProgrammer/render-markdown.nvim",
+      -- TODO: This one doesn't show raw text when the cursor is on
+      -- the lines, but it doesn't render immediately while the text
+      -- is being outputted, and it hides the markdown characters
+      -- so that if you press left/right it will need several key
+      -- presses to change to the next visible character.
+      "OXY2DEV/markview.nvim",
+      branch = "main",
       opts = {
-        file_types = { "markdown", "Avante" },
+        preview = {
+          filetypes = { "markdown", "Avante" },
+          ignore_buftypes = {},
+        },
+        max_length = 99999,
       },
-      ft = { "markdown", "Avante" },
     },
   },
 }

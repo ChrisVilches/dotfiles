@@ -61,9 +61,15 @@ return {
 
   restore_nvim_tree = function()
     local nvim_tree_api = require "nvim-tree.api"
+
+    -- Restore the nvim-tree while maintaining the cursor position in the code window.
+    local win_id = vim.api.nvim_get_current_win()
+    local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
     nvim_tree_api.tree.open()
     nvim_tree_api.tree.change_root(vim.fn.getcwd())
     nvim_tree_api.tree.reload()
+    vim.api.nvim_set_current_win(win_id)
+    pcall(vim.api.nvim_win_set_cursor, win_id, cursor_pos)
   end,
 
   close_other_except_unsaved = function()
