@@ -4,7 +4,7 @@ local function preview_file_floating_window(file_path)
   -- The "/preview/" prefix is used to avoid conflicts with
   -- existing buffers. Without this line, the function
   -- crashes when the file is already open.
-  vim.api.nvim_buf_set_name(buf, "/preview/" .. file_path)
+  vim.api.nvim_buf_set_name(buf, "/preview" .. file_path)
 
   vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
@@ -23,6 +23,9 @@ local function preview_file_floating_window(file_path)
   vim.api.nvim_win_set_option(win, "number", true)
   vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q!<CR>", { noremap = true, silent = true })
 
+  -- The following line used to crash when previewing Go files. But after doings some plugin cleaning,
+  -- and updating, it got fixed. If this happens again, also try to remove sessions.
+  -- Maybe even try removing all plugins and re-installing them.
   vim.cmd "filetype detect"
   vim.cmd "syntax enable"
 
@@ -36,7 +39,11 @@ local function preview_file_floating_window(file_path)
     pattern = "*",
     callback = function()
       if vim.api.nvim_get_current_win() == win then
+        -- Ensure the buffer is removed internally to prevent
+        -- errors from conflicting buffer names.
+        -- Verify with ":ls!".
         vim.api.nvim_win_close(win, true)
+        vim.api.nvim_buf_delete(buf, { force = true })
       end
     end,
   })
