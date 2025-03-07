@@ -58,6 +58,9 @@ return {
       harpoon:list():add { value = file_path, context = {} }
     end
 
+    -- TODO: Sorta collides with avante bindings. Maybe try to use a different letter?
+    -- if I have some other harpoon related bindings (for example <leader>fp) then try to
+    -- make them similar (e.g. use the same prefix, etc).
     vim.keymap.set("n", "<leader>a", function()
       local path = vim.fn.fnamemodify(vim.fn.expand "%", ":.")
       add_file(path)

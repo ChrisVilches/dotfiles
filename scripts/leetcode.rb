@@ -15,6 +15,7 @@ def get_type(value)
   # TODO: Misses the type "empty array"
   return :number_nested_array if nested_number_array?(value)
   return :number_array if value.is_a?(Array) && value.first.is_a?(Numeric)
+  return :bool_array if value.is_a?(Array) && (value.first.is_a?(TrueClass) || value.first.is_a?(FalseClass))
   return :string if value.is_a?(String)
   return :bool if [true, false].include?(value)
 
@@ -31,6 +32,8 @@ def cpp_output_value(var_name, type)
     'cout << (res ? "true" : "false") << endl;'
   when :number_array
     "for (auto x : #{var_name}) { cout << x << ' '; }; cout << endl;"
+  when :bool_array
+    "for (auto x : #{var_name}) { cout << (x ? \"true\" : \"false\") << ' '; }; cout << endl;"
   when :number_nested_array
     "for(auto& row : #{var_name}) { for(auto x : row) { cout << x << ' ';}; cout<<endl;}"
   else
@@ -70,6 +73,8 @@ def expected_answer_to_plain_file(value)
   when :bool
     value ? 'true' : 'false'
   when :number_array
+    value.join ' '
+  when :bool_array
     value.join ' '
   when :number_nested_array
     value.map { _1.join ' ' }.join "\n"

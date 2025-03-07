@@ -30,5 +30,35 @@ map("x", "<leader>pp", '"_dP', { desc = "paste and keep content" })
 
 -- Wrap text inside () or {}
 -- Can then be removed using "tpope/vim-surround"
-map("x", "(", '"zs(<C-r>z)<Esc>')
-map("x", "{", '"zs{\n<C-r>z\n}<Esc>')
+-- TODO: Consider adding <leader> prefix.
+-- Lately I've been using the { and } motions (move to the next/prev empty line), so
+-- maybe I might start doing that in visual/select/line-select modes.
+map("x", "<leader>(", '"zs(<C-r>z)<Esc>')
+map("x", "<leader>{", '"zs{\n<C-r>z\n}<Esc>')
+
+local function toggle_boolean()
+  local utils = require "utils"
+  -- This is a hack to avoid toggling booleans in these situations:
+  -- some_var=True (python) when the cursor is on the =.
+  -- [true, false, false] when the cursor is on a comma.
+  if not utils.is_char_alpha(utils.current_char_under_cursor()) then
+    return
+  end
+
+  local current_word = vim.fn.expand "<cword>"
+  local toggle_map = {
+    ["false"] = "true",
+    ["true"] = "false",
+    ["False"] = "True",
+    ["True"] = "False",
+  }
+  local replacement = toggle_map[current_word]
+
+  if replacement then
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    vim.cmd("normal! ciw" .. replacement)
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+  end
+end
+
+map("n", "<leader>!", toggle_boolean, { desc = "toggle boolean" })

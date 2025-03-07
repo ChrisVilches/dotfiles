@@ -97,47 +97,13 @@ return {
     return true
   end,
 
-  preview_file_floating_window = function(file_path)
-    local buf = vim.api.nvim_create_buf(false, true)
-    -- TODO: Sometimes I see the error "failed to rename buffer". Not sure how to reproduce it.
-    -- but in most cases, the error doesn't happen.
-    vim.api.nvim_buf_set_name(buf, file_path)
-    vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
+  is_char_alpha = function(char)
+    return char:match "%a" ~= nil
+  end,
 
-    vim.api.nvim_buf_set_option(buf, "modifiable", false)
-
-    local win_opts = {
-      relative = "editor",
-      width = 80,
-      height = 20,
-      col = math.floor((vim.o.columns - 80) / 2),
-      row = math.floor((vim.o.lines - 20) / 2),
-      style = "minimal",
-      border = "rounded",
-    }
-
-    -- TODO: Maybe add "desc" to all these mappings inside the floating window. Or create a helper function to make it cleaner.
-    -- (similar to the helper function in nvim-tree.lua)
-    local win = vim.api.nvim_open_win(buf, true, win_opts)
-    vim.api.nvim_win_set_option(win, "number", true)
-    vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q!<CR>", { noremap = true, silent = true })
-
-    vim.cmd "filetype detect"
-    vim.cmd "syntax enable"
-
-    vim.keymap.set("n", "<CR>", function()
-      vim.api.nvim_win_close(win, true)
-      vim.cmd("edit " .. file_path)
-    end, { buffer = buf, noremap = true, silent = true })
-
-    vim.api.nvim_create_autocmd("WinLeave", {
-      group = vim.api.nvim_create_augroup("FloatingWindowBlur", { clear = true }),
-      pattern = "*",
-      callback = function()
-        if vim.api.nvim_get_current_win() == win then
-          vim.api.nvim_win_close(win, true)
-        end
-      end,
-    })
+  current_char_under_cursor = function()
+    local line = vim.api.nvim_get_current_line()
+    local col = vim.fn.col "."
+    return line:sub(col, col)
   end,
 }
