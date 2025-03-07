@@ -17,8 +17,6 @@ local function preview_file_floating_window(file_path)
     border = "rounded",
   }
 
-  -- TODO: Maybe add "desc" to all these mappings inside the floating window. Or create a helper function to make it cleaner.
-  -- (similar to the helper function in nvim-tree.lua)
   local win = vim.api.nvim_open_win(buf, true, win_opts)
   vim.api.nvim_win_set_option(win, "number", true)
   vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q!<CR>", { noremap = true, silent = true })
