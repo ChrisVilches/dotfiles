@@ -1,9 +1,11 @@
 local function on_attach()
-  local gitsigns = require("gitsigns")
+  local gitsigns = require "gitsigns"
   local map = vim.keymap.set
-  map('n', '<leader>ph', gitsigns.preview_hunk, { desc = "Preview hunk" })
-  map('n', '<leader>rh', gitsigns.reset_hunk, { desc = "Reset hunk" })
-  map('n', '<leader>gb', function() gitsigns.blame_line { full = true } end, { desc = "Git blame" })
+  map("n", "<leader>ph", gitsigns.preview_hunk, { desc = "Preview hunk" })
+  map("n", "<leader>rh", gitsigns.reset_hunk, { desc = "Reset hunk" })
+  map("n", "<leader>gb", function()
+    gitsigns.blame_line { full = true }
+  end, { desc = "Git blame" })
 
   -- There are more available
   -- map('n', '<leader>hs', gitsigns.stage_hunk)
@@ -22,8 +24,8 @@ return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" },
   config = function()
-    require("gitsigns").setup({
-      on_attach = on_attach
-    })
+    require("gitsigns").setup {
+      on_attach = on_attach,
+    }
   end,
 }
