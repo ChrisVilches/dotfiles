@@ -6,8 +6,6 @@ return {
   config = function()
     require("nvim-treesitter.configs").setup {
       highlight = {
-        -- TODO: Removing this line (i.e. disabling the highlighting) adds a background color
-        -- to the "TODO" messages, which is what I was looking for, but I don't want to disable Treesitter highlighting.
         enable = true,
       },
       indent = {
