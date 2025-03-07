@@ -1,10 +1,12 @@
 local function preview_file_floating_window(file_path)
   local buf = vim.api.nvim_create_buf(false, true)
-  -- TODO: Sometimes I see the error "failed to rename buffer". Not sure how to reproduce it.
-  -- but in most cases, the error doesn't happen.
-  vim.api.nvim_buf_set_name(buf, file_path)
-  vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
 
+  -- The "/preview/" prefix is used to avoid conflicts with
+  -- existing buffers. Without this line, the function
+  -- crashes when the file is already open.
+  vim.api.nvim_buf_set_name(buf, "/preview/" .. file_path)
+
+  vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
 
   local win_opts = {
