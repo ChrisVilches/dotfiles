@@ -58,20 +58,17 @@ return {
       harpoon:list():add { value = file_path, context = {} }
     end
 
-    -- TODO: Sorta collides with avante bindings. Maybe try to use a different letter?
-    -- if I have some other harpoon related bindings (for example <leader>fp) then try to
-    -- make them similar (e.g. use the same prefix, etc).
-    vim.keymap.set("n", "<leader>a", function()
+    vim.keymap.set("n", "<leader>Ha", function()
       local path = vim.fn.fnamemodify(vim.fn.expand "%", ":.")
       add_file(path)
       print("Harpoon: added '" .. path .. "'")
     end, { desc = "Harpoon Add" })
 
-    vim.keymap.set("n", "<leader>fp", function()
+    vim.keymap.set("n", "<leader>Hf", function()
       toggle_telescope()
     end, { desc = "Harpoon Open telescope" })
 
-    vim.api.nvim_create_user_command("HarpoonReadd", function()
+    vim.keymap.set("n", "<leader>Hr", function()
       if removed_files:is_empty() then
         vim.api.nvim_err_writeln "Harpoon: No files to re-add"
         return
@@ -81,6 +78,6 @@ return {
       add_file(file)
       print("Re-added " .. file)
       toggle_telescope()
-    end, {})
+    end, { desc = "Harpoon Re-add Last Removed File" })
   end,
 }
