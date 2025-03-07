@@ -10,6 +10,7 @@ map("n", "<leader>dc", require("dap").continue, { desc = "continue" })
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<C-s>", "<cmd>w<CR>", { desc = "general save file" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+map("n", "<leader>q", ":q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 
 map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
