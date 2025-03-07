@@ -1,11 +1,8 @@
--- TODO: adding more files crashes the file picker because of a wrong flag being passed to ripgrep.
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
   opts = {
-    -- add any opts here
-    -- for example
     provider = "openai",
     -- Remove the annoying hint popup when in visual mode. It originally shows these suggestions:
     -- <leader>aa ask (open the AI sidebar)
@@ -22,7 +19,6 @@ return {
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
-  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
     "stevearc/dressing.nvim",
@@ -31,13 +27,7 @@ return {
     --- The below dependencies are optional,
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-
-    -- TODO: Where do I configure the "file_selector"? Check the differences.
-    -- TODO: Most importantly, perhaps I only need one "file_selector provider", so try to
-    -- pick one and uninstall the others. Verify that what this TODO says is true.
-    "echasnovski/mini.pick", -- for file_selector provider mini.pick
-    "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-    "ibhagwan/fzf-lua", -- for file_selector provider fzf
+    "nvim-telescope/telescope.nvim",
     {
       -- support for image pasting
       "HakonHarnes/img-clip.nvim",
