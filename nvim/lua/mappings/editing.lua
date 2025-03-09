@@ -36,8 +36,8 @@ map("x", "<leader>{", '"zs{\n<C-r>z\n}<Esc>')
 -- Wrap selected text or the word under the cursor with quotes
 map("x", '<leader>"', '"zs"<C-r>z"<Esc>')
 map("x", "<leader>'", "\"zs'<C-r>z'<Esc>")
-map("n", '<leader>"', 'viw"zs"<C-r>z"<Esc>')
-map("n", "<leader>'", "viw\"zs'<C-r>z'<Esc>")
+map("n", '<leader>"', 'viW"zs"<C-r>z"<Esc>')
+map("n", "<leader>'", "viW\"zs'<C-r>z'<Esc>")
 
 local function toggle_boolean()
   local utils = require "utils"
