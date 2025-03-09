@@ -112,4 +112,13 @@ return {
     local col = vim.fn.col "."
     return line:sub(col, col)
   end,
+
+  is_nvimtree_open = function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "NvimTree" then
+        return true
+      end
+    end
+    return false
+  end,
 }

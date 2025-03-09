@@ -12,7 +12,25 @@ map("n", "<leader>dc", require("dap").continue, { desc = "continue" })
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<C-s>", "<cmd>w<CR>", { desc = "general save file" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
-map("n", "<leader>q", ":q<CR>", { desc = "quit the current window", noremap = true, silent = true })
+
+map("n", "<leader>q", function()
+  local wins = vim.api.nvim_list_wins()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local is_nvimtree = vim.bo[current_buf].filetype == "NvimTree"
+
+  -- If nvim-tree is the last window open, the cursor position will be saved to it.
+  -- This is inconvenient because I want the cursor position to be restored to the
+  -- code window by the sessions plugin. To address this, all windows are closed
+  -- when nvim-tree would be the last remaining one, ensuring the cursor position
+  -- remains on the code window for the next session.
+  -- This is also convenient because I don't have to execute this keymap twice in order to
+  -- close the code and then the nvim-tree.
+  if #wins == 2 and not is_nvimtree and require("utils").is_nvimtree_open() then
+    vim.cmd "qa"
+  else
+    vim.cmd "q"
+  end
+end, { desc = "Quit the current window (or all if nvim-tree is last)", noremap = true, silent = true })
 
 map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
