@@ -46,4 +46,13 @@ return {
   -- https://github.com/mbbill/undotree
   -- https://github.com/folke/noice.nvim
   -- https://github.com/gbprod/substitute.nvim
+  --
+  -- TODO: Try installing Quarto, but first make sure it works on the kickstarter
+  -- just run it like this to test it out:
+  -- NVIM_APPNAME=quarto-nvim-kickstarter nvim
+  -- Also, watch this playlist related to Quarto on Neovim.
+  -- I still need to learn how to re-run individual cells! That seems very important and
+  -- I haven't been able to get it yet.
+  -- A coffee with quarto and neovim (parts 1 ~ 7)
+  -- https://www.youtube.com/watch?v=Lc_kMYVIS5I&list=PLabWm-zCaD1axcMGvf7wFxJz8FZmyHSJ7&index=2&ab_channel=JannikBuhr
 }
