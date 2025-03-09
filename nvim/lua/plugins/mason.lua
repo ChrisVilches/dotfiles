@@ -23,6 +23,7 @@ return {
         "pyright",
         "rust-analyzer",
         "stylua",
+        "luacheck",
       },
     }
   end,
