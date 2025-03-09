@@ -7,25 +7,18 @@
 -- and nothing else. The things to download would be located in the LSP plugin file, linter plugin file,
 -- and formatter plugin file.
 return {
-  -- TODO: It's a bit hard to see what is being required by which plugin, and
-  --       to which category they belong (LSP, linter, formatter), so make sure to understand all that.
-  --       Read about mason and how it works.
   "williamboman/mason.nvim",
   dependencies = {
-    "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
   config = function()
-    -- TODO: I still don't understand exactly what mason does, so the refactoring of these files
-    -- (mason.lua and lspconfig.lua will be later when I understand Mason well)
-
     require("mason").setup()
     require("mason-tool-installer").setup {
       ensure_installed = {
         "autopep8",
         "clangd",
         "css-lsp",
-        "eslint",
+        -- "eslint",
         "gopls",
         "html-lsp",
         "lua-language-server",

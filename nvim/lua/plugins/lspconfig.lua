@@ -1,6 +1,3 @@
--- TODO: This file is a bit weird because I grabbed some code from NvChad's repo.
--- From this file: ./lua/nvchad/configs/lspconfig.lua
-
 local function on_attach(_, bufnr)
   local map = vim.keymap.set
 
@@ -26,39 +23,12 @@ local function on_attach(_, bufnr)
   map("n", "gr", vim.lsp.buf.references, opts "Show references")
 end
 
-local function on_init(client, _)
-  if client.supports_method "textDocument/semanticTokens" then
-    client.server_capabilities.semanticTokensProvider = nil
-  end
-end
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-    },
-  },
-}
-
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
-    { "folke/neodev.nvim", opts = {} },
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
@@ -68,8 +38,6 @@ return {
       function(server_name)
         lspconfig[server_name].setup {
           on_attach = on_attach,
-          on_init = on_init,
-          capabilities = capabilities,
         }
       end,
     }
