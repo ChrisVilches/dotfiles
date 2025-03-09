@@ -38,13 +38,11 @@ return {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
   },
-
   -- TODO: Try in the future:
   -- Friendly snippets (currently I only use it for Lua because it's the default, but
   -- do it for other languages as well)
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
-  -- https://github.com/folke/noice.nvim
   -- https://github.com/gbprod/substitute.nvim
   --
   -- TODO: Try installing Quarto, but first make sure it works on the kickstarter
