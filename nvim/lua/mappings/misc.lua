@@ -34,4 +34,4 @@ map("n", "<leader>wk", function()
   vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
 end, { desc = "whichkey query lookup" })
 
-map("n", "<leader>z", require("custom-plugins.toggle-fullscreen").toggle_fullscreen, { noremap = true, silent = true })
+map("n", "<leader>z", require("toggle-fullscreen").toggle_fullscreen, { noremap = true, silent = true })
