@@ -17,6 +17,7 @@ vim.api.nvim_create_autocmd("WinClosed", {
     local wins = vim.api.nvim_list_wins()
 
     if #wins == 2 and not is_nvimtree and require("utils").is_nvimtree_open() then
+      vim.cmd ":SessionSave"
       vim.cmd ":qa"
     end
   end,
