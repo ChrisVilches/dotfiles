@@ -74,21 +74,3 @@ end, { desc = "theme favorite next" })
 map("n", "<leader>tp", function()
   cycle_fav_themes(false)
 end, { desc = "theme favorite prev" })
-
-map("n", "<leader>tu", function()
-  -- Only remove from required cache files that match these patterns.
-  local whitelist_remove_cache_patterns = {
-    "retroblue",
-  }
-
-  for key, _ in pairs(package.loaded) do
-    for _, pattern in ipairs(whitelist_remove_cache_patterns) do
-      if key:match(pattern) then
-        package.loaded[key] = false
-        break
-      end
-    end
-  end
-
-  vim.cmd("colorscheme " .. vim.g.colors_name)
-end, { desc = "theme update (reload current theme)" })
