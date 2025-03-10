@@ -1,58 +1,3 @@
-local function preview_file_floating_window(file_path)
-  local buf = vim.api.nvim_create_buf(false, true)
-
-  -- The "/preview/" prefix is used to avoid conflicts with
-  -- existing buffers. Without this line, the function
-  -- crashes when the file is already open.
-  vim.api.nvim_buf_set_name(buf, "/preview" .. file_path)
-
-  vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
-  vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
-
-  local win_opts = {
-    relative = "editor",
-    width = 80,
-    height = 20,
-    col = math.floor((vim.o.columns - 80) / 2),
-    row = math.floor((vim.o.lines - 20) / 2),
-    style = "minimal",
-    border = "rounded",
-  }
-
-  local win = vim.api.nvim_open_win(buf, true, win_opts)
-  vim.api.nvim_set_option_value("number", true, { win = win })
-  vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q!<CR>", { noremap = true, silent = true })
-
-  -- The following line used to crash when previewing Go files. But after doings some plugin cleaning,
-  -- and updating, it got fixed. If this happens again, also try to remove sessions.
-  -- Maybe even try removing all plugins and re-installing them.
-  vim.cmd "filetype detect"
-  vim.cmd "syntax enable"
-
-  -- This autocommand ensures proper rendering for certain filetypes, such as markdown with markview.
-  -- If rendering issues persist, consider adding more autocommands.
-  vim.api.nvim_exec_autocmds("BufEnter", { buffer = buf })
-
-  vim.keymap.set("n", "<CR>", function()
-    vim.api.nvim_win_close(win, true)
-    vim.cmd("edit " .. file_path)
-  end, { buffer = buf, noremap = true, silent = true })
-
-  vim.api.nvim_create_autocmd("WinLeave", {
-    group = vim.api.nvim_create_augroup("FloatingWindowBlur", { clear = true }),
-    pattern = "*",
-    callback = function()
-      if vim.api.nvim_get_current_win() == win then
-        -- Ensure the buffer is removed internally to prevent
-        -- errors from conflicting buffer names.
-        -- Verify with ":ls!".
-        vim.api.nvim_win_close(win, true)
-        vim.api.nvim_buf_delete(buf, { force = true })
-      end
-    end,
-  })
-end
-
 local function on_attach(bufnr)
   local api = require "nvim-tree.api"
 
@@ -76,8 +21,10 @@ local function on_attach(bufnr)
   vim.keymap.set("n", "p", function()
     local node = api.tree.get_node_under_cursor()
 
-    if node and node.absolute_path and vim.fn.isdirectory(node.absolute_path) ~= 1 then
-      preview_file_floating_window(node.absolute_path)
+    if node and node.absolute_path then
+      -- TODO: Is there a way to just include it by the plugin name without "custom-plugins." prefix?
+      -- Maybe my config is wrong and it should be possible.
+      require("custom-plugins.preview-file").preview_file(node.absolute_path)
     end
   end, opts "Preview selected file in a floating window")
 end
