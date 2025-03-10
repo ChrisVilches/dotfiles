@@ -6,8 +6,6 @@ local M = {}
 local fullscreen_win = nil
 local cursor_moved_autocmd = nil
 
-function M.setup() end
-
 function M.toggle_fullscreen()
   if fullscreen_win ~= nil then
     vim.api.nvim_win_close(fullscreen_win, true)
@@ -58,8 +56,5 @@ function M.toggle_fullscreen()
     callback = cleanup,
   })
 end
-
--- TODO: Remove, this does nothing.
-function M.config() end
 
 return M
