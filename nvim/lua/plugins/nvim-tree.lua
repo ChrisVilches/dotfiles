@@ -7,7 +7,7 @@ local function preview_file_floating_window(file_path)
   vim.api.nvim_buf_set_name(buf, "/preview" .. file_path)
 
   vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
-  vim.api.nvim_buf_set_option(buf, "modifiable", false)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
   local win_opts = {
     relative = "editor",
@@ -20,7 +20,7 @@ local function preview_file_floating_window(file_path)
   }
 
   local win = vim.api.nvim_open_win(buf, true, win_opts)
-  vim.api.nvim_win_set_option(win, "number", true)
+  vim.api.nvim_set_option_value("number", true, { win = win })
   vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":q!<CR>", { noremap = true, silent = true })
 
   -- The following line used to crash when previewing Go files. But after doings some plugin cleaning,
@@ -28,6 +28,10 @@ local function preview_file_floating_window(file_path)
   -- Maybe even try removing all plugins and re-installing them.
   vim.cmd "filetype detect"
   vim.cmd "syntax enable"
+
+  -- This autocommand ensures proper rendering for certain filetypes, such as markdown with markview.
+  -- If rendering issues persist, consider adding more autocommands.
+  vim.api.nvim_exec_autocmds("BufEnter", { buffer = buf })
 
   vim.keymap.set("n", "<CR>", function()
     vim.api.nvim_win_close(win, true)
