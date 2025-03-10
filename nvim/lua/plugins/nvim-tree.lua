@@ -22,9 +22,7 @@ local function on_attach(bufnr)
     local node = api.tree.get_node_under_cursor()
 
     if node and node.absolute_path then
-      -- TODO: Is there a way to just include it by the plugin name without "custom-plugins." prefix?
-      -- Maybe my config is wrong and it should be possible.
-      require("custom-plugins.preview-file").preview_file(node.absolute_path)
+      require("preview-file").preview_file(node.absolute_path)
     end
   end, opts "Preview selected file in a floating window")
 end

@@ -6,6 +6,8 @@ local M = {}
 local fullscreen_win = nil
 local cursor_moved_autocmd = nil
 
+function M.setup() end
+
 function M.toggle_fullscreen()
   if fullscreen_win ~= nil then
     vim.api.nvim_win_close(fullscreen_win, true)
@@ -18,7 +20,7 @@ function M.toggle_fullscreen()
     return
   end
 
-  local utils = require "custom-plugins.toggle-fullscreen.window-util"
+  local utils = require "toggle-fullscreen.window-util"
 
   if utils.is_floating(vim.api.nvim_get_current_win()) then
     vim.api.nvim_err_writeln "Cannot set a floating window to fullscreen"
