@@ -11,7 +11,7 @@ map("n", "<leader>th", function()
       actions.select_default:replace(function(prompt_bufnr)
         local selection = action_state.get_selected_entry()
         actions.close(prompt_bufnr)
-        require("utils").save_theme(selection.value)
+        require("theme-store").save(selection.value)
         vim.cmd("colorscheme " .. selection.value)
       end)
       return true
@@ -64,7 +64,7 @@ local function cycle_fav_themes(is_next)
 
   local theme = fav_themes[fav_theme_idx + 1]
   vim.cmd("colorscheme " .. theme)
-  require("utils").save_theme(theme)
+  require("theme-store").save(theme)
 end
 
 map("n", "<leader>tn", function()

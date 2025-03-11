@@ -131,9 +131,6 @@ local function load_colorscheme(variant)
   -- TODO: More colors need to be applied for floating windows to render properly.
   -- Currently, both my preview-file and toggle-fullscreen plugins don't show colors
   -- properly because I haven't configured those colors correctly here.
-  -- TODO: Actually, floating windows do have a different color in all themes, not just this one.
-  -- Maybe the approach of using floating windows to create a zoom-in isn't 100% accurate.
-  -- Maybe a better approach would be to create a normal window, and use that one temporarily as the only one.
   -- hi("NormalFloat", { fg = "#e0dbba", bg = blue_bg[1] })
   -- hi("FloatBorder", { fg = "#ff0000", bg = blue_bg[1] })
   -- hi("FloatTitle", { fg = "#76b4de", bg = blue_bg[1] })

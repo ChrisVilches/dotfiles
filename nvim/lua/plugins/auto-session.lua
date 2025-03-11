@@ -1,4 +1,21 @@
-local utils = require "utils"
+local function current_dir_is_git_repo()
+  local cwd = vim.fn.getcwd()
+  local res = vim.fn.glob(cwd .. "/.git/")
+  return #res > 0
+end
+
+local function restore_nvim_tree()
+  local nvim_tree_api = require "nvim-tree.api"
+
+  -- Restore the nvim-tree while maintaining the cursor position in the code window.
+  local win_id = vim.api.nvim_get_current_win()
+  local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
+  nvim_tree_api.tree.open()
+  nvim_tree_api.tree.change_root(vim.fn.getcwd())
+  nvim_tree_api.tree.reload()
+  vim.api.nvim_set_current_win(win_id)
+  pcall(vim.api.nvim_win_set_cursor, win_id, cursor_pos)
+end
 
 return {
   "rmagatti/auto-session",
@@ -8,13 +25,13 @@ return {
   -- },
   config = function()
     local function handle_restore()
-      if utils.current_dir_is_git_repo() then
-        utils.restore_nvim_tree()
+      if current_dir_is_git_repo() then
+        restore_nvim_tree()
       end
     end
 
     require("auto-session").setup {
-      auto_create = utils.current_dir_is_git_repo,
+      auto_create = current_dir_is_git_repo,
       post_restore_cmds = { handle_restore },
     }
   end,

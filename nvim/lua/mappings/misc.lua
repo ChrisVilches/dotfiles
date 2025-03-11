@@ -14,6 +14,7 @@ map("n", "<C-s>", "<cmd>w<CR>", { desc = "general save file" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
+map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
 
 map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
@@ -34,4 +35,4 @@ map("n", "<leader>wk", function()
   vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
 end, { desc = "whichkey query lookup" })
 
-map("n", "<leader>z", require("toggle-fullscreen").toggle_fullscreen, { noremap = true, silent = true })
+map("n", "<leader>z", require "toggle-fullscreen", { noremap = true, silent = true })

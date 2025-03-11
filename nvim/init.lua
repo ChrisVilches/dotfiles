@@ -51,7 +51,7 @@ require("lazy").setup {
   },
 }
 
-local theme = require("utils").load_theme()
+local theme = require("theme-store").load()
 
 if theme ~= nil then
   if

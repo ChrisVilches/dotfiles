@@ -23,6 +23,13 @@ local function on_attach(_, bufnr)
   map("n", "gr", vim.lsp.buf.references, opts "Show references")
 end
 
+local function on_init(client)
+  if client.server_capabilities then
+    -- Disable semantic tokens to prevent errors from incomplete LSP support.
+    client.server_capabilities.semanticTokensProvider = false
+  end
+end
+
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
@@ -37,6 +44,7 @@ return {
     require("mason-lspconfig").setup_handlers {
       function(server_name)
         lspconfig[server_name].setup {
+          on_init = on_init,
           on_attach = on_attach,
         }
       end,

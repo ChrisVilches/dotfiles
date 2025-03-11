@@ -29,40 +29,10 @@ map("n", "<leader><C-l>", "<cmd>BufferLineMoveNext<CR>", { desc = "buffer move n
 map(
   "n",
   "<leader>tx",
-  require("utils").close_other_except_unsaved,
+  require("buffer-close").close_other_except_unsaved,
   { desc = "close all tabs except current and unsaved" }
 )
 
-local closed_files = require("stack").Stack:new()
-
-local close_buffer_wrapper = function(force)
-  local name = vim.api.nvim_buf_get_name(0)
-  local closed = require("utils").close_buffer { force = force }
-
-  if closed then
-    closed_files:push(name)
-  end
-end
-
-map("n", "<leader>x", function()
-  close_buffer_wrapper(false)
-end, { desc = "buffer close" })
-
-map("n", "<leader>X", function()
-  close_buffer_wrapper(true)
-end, { desc = "buffer close (force)" })
-
-map("n", "<leader>tr", function()
-  if closed_files:is_empty() then
-    vim.api.nvim_err_writeln "No files to re-open"
-    return
-  end
-
-  local file_path = closed_files:pop()
-
-  if vim.loop.fs_stat(file_path) then
-    vim.cmd("edit " .. vim.fn.fnameescape(file_path))
-  else
-    vim.api.nvim_err_writeln("Cannot re-open file: " .. file_path)
-  end
-end, { desc = "tab re-open" })
+map("n", "<leader>x", require("buffer-close").close, { desc = "buffer close" })
+map("n", "<leader>X", require("buffer-close").close_force, { desc = "buffer close (force)" })
+map("n", "<leader>tr", require("buffer-close").reopen_last, { desc = "tab re-open" })
