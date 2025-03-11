@@ -1,5 +1,3 @@
-local M = {}
-
 -- NOTE: Avoid using :q to close a fullscreen window, as it may cause glitches and errors,
 -- especially with plugins like Avante (AI plugin).
 -- Instead, use the provided toggle function to safely close the window.
@@ -7,7 +5,7 @@ local M = {}
 local fullscreen_win = nil
 local cursor_moved_autocmd = nil
 
-function M.toggle_fullscreen()
+return function()
   if fullscreen_win ~= nil then
     vim.api.nvim_win_close(fullscreen_win, true)
     return
@@ -47,5 +45,3 @@ function M.toggle_fullscreen()
     end,
   })
 end
-
-return M

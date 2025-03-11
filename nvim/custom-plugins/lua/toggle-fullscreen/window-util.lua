@@ -20,12 +20,18 @@ function M.copy_win_options(src, dest)
   -- vim.api.nvim_win_set_cursor(dest, cursor_pos)
   -- TODO: Syncing the scroll position would be nice as well. How to do it?
   -- problem: sometimes the vertical position (scrolling) are different (original vs preview windows)
+  -- try using:
+  -- local view = vim.fn.winsaveview()
+  -- which worked in my buffer-close plugin, but mind that the requirements are a bit different
+  -- (the fullscreen has different size than the original one, so they may not match)
+  -- but maybe it works better than without.
 end
 
 function M.create_fullscreen_floating(buf)
   local ui = vim.api.nvim_list_uis()[1]
 
   -- TODO: It gets on top of the popup window when doing -> command line -> ctrl+f (show history - bug: not visible)
+  -- TODO: It uses "floating window" highlights which means the colors are different from the usual window.
   local win = vim.api.nvim_open_win(buf, true, {
     relative = "editor",
     width = ui.width,
