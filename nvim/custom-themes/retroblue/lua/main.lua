@@ -136,5 +136,4 @@ local function load_colorscheme(variant)
   -- hi("FloatTitle", { fg = "#76b4de", bg = blue_bg[1] })
 end
 
-print "doing something"
 return load_colorscheme

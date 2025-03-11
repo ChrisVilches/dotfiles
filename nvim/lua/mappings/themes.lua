@@ -19,7 +19,8 @@ map("n", "<leader>th", function()
   }
 end, { desc = "theme picker" })
 
-local fav_themes = {
+require("theme-cycle").on_change(require("theme-store").save)
+require("theme-cycle").set_fav_themes {
   "ayu",
   "retroblue",
   "retroblue-darker",
@@ -37,40 +38,5 @@ local fav_themes = {
   "gruvbox",
 }
 
-local fav_theme_idx = -1
-
-local function cycle_fav_themes(is_next)
-  -- Try to find the current theme (only happens once)
-  -- After that, if you change the theme manually but then use this function,
-  -- it will still use this variable to know which theme to choose next.
-  if fav_theme_idx == -1 then
-    for index, theme in ipairs(fav_themes) do
-      if theme == vim.g.colors_name then
-        fav_theme_idx = index - 1
-        break
-      end
-    end
-  end
-
-  if fav_theme_idx == -1 then
-    fav_theme_idx = 0
-  end
-
-  if is_next then
-    fav_theme_idx = (fav_theme_idx + 1) % #fav_themes
-  else
-    fav_theme_idx = (fav_theme_idx - 1 + #fav_themes) % #fav_themes
-  end
-
-  local theme = fav_themes[fav_theme_idx + 1]
-  vim.cmd("colorscheme " .. theme)
-  require("theme-store").save(theme)
-end
-
-map("n", "<leader>tn", function()
-  cycle_fav_themes(true)
-end, { desc = "theme favorite next" })
-
-map("n", "<leader>tp", function()
-  cycle_fav_themes(false)
-end, { desc = "theme favorite prev" })
+map("n", "<leader>tn", require("theme-cycle").cycle_next, { desc = "theme favorite next" })
+map("n", "<leader>tp", require("theme-cycle").cycle_prev, { desc = "theme favorite prev" })

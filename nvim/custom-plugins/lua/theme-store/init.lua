@@ -1,44 +1,23 @@
 local M = {}
 
-local load_json = function(file_path)
-  local file = io.open(file_path, "r")
-  if not file then
-    return nil
-  end
+local json = require "theme-store.json"
 
-  local content = file:read "*all"
-  file:close()
-  local success, result = pcall(vim.fn.json_decode, content)
-
-  if success then
-    return result
-  else
-    return nil
-  end
-end
-
-local save_file = function(file_path, data)
-  local file = io.open(file_path, "w")
-  if not file then
-    error("Could not open file for writing: " .. file_path)
-    return
-  end
-  file:write(data .. "\n")
-  file:close()
+local function get_theme_path()
+  return vim.fn.stdpath "data" .. "/selected-theme"
 end
 
 function M.save(theme)
-  local themepath = vim.fn.stdpath "data" .. "/selected-theme"
-  local curr = load_json(themepath) or {}
+  local themepath = get_theme_path()
+  local curr = json.load(themepath) or {}
   local project = vim.fn.getcwd()
   curr[project] = theme
-  save_file(themepath, vim.fn.json_encode(curr))
+  json.save(themepath, curr)
 end
 
 function M.load()
-  local themepath = vim.fn.stdpath "data" .. "/selected-theme"
+  local themepath = get_theme_path()
   local project = vim.fn.getcwd()
-  local all_themes = load_json(themepath)
+  local all_themes = json.load(themepath)
   if all_themes == nil then
     return nil
   end
