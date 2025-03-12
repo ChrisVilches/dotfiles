@@ -1,3 +1,4 @@
+-- TODO: Error: close a quarto file, then open it again, a Diagnostics-related (and Otter) error appears.
 return {
   "quarto-dev/quarto-nvim",
   ft = { "quarto" },

@@ -25,8 +25,18 @@ local function opts(desc)
   return { desc = "quarto: " .. desc, buffer = 0, noremap = true, silent = true, nowait = true }
 end
 
-map("n", "<localleader>qr", require("quarto.runner").run_cell, opts "run cell")
-map("n", "<localleader>qR", require("quarto.runner").run_all, opts "run all cells")
+-- TODO: It's necessary to wrap the function calls so that this script doesn't initialize the Quarto plugin.
+-- Instead, Quarto has to be initialized due to the format event.
+-- This is because if this script loads Quarto, it won't get initialized properly (some highlights won't be
+-- rendered, etc).
+-- I wish I could fix it so that we don't have to think so much about why this is going on (it should simply work).
+map("n", "<localleader>qr", function()
+  require("quarto.runner").run_cell()
+end, opts "run cell")
+
+map("n", "<localleader>qR", function()
+  require("quarto.runner").run_all()
+end, opts "run all cells")
 
 map("n", "<localleader>qp", function()
   insert_code_chunk "python"
