@@ -24,6 +24,11 @@ local function on_attach(_, bufnr)
 end
 
 local function on_init(client)
+  -- TODO: Should i do something like this in my LSP? (this was in the Quarto kickstarter).
+  -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+  -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+  -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+
   if client.server_capabilities then
     -- Disable semantic tokens to prevent errors from incomplete LSP support.
     client.server_capabilities.semanticTokensProvider = false
