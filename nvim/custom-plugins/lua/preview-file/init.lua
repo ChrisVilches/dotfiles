@@ -55,6 +55,16 @@ local function set_on_blur_close(win, buf)
   })
 end
 
+local function add_virtual_text_file_path(buf, file_path)
+  local ns_id = vim.api.nvim_create_namespace "preview_file_virtual_text"
+  local short_path = vim.fn.fnamemodify(file_path, ":~:.")
+
+  vim.api.nvim_buf_set_extmark(buf, ns_id, 0, 0, {
+    virt_text = { { short_path, "Comment" } },
+    virt_text_pos = "right_align",
+  })
+end
+
 local function create_buffer(file_path)
   local buf = vim.api.nvim_create_buf(false, true)
 
@@ -66,6 +76,7 @@ local function create_buffer(file_path)
   vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
   vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
   vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", ":q!<cr>", { noremap = true, silent = true })
+  add_virtual_text_file_path(buf, file_path)
 
   vim.api.nvim_buf_call(buf, function()
     vim.cmd "doautocmd BufEnter"

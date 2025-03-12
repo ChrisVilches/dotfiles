@@ -1,15 +1,24 @@
 -- Editing, motions, replacing, etc.
 local map = vim.keymap.set
 
+-- TODO: I need more useful commands for like, pasting (and managing registers effectively) and
+-- things like macros or multicursor (for when I use Tailwind), but don't add just whatever you
+-- find online. Try to make them useful for me and to start using them a lot.
+-- Maybe try to learn how to search history of edits (maybe the overriden keymappings below would help,
+-- but I think there are others that let you open a popup to autocomplete using your previous inserts)
+
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
 -- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
 -- get used to doing that motion both in Neovim and the terminal.
 map("i", "<C-e>", "<End>", { desc = "move end of line" })
 map("i", "<C-a>", "<ESC>I", { desc = "move beginning of line" })
-map("i", "<C-d>", "<ESC><Right>ce")
+
+-- TODO: Maybe remove. I never use it, I find it confusing to have this.
+-- map("i", "<C-d>", "<ESC><Right>ce")
 
 -- Exit parentheses while editing.
-map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
+-- TODO: Maybe remove. I never use it, I find it confusing to have this.
+-- map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
 
 -- Save file while inserting. Using <C-o>w doesn't format the file.
 map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })

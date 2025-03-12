@@ -20,6 +20,7 @@ map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
 
+-- TODO: Maybe just ESC is enough, as I never need ESC to be pressed on the terminal (I think)
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 local terminal = require("toggleterm.terminal").Terminal:new { direction = "float" }

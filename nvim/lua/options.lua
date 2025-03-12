@@ -5,6 +5,7 @@ local g = vim.g
 opt.termguicolors = true
 vim.wo.wrap = false
 opt.scrolloff = 8
+vim.g.maplocalleader = "\\"
 
 -- Recommended by auto-session plugin
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
@@ -52,7 +53,6 @@ opt.whichwrap:append "<>[]hl"
 
 -- disable some default providers
 g.loaded_node_provider = 0
-g.loaded_python3_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_ruby_provider = 0
 
