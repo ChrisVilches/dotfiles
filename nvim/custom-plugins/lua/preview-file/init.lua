@@ -4,7 +4,7 @@ local function inherit_option(win, key)
   vim.api.nvim_set_option_value(key, vim.go[key], { win = win })
 end
 
-local function create_window(buf)
+local function create_window(buf, title)
   local win_opts = {
     relative = "editor",
     width = 80,
@@ -13,6 +13,7 @@ local function create_window(buf)
     row = math.floor((vim.o.lines - 20) / 2),
     style = "minimal",
     border = "rounded",
+    title = title,
   }
 
   local win = vim.api.nvim_open_win(buf, true, win_opts)
@@ -55,16 +56,6 @@ local function set_on_blur_close(win, buf)
   })
 end
 
-local function add_virtual_text_file_path(buf, file_path)
-  local ns_id = vim.api.nvim_create_namespace "preview_file_virtual_text"
-  local short_path = vim.fn.fnamemodify(file_path, ":~:.")
-
-  vim.api.nvim_buf_set_extmark(buf, ns_id, 0, 0, {
-    virt_text = { { short_path, "Comment" } },
-    virt_text_pos = "right_align",
-  })
-end
-
 local function create_buffer(file_path)
   local buf = vim.api.nvim_create_buf(false, true)
 
@@ -76,7 +67,6 @@ local function create_buffer(file_path)
   vim.fn.setbufline(buf, 1, vim.fn.readfile(file_path))
   vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
   vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", ":q!<cr>", { noremap = true, silent = true })
-  add_virtual_text_file_path(buf, file_path)
 
   vim.api.nvim_buf_call(buf, function()
     vim.cmd "doautocmd BufEnter"
@@ -94,7 +84,8 @@ function M.preview_file(file_path)
   end
 
   local buf = create_buffer(file_path)
-  local win = create_window(buf)
+  local win_title = vim.fn.fnamemodify(file_path, ":~:.")
+  local win = create_window(buf, win_title)
 
   map_edit_on_enter(win, buf, file_path)
   set_on_blur_close(win, buf)

@@ -10,9 +10,9 @@ return {
     hints = { enabled = false },
     openai = {
       endpoint = "https://api.openai.com/v1",
-      model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+      model = "gpt-4o",
       timeout = 30000, -- timeout in milliseconds
-      temperature = 0, -- adjust if needed
+      temperature = 0,
       max_tokens = 4096,
       -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
     },
@@ -26,26 +26,12 @@ return {
     "MunifTanjim/nui.nvim",
     --- The below dependencies are optional,
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-    "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    "nvim-tree/nvim-web-devicons",
     "nvim-telescope/telescope.nvim",
-    -- TODO: This plugin has the problem that the raw text becomes
-    -- visible when the cursor is on the line, which makes it
-    -- annoying because the entire text moves and it's hard to read.
-    -- {
-    --   "MeanderingProgrammer/render-markdown.nvim",
-    --   opts = {
-    --     file_types = { "markdown", "Avante" },
-    --     anti_conceal = { enabled = true },
-    --   },
-    --   ft = { "markdown", "Avante" },
-    -- },
     {
-      -- TODO: This one doesn't show raw text when the cursor is on
-      -- the lines, but it doesn't render immediately while the text
-      -- is being outputted, and it hides the markdown characters
-      -- so that if you press left/right it will need several key
-      -- presses to change to the next visible character.
       "OXY2DEV/markview.nvim",
+      --   Alternative:
+      --   "MeanderingProgrammer/render-markdown.nvim",
       branch = "main",
       opts = {
         preview = {
