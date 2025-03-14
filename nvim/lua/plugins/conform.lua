@@ -23,8 +23,6 @@ return {
       },
     }
 
-    -- TODO: Grabbed this code from the Quarto kickstarter (verify it's correct and make
-    -- sure it does something useful).
     require("conform").formatters.injected = {
       -- Set the options field
       options = {

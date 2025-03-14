@@ -40,18 +40,18 @@ local function close_aux(force)
   end
 end
 
--- TODO: This function should return only buffers listed in the tabs.
--- Not sure if that's how it works.
-local current_buffers = function()
+local current_tabs_buffers = function()
+  -- More information
+  -- :h buftype
   return vim.tbl_filter(function(buf)
-    return vim.bo[buf].buflisted and vim.bo[buf].buftype ~= "terminal"
+    return vim.bo[buf].buflisted and vim.bo[buf].buftype == ""
   end, vim.api.nvim_list_bufs())
 end
 
 function M.close_other_except_unsaved()
   local current_buf = vim.api.nvim_get_current_buf()
 
-  for _, buf in ipairs(current_buffers()) do
+  for _, buf in ipairs(current_tabs_buffers()) do
     if buf ~= current_buf and not vim.bo[buf].modified then
       vim.api.nvim_buf_delete(buf, {})
     end

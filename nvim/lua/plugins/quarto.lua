@@ -1,4 +1,6 @@
 -- TODO: Error: close a quarto file, then open it again, a Diagnostics-related (and Otter) error appears.
+-- Probably triage. It can't be solved easily. On the kickstarter this error doesn't happen but it's hard
+-- to understand what's the difference between my setup and the kickstarter one.
 return {
   "quarto-dev/quarto-nvim",
   ft = { "quarto" },
