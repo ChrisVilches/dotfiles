@@ -35,6 +35,18 @@ local function on_init(client)
   end
 end
 
+-- Temporary fix for Quarto: Keymaps are not binding with mason-lspconfig on .qmd files,
+-- possibly due to an Otter plugin issue. This still doesn't work for newly created files.
+local function quarto_workaround()
+  vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("quarto-lsp-attach", { clear = true }),
+    pattern = "*.qmd",
+    callback = function(event)
+      on_attach(nil, event.buf)
+    end,
+  })
+end
+
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
@@ -45,6 +57,8 @@ return {
   },
   config = function()
     local lspconfig = require "lspconfig"
+
+    quarto_workaround()
 
     require("mason-lspconfig").setup_handlers {
       function(server_name)
