@@ -17,7 +17,7 @@ tee=/usr/bin/tee
 
 # Calibrate manually.
 step=4000
-min_value=30000
+min_value=10000
 max_value=$(cat $dir/max_brightness)
 
 get_curr() {
