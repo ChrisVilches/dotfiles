@@ -20,8 +20,9 @@ map("i", "<C-a>", "<ESC>I", { desc = "move beginning of line" })
 -- TODO: Maybe remove. I never use it, I find it confusing to have this.
 -- map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
 
--- Save file while inserting. Using <C-o>w doesn't format the file.
-map("i", "<C-s>", "<Esc>:w<cr>i", { desc = "file save" })
+map({ "i", "n" }, "<C-s>", function()
+  vim.api.nvim_command "write"
+end, { desc = "file save" })
 
 -- Find and replace
 map("n", "<leader>frl", ":s///g<Left><Left><Left>", { desc = "find and replace (line)" })

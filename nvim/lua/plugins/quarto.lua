@@ -40,6 +40,7 @@ return {
     -- },
     {
       "benlubas/molten-nvim",
+      -- NOTE: This needs a lot of external dependencies so make sure you run 'checkhealth molten'
       build = ":UpdateRemotePlugins",
       init = function()
         vim.g.molten_output_win_max_height = 20
