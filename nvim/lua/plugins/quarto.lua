@@ -23,11 +23,6 @@ return {
           "nvim-treesitter/nvim-treesitter",
         },
       },
-      opts = {
-        verbose = {
-          no_code_found = false,
-        },
-      },
     },
     -- {
     --   Enable and try someday (preview equations)
