@@ -30,13 +30,8 @@ return {
       },
     },
     -- {
-    --   -- TODO: Enable and try someday.
-    --   -- preview equations
+    --   Enable and try someday (preview equations)
     --   "jbyuki/nabla.nvim",
-    --   enabled = false,
-    --   keys = {
-    --     { "<leader>qm", ':lua require"nabla".toggle_virt()<cr>', desc = "toggle math equations" },
-    --   },
     -- },
     {
       "benlubas/molten-nvim",
@@ -62,7 +57,6 @@ return {
         -- vim.g.molten_auto_open_html_in_browser = true
 
         -- When the window can't display the entire contents of the output buffer, shows the number of extra lines in the window footer (requires nvim 10.0+ and a window border)
-        -- TODO: Maybe this would be good for when a Pandas series has a lot of data, etc.
         -- vim.g.molten_output_show_more = true
       end,
     },

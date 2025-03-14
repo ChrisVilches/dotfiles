@@ -13,13 +13,6 @@ local map = vim.keymap.set
 map("i", "<C-e>", "<End>", { desc = "move end of line" })
 map("i", "<C-a>", "<ESC>I", { desc = "move beginning of line" })
 
--- TODO: Maybe remove. I never use it, I find it confusing to have this.
--- map("i", "<C-d>", "<ESC><Right>ce")
-
--- Exit parentheses while editing.
--- TODO: Maybe remove. I never use it, I find it confusing to have this.
--- map("i", "<C-l>", "<Left><c-o>:call search('}\\|)\\|]\\|>\\|\"', 'W')<cr><Right>", { silent = true })
-
 map({ "i", "n" }, "<C-s>", function()
   vim.api.nvim_command "write"
 end, { desc = "file save" })

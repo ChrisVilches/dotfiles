@@ -1,5 +1,9 @@
 local M = {}
 
+-- Known issues:
+-- * Floating window uses different highlights, causing color inconsistency.
+-- * Fullscreen floating window overlaps popup when using command line history.
+
 function M.is_floating(win_id)
   local config = vim.api.nvim_win_get_config(win_id)
   return config.relative ~= ""
@@ -16,22 +20,13 @@ function M.copy_win_options(src, dest)
   copy_opt "foldmethod"
   copy_opt "scrolloff"
   copy_opt "wrap"
-  -- local cursor_pos = vim.api.nvim_win_get_cursor(src)
-  -- vim.api.nvim_win_set_cursor(dest, cursor_pos)
-  -- TODO: Syncing the scroll position would be nice as well. How to do it?
-  -- problem: sometimes the vertical position (scrolling) are different (original vs preview windows)
-  -- try using:
-  -- local view = vim.fn.winsaveview()
-  -- which worked in my buffer-close plugin, but mind that the requirements are a bit different
-  -- (the fullscreen has different size than the original one, so they may not match)
-  -- but maybe it works better than without.
 end
 
 function M.create_fullscreen_floating(buf)
   local ui = vim.api.nvim_list_uis()[1]
 
-  -- TODO: It gets on top of the popup window when doing -> command line -> ctrl+f (show history - bug: not visible)
-  -- TODO: It uses "floating window" highlights which means the colors are different from the usual window.
+  local view = vim.fn.winsaveview()
+
   local win = vim.api.nvim_open_win(buf, true, {
     relative = "editor",
     width = ui.width,
@@ -41,6 +36,9 @@ function M.create_fullscreen_floating(buf)
     style = "minimal",
     border = "solid",
   })
+
+  -- Attempt to synchronize scroll and cursor positions.
+  vim.fn.winrestview(view)
 
   -- This is to prevent switching to a different buffer. This window
   -- should only have the original buffer.

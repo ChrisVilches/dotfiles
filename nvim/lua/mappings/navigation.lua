@@ -1,16 +1,5 @@
 local map = vim.keymap.set
 
--- NOTE: Never used these smart movements. Archived for now. Consider removing later.
--- Be careful if you add dot (.) since it matches any character (must escape it somehow).
--- local find_symbols = { "{", "}", "\\[", "\\]", "(", ")", "," }
--- local pattern = table.concat(find_symbols, "\\|")
--- map({ "n", "v" }, "<C-h>", function()
---   vim.cmd(":call search('" .. pattern .. "', 'Wb')")
--- end, { desc = "smart move (left)", silent = true })
--- map({ "n", "v" }, "<C-l>", function()
---   vim.cmd(":call search('" .. pattern .. "', 'W')")
--- end, { desc = "smart move (right)", silent = true })
-
 map({ "n", "x" }, "<C-j>", "6j")
 map({ "n", "x" }, "<C-k>", "6k")
 
