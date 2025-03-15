@@ -1,9 +1,3 @@
--- TODO: I think one of the worst colors is the function color, it looks too similar to the
--- background color, and it's hard to see. It should look more snappy.
---     for example in this C++ code (the `sort`)
---     sort(events.begin(), events.end());
---  (I'm talking about the lighter variant)
-
 local function hi(group, opts)
   -- For more:
   -- :h nvim_set_hl
@@ -41,7 +35,6 @@ local function set_general_ui(opts)
     keyword = "#76b4de",
   }
 
-  -- TODO: Some of these colors are untested.
   hi("Normal", { fg = colors.fg, bg = colors.bg })
   hi("Visual", { bg = colors.visual_bg })
   hi("Search", { bg = "#ffed82", fg = "#000000" })

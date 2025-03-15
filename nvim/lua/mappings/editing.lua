@@ -29,7 +29,6 @@ map("v", "<leader>rx", '"vy' .. ":let @/ = @v<CR>" .. "cgn", { desc = "replace u
 -- Move selected text.
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
-map("x", "<leader>p", '"_dP', { desc = "paste and keep content" })
 
 -- Wrap text inside () or {}
 -- Can then be removed using "tpope/vim-surround"
