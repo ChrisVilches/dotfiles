@@ -14,6 +14,8 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 -------------------------------------- options ------------------------------------------
 o.laststatus = 3
 o.showmode = false
+opt.incsearch = true
+opt.wrapscan = true
 
 o.clipboard = "unnamedplus"
 o.cursorline = true

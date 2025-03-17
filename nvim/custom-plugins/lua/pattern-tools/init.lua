@@ -1,10 +1,3 @@
--- TODO: This should be tested with some alternative searching options. This is what ChatGPT said:
--- Yes, when you press n in Vim while searching, the cursor is placed on the first character of the next match. This is the default behavior for both / (forward search) and ? (backward search).
--- However, there are some cases where the cursor might not be exactly where you expect:
--- If you use set incsearch, the match is highlighted as you type, but the cursor stays at its original position until you press Enter.
--- If you use set nowrapscan, Vim won’t wrap around the file when reaching the last match.
--- If you use \zs in your search pattern, the match position can be altered. For example, /foo\zsbar will match foobar, but the cursor will be placed at b in bar instead of f in foo.
-
 local M = {}
 
 local function use_word()
