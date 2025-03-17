@@ -7,40 +7,20 @@
 
 local M = {}
 
-local function trim(s)
-  return s:match "^%s*(.-)%s*$"
-end
-
 local function use_word()
   return vim.api.nvim_get_mode().mode == "n"
 end
 
--- Refer to "very nomagic" or \V in the help documentation to understand which characters need to be escaped.
-local function clean(text)
-  local special_chars_attempt = [[\/]]
-
-  text = vim.fn.escape(text, special_chars_attempt)
-  text = trim(text)
-  text = text:gsub("\n", [[\n]])
-  return text
-end
-
--- Warning: This function may unexpectedly change the mode. Ensure to store the initial mode before invoking it.
+-- This function also switches to normal mode.
 function M.search_text()
   if use_word() then
     vim.cmd [[let @/ = expand('<cword>')]]
   else
-    local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    local very_nomagic = [[\V]]
-    vim.api.nvim_command 'silent normal! "vy'
-
-    -- Restore the cursor position after yanking, as yanking changes it.
-    -- Known issue: If the selection is too long, causing the cursor to move away from the first character,
-    -- the highlight might not be displayed. This is likely due to a Neovim performance optimization.
-    vim.api.nvim_win_set_cursor(0, cursor_pos)
-    vim.fn.setreg("/", very_nomagic .. clean(vim.fn.getreg "v"))
+    local text = require("pattern-tools.util").get_selection()
+    vim.fn.setreg("/", require("pattern-tools.util").convert_very_nomagic(text))
   end
 
+  require("pattern-tools.util").go_to_normal_mode()
   vim.cmd [[set hlsearch]]
 end
 
