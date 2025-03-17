@@ -41,7 +41,7 @@ function M.find_and_replace_global_confirm()
   feed_keys [[:%s///gc<Left><Left><Left><Left>]]
 end
 
--- TODO: Test
+-- TODO: Test and practice
 function M.edit_with_macro()
   local move_to_first_character = use_word() and "#*" or "nN"
 

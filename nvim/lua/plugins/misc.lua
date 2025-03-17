@@ -15,6 +15,7 @@ return {
     event = "BufEnter",
   },
   {
+    -- TODO: Learn this plugin properly. I already got rid of my previous C-n mapping so I can use this plugin instead.
     "mg979/vim-visual-multi",
     event = "BufEnter",
   },

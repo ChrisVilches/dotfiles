@@ -1,13 +1,6 @@
 -- Editing, motions, replacing, etc.
 local map = vim.keymap.set
 
--- UPDATE: I added the pattern-tools in which I refactored some old ones, but added the new powerful
--- "set selection or word as search pattern"
--- UPDATE: Added the macro thingy to edit quickly (?).
--- TODO: Learn how to use :cdo to edit multiple files
--- TODO: Learn the multi cursor plugin I already have, just make sure to avoid keymap conflicts like the C-n I had
--- in normal mode (which is normally mapped to opening Nvim-Tree)
-
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
 -- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
 -- get used to doing that motion both in Neovim and the terminal.
