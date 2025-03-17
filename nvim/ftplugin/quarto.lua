@@ -1,52 +1,5 @@
 local buf = vim.api.nvim_get_current_buf()
 
--- Retrieves positions of all code blocks in the current buffer
-local function get_cell_positions()
-  local parsername = "markdown"
-  local parser = vim.treesitter.get_parser(buf, parsername)
-  local cell_query = [[(fenced_code_block)@codeblock]]
-  local query = vim.treesitter.query.parse(parsername, cell_query)
-  local tree = parser:parse()
-  local root = tree[1]:root()
-  local res = {}
-  for _, match, _ in query:iter_matches(root, buf, 0, -1, { all = true }) do
-    for _, nodes in pairs(match) do
-      for _, node in ipairs(nodes) do
-        local start_line, _, end_line, _ = node:range()
-        table.insert(res, { start_line, end_line })
-      end
-    end
-  end
-  table.sort(res, function(a, b)
-    return a[1] < b[1]
-  end)
-  return res
-end
-
-local function go_to_next_codeblock()
-  local curr = vim.fn.line "."
-  for _, cell in ipairs(get_cell_positions()) do
-    if curr < cell[1] + 2 then
-      vim.api.nvim_win_set_cursor(0, { cell[1] + 2, 0 })
-      return
-    end
-  end
-end
-
-local function go_to_prev_codeblock()
-  local curr = vim.fn.line "."
-  local found = nil
-  for _, cell in ipairs(get_cell_positions()) do
-    if cell[2] >= curr then
-      break
-    end
-    found = cell[1] + 2
-  end
-  if found ~= nil then
-    vim.api.nvim_win_set_cursor(0, { found, 0 })
-  end
-end
-
 -- Why "vim.schedule" is necessary:
 -- The expected event when lazy loading the Quarto plugin should be:
 -- ● quarto-nvim 10.76ms  quarto
@@ -58,12 +11,11 @@ vim.schedule(function()
   local function opts(desc)
     return { desc = "quarto: " .. desc, buffer = buf, noremap = true, silent = true, nowait = true }
   end
-  map("n", "<CR>", require("quarto.runner").run_cell, opts "run cell")
-  map("n", "<localleader>R", require("quarto.runner").run_all, opts "run all cells")
-  map("n", "<localleader>a", "<CMD>QuartoActivate<CR>", opts "activate")
-  map("n", "[", go_to_prev_codeblock, opts "go to prev block")
-  map("n", "]", go_to_next_codeblock, opts "go to next block")
-  map("n", "<localleader>p", "i```{python}\n\n```<Up>", opts "create Python cell")
+  map("n", "<CR>", ":QuartoSend<CR>", opts "run cell")
+  map("n", "<localleader>R", ":QuartoSendAll<CR>", opts "run all cells")
+  map("n", "<localleader>a", ":QuartoActivate<CR>", opts "activate")
+  map("n", "[", ":TSTextobjectGotoPreviousStart @block.inner<CR>", opts "go to prev block")
+  map("n", "]", ":TSTextobjectGotoNextStart @block.inner<CR>", opts "go to next block")
 end)
 
 -- Autocommand to activate LSP for new files because Otter cannot detect code blocks in empty files initially.
@@ -102,6 +54,26 @@ local function highlight_range(from, to)
 
     vim.api.nvim_buf_set_extmark(buf, ns, i, 0, { hl_eol = true, line_hl_group = hl })
   end
+end
+
+-- Retrieves positions of all code blocks in the current buffer
+local function get_cell_positions()
+  local parsername = "markdown"
+  local parser = vim.treesitter.get_parser(buf, parsername)
+  local cell_query = [[(fenced_code_block)@codeblock]]
+  local query = vim.treesitter.query.parse(parsername, cell_query)
+  local tree = parser:parse()
+  local root = tree[1]:root()
+  local res = {}
+  for _, match, _ in query:iter_matches(root, buf, 0, -1, { all = true }) do
+    for _, nodes in pairs(match) do
+      for _, node in ipairs(nodes) do
+        local start_line, _, end_line, _ = node:range()
+        table.insert(res, { start_line, end_line })
+      end
+    end
+  end
+  return res
 end
 
 local function highlight_cells()

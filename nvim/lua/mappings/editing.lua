@@ -1,11 +1,12 @@
 -- Editing, motions, replacing, etc.
 local map = vim.keymap.set
 
--- TODO: I need more useful commands for like, pasting (and managing registers effectively) and
--- things like macros or multicursor (for when I use Tailwind), but don't add just whatever you
--- find online. Try to make them useful for me and to start using them a lot.
--- Maybe try to learn how to search history of edits (maybe the overriden keymappings below would help,
--- but I think there are others that let you open a popup to autocomplete using your previous inserts)
+-- UPDATE: I added the pattern-tools in which I refactored some old ones, but added the new powerful
+-- "set selection or word as search pattern"
+-- UPDATE: Added the macro thingy to edit quickly (?).
+-- TODO: Learn how to use :cdo to edit multiple files
+-- TODO: Learn the multi cursor plugin I already have, just make sure to avoid keymap conflicts like the C-n I had
+-- in normal mode (which is normally mapped to opening Nvim-Tree)
 
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
 -- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
@@ -17,14 +18,18 @@ map({ "i", "n" }, "<C-s>", function()
   vim.api.nvim_command "write"
 end, { desc = "file save" })
 
+local patterns = require "pattern-tools"
 -- Find and replace
-map("n", "<leader>frl", ":s///g<Left><Left><Left>", { desc = "find and replace (line)" })
-map("n", "<leader>frg", ":%s///g<Left><Left><Left>", { desc = "find and replace (global)" })
+map("n", "<leader>frl", patterns.find_and_replace_line, { desc = "find and replace (line)" })
+map("n", "<leader>frg", patterns.find_and_replace_global, { desc = "find and replace (global)" })
 
--- Replace word under cursor, then continue replacing instances
--- by pressing ".", or skip using "n". Both directions.
-map("n", "<leader>rx", ":let @/ = expand('<cword>')<CR>" .. "cgn", { desc = "replace under cursor" })
-map("v", "<leader>rx", '"vy' .. ":let @/ = @v<CR>" .. "cgn", { desc = "replace under cursor" })
+-- TODO: Experimental
+map("n", "<leader>frc", patterns.find_and_replace_global_confirm, { desc = "find and replace (global + confirm)" })
+map({ "n", "x" }, "<leader>/", patterns.search_text, { desc = "set text as search pattern", silent = true })
+map({ "n", "x" }, "<leader>e", patterns.edit_with_macro, { desc = "set as search and start macro", silent = true })
+map("n", "<leader>rc", 'v"vy"vp', { desc = "repeat character", noremap = true })
+map("n", "<leader>rw", 'viw"vye"vp', { desc = "repeat word", noremap = true })
+map("n", "<leader>rW", 'viW"vyE"vp', { desc = "repeat WORD", noremap = true })
 
 -- Move selected text.
 map("v", "J", ":m '>+1<CR>gv=gv")

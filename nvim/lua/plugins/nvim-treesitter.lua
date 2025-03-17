@@ -4,6 +4,10 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   config = function()
     require("nvim-treesitter.configs").setup {
+      auto_install = true,
+      ignore_install = {},
+      modules = {},
+      sync_install = false,
       highlight = {
         enable = true,
       },

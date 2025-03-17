@@ -23,6 +23,7 @@ return {
     event = "VeryLazy",
     config = function()
       require("notify").setup {
+        merge_duplicates = false,
         background_colour = "#000000",
       }
     end,
@@ -44,4 +45,5 @@ return {
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
   -- https://github.com/gbprod/substitute.nvim
+  -- https://github.com/jake-stewart/multicursor.nvim
 }
