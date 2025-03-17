@@ -2,6 +2,7 @@ local opt = vim.opt
 local o = vim.o
 local g = vim.g
 
+vim.o.guifont = "Source Code Pro:h10"
 opt.termguicolors = true
 vim.wo.wrap = false
 opt.scrolloff = 8
