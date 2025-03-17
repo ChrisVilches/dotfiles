@@ -26,4 +26,9 @@ function M.go_to_normal_mode()
   vim.cmd [[exe "normal \<esc>"]]
 end
 
+function M.feed_keys(keys)
+  keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+  vim.fn.feedkeys(keys, "n")
+end
+
 return M
