@@ -13,10 +13,10 @@ end
 
 -- Refer to "very nomagic" or \V in the help documentation to understand which characters need to be escaped.
 function M.convert_very_nomagic(text)
-  local special_chars_attempt = [[\/]]
+  local special_chars = [[\/]]
   local very_nomagic = [[\V]]
 
-  text = vim.fn.escape(text, special_chars_attempt)
+  text = vim.fn.escape(text, special_chars)
   text = trim(text)
   text = text:gsub("\n", [[\n]])
   return very_nomagic .. text
