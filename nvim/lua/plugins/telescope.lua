@@ -8,6 +8,7 @@ return {
   },
   config = function()
     local telescope = require "telescope"
+    local actions = require "telescope.actions"
     local action_set = require "telescope.actions.set"
     telescope.setup {
       defaults = {
@@ -24,6 +25,11 @@ return {
             ["<C-k>"] = function(prompt_bufnr)
               action_set.shift_selection(prompt_bufnr, -6)
             end,
+            -- Originally mapped to CTRL+Q, but that's my TMUX prefix.
+            ["<C-a>"] = actions.send_to_qflist + actions.open_qflist,
+          },
+          i = {
+            ["<C-a>"] = actions.send_to_qflist + actions.open_qflist,
           },
         },
       },
