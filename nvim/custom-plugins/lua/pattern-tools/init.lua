@@ -6,19 +6,6 @@ local function use_word()
   return vim.api.nvim_get_mode().mode == "n"
 end
 
--- This function also switches to normal mode.
-function M.search_text()
-  if use_word() then
-    vim.cmd [[let @/ = expand('<cword>')]]
-  else
-    local text = util.get_selection()
-    vim.fn.setreg("/", util.convert_very_nomagic(text))
-  end
-
-  util.go_to_normal_mode()
-  vim.cmd [[set hlsearch]]
-end
-
 function M.find_and_replace_line()
   util.feed_keys [[:s///g<Left><Left><Left>]]
 end
@@ -34,11 +21,20 @@ end
 -- TODO: Test and practice
 function M.edit_with_macro()
   local move_to_first_character = use_word() and "#*" or "nN"
+  local text
 
-  M.search_text()
+  if use_word() then
+    text = vim.fn.expand "<cword>"
+  else
+    text = util.get_escaped_selection()
+    util.go_to_normal_mode()
+  end
+
+  vim.fn.setreg("/", text)
+  vim.cmd [[set hlsearch]]
 
   vim.cmd("normal! " .. move_to_first_character)
-  vim.cmd [[normal! qa]]
+  vim.cmd("normal! q" .. require("pattern-tools.config").opts.macro_reg)
 end
 
 return M

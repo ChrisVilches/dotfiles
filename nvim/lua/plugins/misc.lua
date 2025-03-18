@@ -14,11 +14,13 @@ return {
     "tpope/vim-surround",
     event = "BufEnter",
   },
-  {
-    -- TODO: Learn this plugin properly. I already got rid of my previous C-n mapping so I can use this plugin instead.
-    "mg979/vim-visual-multi",
-    event = "BufEnter",
-  },
+  -- {
+  -- TODO: This one is trash compared to multicursor.lua. Remove!!!!
+  -- That one requires almost no usage learning (no muscle memory), it simply works.
+  --   "mg979/vim-visual-multi",
+  --   event = "BufEnter",
+  --   enabled = false,
+  -- },
   {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
