@@ -28,8 +28,10 @@ map(
 
 map("n", "<leader>ff", "<cmd> Telescope frecency workspace=CWD <CR>", { desc = "find files (frecency)" })
 
+map("n", "<leader>re", function()
+  require("telescope.builtin").registers { initial_mode = "normal" }
+end)
+
 map("n", "<leader><tab>", function()
-  require("telescope.builtin").buffers {
-    initial_mode = "normal",
-  }
+  require("telescope.builtin").buffers { initial_mode = "normal" }
 end)
