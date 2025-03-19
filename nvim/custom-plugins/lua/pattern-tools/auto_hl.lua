@@ -38,19 +38,15 @@ local update_hl = function()
   vim.cmd [[set hlsearch]]
 end
 
-local function auto_highlight()
-  group = vim.api.nvim_create_augroup("VisualCursorMoved", { clear = true })
-
-  update_hl()
-  listen_enter_visual_and_cursor(update_hl)
-  listen_exit_visual(clear_autocmds)
-end
-
 return function()
   if group ~= nil then
     clear_autocmds()
     return
   end
 
-  auto_highlight()
+  group = vim.api.nvim_create_augroup("VisualCursorMoved", { clear = true })
+
+  update_hl()
+  listen_enter_visual_and_cursor(update_hl)
+  listen_exit_visual(clear_autocmds)
 end
