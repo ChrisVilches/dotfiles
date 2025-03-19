@@ -44,6 +44,6 @@ map("n", "<leader>'", "viW\"zs'<C-r>z'<Esc>")
 map("n", "<leader>!", require "toggle-boolean", { desc = "toggle boolean" })
 
 -- Add undo breakpoints while inserting
-for _, c in pairs { ".", ",", "!", "?", ";", ":" } do
+for _, c in pairs { ".", ",", "!", "?", ";", ":", "_", "-" } do
   map("i", c, c .. "<c-g>u")
 end
