@@ -1,0 +1,3 @@
+# This allows i3 config to reference scripts.
+# It seems it also helps tmux (config file) reference scripts.
+export PATH="$HOME/programs/scripts:$PATH"
