@@ -39,18 +39,14 @@ exec --no-startup-id dunst
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
-set $lock_color '110100'
-
-# Bug (just get used to it):
-# This setup locks screen twice if I lock it first manually, and then it suspends automatically.
 # Remove X screensaver to avoid confusion.
 exec --no-startup-id xset s off
 
 # Suspend and lock (with password) when the timer goes off.
-exec --no-startup-id xidlehook --not-when-fullscreen --not-when-audio --timer 600 'i3lock --color $lock_color & systemctl suspend' ''
+exec --no-startup-id xidlehook --not-when-fullscreen --not-when-audio --timer 600 ~/programs/scripts/lock-screen.sh ''
 
 # Keybinding for locking the screen (with password).
-bindsym $win+l exec --no-startup-id i3lock --color $lock_color
+bindsym $win+l exec --no-startup-id ~/programs/scripts/lock-screen.sh
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
