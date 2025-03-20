@@ -43,7 +43,7 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xset s off
 
 # Suspend and lock (with password) when the timer goes off.
-exec --no-startup-id xidlehook --not-when-fullscreen --not-when-audio --timer 600 lock-screen.sh ''
+exec --no-startup-id xidlehook --not-when-fullscreen --not-when-audio --timer 600 'lock-screen.sh suspend' ''
 
 # Keybinding for locking the screen (with password).
 bindsym $win+l exec --no-startup-id lock-screen.sh
