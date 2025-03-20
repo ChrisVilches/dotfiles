@@ -6,6 +6,7 @@ vim.o.guifont = "Source Code Pro:h10"
 opt.termguicolors = true
 vim.wo.wrap = false
 opt.scrolloff = 8
+vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Recommended by auto-session plugin

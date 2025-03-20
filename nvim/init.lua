@@ -1,8 +1,6 @@
-vim.g.mapleader = " "
-
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local repo = "https://github.com/folke/lazy.nvim.git"
   vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
@@ -73,6 +71,7 @@ else
 end
 
 vim.schedule(function()
+  require "options"
   require "autocmds"
   require "commands"
   require "mappings/editing"
@@ -80,5 +79,4 @@ vim.schedule(function()
   require "mappings/navigation"
   require "mappings/telescope"
   require "mappings/themes"
-  require "options"
 end)
