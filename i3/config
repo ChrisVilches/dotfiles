@@ -69,6 +69,8 @@ bindsym $mod+Return exec --no-startup-id terminator -x tmux; workspace 1; move c
 bindsym $mod+c exec --no-startup-id google-chrome-stable --remote-debugging-port=9222 --force-dark-mode --profile-directory="Default"; workspace 2; move container to workspace 2
 bindsym $mod+$win+c exec --no-startup-id google-chrome-stable --remote-debugging-port=9222 --force-dark-mode -profile-directory="Profile 1"; workspace 3; move container to workspace 3
 bindsym $mod+d exec "rofi -modi drun,run -show drun"
+# Electron: Zooming in with (ctrl++) doesn't work, but you can use Alt to
+# open the menu and manually select "zoom in".
 bindsym $mod+e exec --no-startup-id electron34 https://www.evernote.com/client/web; workspace 4; move container to workspace 4
 
 # change focus
