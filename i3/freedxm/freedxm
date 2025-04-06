@@ -1,0 +1,22 @@
+#!/bin/bash
+
+active() {
+  echo "🧘 freedxm active"
+}
+
+inactive() {
+  echo "freedxm inactive"
+}
+
+inactive
+
+# Read only the lines that are helpful in determining the current state.
+journalctl --user -fu freedxm.service --no-pager | while read -r line; do
+    if [[ "$line" == *"Session started"* ]]; then
+      active
+    elif [[ "$line" == *"Started Freedxm Service"* ]]; then
+      inactive
+    elif [[ "$line" == *"processes: [] domains: []"* ]]; then
+      inactive
+    fi
+done
