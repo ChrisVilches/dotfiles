@@ -1,0 +1,41 @@
+# NOTE: Symbolic link must be called "config", not "ghostty"!
+#
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /home/chris/.config/ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Config syntax crash course
+# ==========================
+# window-padding-x = 10
+# window-padding-y = 10
+font-family=RobotoMono Nerd Font
+font-size = 16
+keybind = ctrl+page_up=unbind
+keybind = ctrl+page_down=unbind
+# background = #09122C
+
+# NOTE: When using ctrl+plus, I think 'shift' is also necessary (i.e. shift+ctrl+plus),
+# possibly due to my keyd setup.
+keybind = ctrl+^=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+
+# # Empty values are used to reset config keys to default.
+# key =
+#
+# # Some config options have unique syntaxes for their value,
+# # which is explained in the docs for that config option.
+# # Just for example:
+# resize-overlay-duration = 4s 200ms

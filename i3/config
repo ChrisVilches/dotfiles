@@ -65,7 +65,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id terminator -x tmux; workspace 1; move container to workspace 1
+bindsym $mod+Return exec --no-startup-id ghostty -e tmux; workspace 1; move container to workspace 1
 bindsym $mod+c exec --no-startup-id google-chrome-stable --remote-debugging-port=9222 --force-dark-mode --profile-directory="Default"; workspace 2; move container to workspace 2
 bindsym $mod+$win+c exec --no-startup-id google-chrome-stable --remote-debugging-port=9222 --force-dark-mode -profile-directory="Profile 1"; workspace 3; move container to workspace 3
 bindsym $mod+d exec "rofi -modi drun,run -show drun"
