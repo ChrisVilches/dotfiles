@@ -17,6 +17,9 @@
 
 # Config syntax crash course
 # ==========================
+# ghostty +list-themes
+theme = Everblush
+# theme = embers-dark
 
 # NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
