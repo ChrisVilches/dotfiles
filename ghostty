@@ -19,12 +19,19 @@
 
 # Config syntax crash course
 # ==========================
+
+# NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
 # window-padding-y = 10
+# window-padding-balance = true
+window-padding-color = extend
+
 font-family=RobotoMono Nerd Font
 font-size = 16
 keybind = ctrl+page_up=unbind
 keybind = ctrl+page_down=unbind
+window-decoration = false
+
 # background = #09122C
 
 # NOTE: When using ctrl+plus, I think 'shift' is also necessary (i.e. shift+ctrl+plus),
