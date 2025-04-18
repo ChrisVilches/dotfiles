@@ -18,14 +18,19 @@
 # Config syntax crash course
 # ==========================
 # ghostty +list-themes
-theme = Everblush
-# theme = embers-dark
+# theme = lovelace
+# theme = duskfox
+# theme = Mariana
+# theme = GruvboxDarkHard
+# theme = Everblush
+theme = OneHalfDark
 
 # NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
 # window-padding-y = 10
 # window-padding-balance = true
 window-padding-color = extend
+adjust-underline-thickness=-1
 
 font-family=RobotoMono Nerd Font
 font-size = 16
@@ -37,6 +42,10 @@ window-decoration = false
 
 # NOTE: When using ctrl+plus, I think 'shift' is also necessary (i.e. shift+ctrl+plus),
 # possibly due to my keyd setup.
+# TODO: ctrl+^ is actually a very important Neovim shortcut, and this overrides that :/
+# but I can also use ctrl+6 and it does the same thing.
+# Actually ctrl+^ is more important for neovim. For ghostty find another key (I very
+# rarely zoom in/out).
 keybind = ctrl+^=increase_font_size:1
 keybind = ctrl+minus=decrease_font_size:1
 
