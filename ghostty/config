@@ -19,11 +19,11 @@
 # ==========================
 # ghostty +list-themes
 # theme = lovelace
-# theme = duskfox
+theme = duskfox
 # theme = Mariana
 # theme = GruvboxDarkHard
 # theme = Everblush
-theme = OneHalfDark
+# theme = OneHalfDark
 
 # NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
