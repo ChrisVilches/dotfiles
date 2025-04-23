@@ -14,6 +14,7 @@ map("n", "<leader>dc", require("dap").continue, { desc = "continue" })
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
+-- TODO: How does ZZ compare to these? should I remove one in favor of ZZ??
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
 
