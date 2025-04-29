@@ -31,5 +31,11 @@ return {
         }
       end,
     }
+
+    -- Avoid underlining the whole text when there's a diagnostic.
+    vim.diagnostic.config {
+      underline = false,
+      virtual_text = true,
+    }
   end,
 }
