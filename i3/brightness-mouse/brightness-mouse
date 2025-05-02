@@ -26,7 +26,7 @@ get_curr() {
 
 display() {
   p=$((100 * $(get_curr) / max_value))
-  echo -e "<span color=\"#FFA500\">\uf185</span> $p%"
+  echo -e "<span color=\"#FFA500\">🔆</span> $p%"
 }
 
 reset() {
