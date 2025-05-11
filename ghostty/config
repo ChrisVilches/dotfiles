@@ -42,11 +42,7 @@ window-decoration = false
 
 # NOTE: When using ctrl+plus, I think 'shift' is also necessary (i.e. shift+ctrl+plus),
 # possibly due to my keyd setup.
-# TODO: ctrl+^ is actually a very important Neovim shortcut, and this overrides that :/
-# but I can also use ctrl+6 and it does the same thing.
-# Actually ctrl+^ is more important for neovim. For ghostty find another key (I very
-# rarely zoom in/out).
-keybind = ctrl+^=increase_font_size:1
+keybind = shift+ctrl+plus=increase_font_size:1
 keybind = ctrl+minus=decrease_font_size:1
 
 # # Empty values are used to reset config keys to default.
