@@ -31,16 +31,22 @@ map("n", "<leader>rW", 'viW"vyE"vp', { desc = "repeat WORD", noremap = true })
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
--- Wrap text inside () or {}
--- Can then be removed using "tpope/vim-surround"
-map("x", "<leader>(", '"zs(<C-r>z)<Esc>')
-map("x", "<leader>{", '"zs{\n<C-r>z\n}<Esc>')
+local wrappers = {
+  ['"'] = { '"', '"' },
+  ["'"] = { "'", "'" },
+  ["`"] = { "`", "`" },
+  ["("] = { "(", ")" },
+  ["["] = { "[", "]" },
+  ["{"] = { "{\n", "\n}" },
+}
 
--- Wrap selected text or the word under the cursor with quotes
-map("x", '<leader>"', '"zs"<C-r>z"<Esc>')
-map("x", "<leader>'", "\"zs'<C-r>z'<Esc>")
-map("n", '<leader>"', 'viW"zs"<C-r>z"<Esc>')
-map("n", "<leader>'", "viW\"zs'<C-r>z'<Esc>")
+-- Wrap selected text or word under the cursor.
+-- Can then be removed using "tpope/vim-surround"
+for key, chars in pairs(wrappers) do
+  map("x", "<leader>" .. key, '"zs' .. chars[1] .. "<C-r>z" .. chars[2] .. "<Esc>")
+  map("n", "<leader>" .. key, 'viW"zs' .. chars[1] .. "<C-r>z" .. chars[2] .. "<Esc>")
+end
+
 map("n", "<leader>!", require "toggle-boolean", { desc = "toggle boolean" })
 
 -- Add undo breakpoints while inserting
