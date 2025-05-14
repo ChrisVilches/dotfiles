@@ -1,4 +1,8 @@
-# Configs
+# Dotfiles
+
+Some of this is outdated or explained insufficiently.
+
+Basically you have to `symlink` the config files. Install external/global dependencies if needed.
 
 ## Neovim
 
@@ -6,7 +10,9 @@ Working Neovim version:
 
 ```sh
 nvim -v
-NVIM v0.10.1
+NVIM v0.11.0
+Build type: RelWithDebInfo
+LuaJIT 2.1.1741730670
 ```
 
 1. https://github.com/BurntSushi/ripgrep
