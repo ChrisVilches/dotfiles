@@ -128,7 +128,6 @@ alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
 
-# TODO: Make sure the scripts I put here work
 # Put here things that cannot be committed (private keys, private IPs, etc).
 [[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
 
