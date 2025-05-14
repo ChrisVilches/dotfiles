@@ -19,6 +19,8 @@ return {
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
+    -- TODO: It seems now I can't go to other files with the "go to definition" trick.
+    -- (this plugin mason-lspconfig was updated lately, maybe that broke it.)
     require("mason-lspconfig").setup()
 
     -- Avoid underlining the whole text when there's a diagnostic.
