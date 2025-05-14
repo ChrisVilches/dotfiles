@@ -19,18 +19,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
-    local lspconfig = require "lspconfig"
-
-    require("mason-lspconfig").setup_handlers {
-      function(server_name)
-        lspconfig[server_name].setup {
-          on_init = on_init,
-          on_attach = function(_, bufnr)
-            require "mappings.lsp"(bufnr)
-          end,
-        }
-      end,
-    }
+    require("mason-lspconfig").setup()
 
     -- Avoid underlining the whole text when there's a diagnostic.
     vim.diagnostic.config {
