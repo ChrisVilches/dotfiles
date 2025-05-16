@@ -103,6 +103,9 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Put here things that cannot be committed (private keys, private IPs, etc).
+[[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
+
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
@@ -127,9 +130,6 @@ alias la='ls -A'
 alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
-
-# Put here things that cannot be committed (private keys, private IPs, etc).
-[[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
 
 search-text(){
   if [ ! -z "$1" ]
