@@ -21,6 +21,13 @@ return {
   config = function()
     -- TODO: It seems now I can't go to other files with the "go to definition" trick.
     -- (this plugin mason-lspconfig was updated lately, maybe that broke it.)
+    -- What happened here is that the previous setup had some more logic (see the code
+    -- in the commit history) and one of those things was to load the lsp mappings.
+    -- Now those mappings aren't even loaded!! so I lost a lot of LSP functionality.
+    --
+    -- Here are some other problems:
+    -- Sometimes I have to close a file and then open it again to make ctrl+k (hover) available
+    -- Can't gd into other files (go to definition)
     require("mason-lspconfig").setup()
 
     -- Avoid underlining the whole text when there's a diagnostic.
