@@ -1,6 +1,11 @@
 -- Editing, motions, replacing, etc.
 local map = vim.keymap.set
 
+-- Some useful native tricks:
+-- gwip
+-- g; g,
+-- g&
+
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
 -- but I never used it, so it's alright. I prefer having the same setup as in a terminal so I can
 -- get used to doing that motion both in Neovim and the terminal.
