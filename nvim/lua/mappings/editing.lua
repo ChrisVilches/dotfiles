@@ -4,6 +4,7 @@ local map = vim.keymap.set
 -- Some useful native tricks:
 -- gwip
 -- g; g,
+-- gi
 -- g&
 
 -- This overrides a native neovim keyboard shortcut that inserts a previously inserted text,
