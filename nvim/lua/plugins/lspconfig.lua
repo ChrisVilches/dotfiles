@@ -12,28 +12,22 @@ end
 
 return {
   "neovim/nvim-lspconfig",
-  event = { "BufReadPre", "BufNewFile" },
+  -- event = { "BufReadPre", "BufNewFile" },
+  lazy = false,
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
     { "antosha417/nvim-lsp-file-operations", config = true },
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
-    -- TODO: Hover appears as a new window instead of as a floating popup. (it
-    -- gets fixed if you close and re-open the file)
-    local mason = require "mason-lspconfig"
-    local lspconfig = require "lspconfig"
+    require("mason-lspconfig").setup()
 
-    mason.setup()
-
-    for _, server_name in ipairs(mason.get_installed_servers()) do
-      lspconfig[server_name].setup {
-        on_init = on_init,
-        on_attach = function(_, bufnr)
-          require "mappings.lsp"(bufnr)
-        end,
-      }
-    end
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(args)
+        local bufnr = args.buf
+        require "mappings.lsp"(bufnr)
+      end,
+    })
 
     -- Avoid underlining the whole text when there's a diagnostic.
     vim.diagnostic.config {

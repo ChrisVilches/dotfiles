@@ -29,6 +29,7 @@ vim.api.nvim_create_autocmd({ "BufWrite" }, {
 
 -- LSP mappings are not automatically attached to Quarto files. This autocommand ensures
 -- that LSP mappings are set up correctly when the LSP attaches to a buffer.
+-- TODO: Maybe this is not necessary anymore, since I fixed this problem in the main LSP config file.
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("QuartoLspAttach", { clear = true }),
   buffer = buf,
