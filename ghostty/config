@@ -34,6 +34,7 @@ adjust-underline-thickness=-1
 
 font-family=RobotoMono Nerd Font
 font-size = 16
+keybind = ctrl+enter=unbind
 keybind = ctrl+page_up=unbind
 keybind = ctrl+page_down=unbind
 keybind = shift+ctrl+page_up=unbind
