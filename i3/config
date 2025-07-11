@@ -29,6 +29,13 @@ default_border pixel 0
 exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
 
 # For Japanese/Chinese input.
+# Setting the layout first is necessary because otherwise ibus may not recognize
+# the key "Zenkaku_Hankaku" which I use to toggle languages (I saw this error in the
+# verbose logs once).
+# Debug using:
+# ibus-daemon -rx --verbose
+# setxkbmap -query
+exec --no-startup-id setxkbmap -layout jp
 exec --no-startup-id ibus-daemon -drx
 
 # dunst - a customizable and lightweight notification-daemon
