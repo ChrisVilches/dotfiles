@@ -22,6 +22,7 @@ local patterns = require "pattern-tools"
 -- Find and replace
 map("n", "<leader>frl", patterns.find_and_replace_line, { desc = "find and replace (line)" })
 map("n", "<leader>frg", patterns.find_and_replace_global, { desc = "find and replace (global)" })
+map("v", "<leader>fr", patterns.find_and_replace_selected, { desc = "find and replace (selected lines)" })
 
 -- TODO: Experimental
 map("n", "<leader>frc", patterns.find_and_replace_global_confirm, { desc = "find and replace (global + confirm)" })
