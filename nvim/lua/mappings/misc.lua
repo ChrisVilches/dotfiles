@@ -30,6 +30,8 @@ map({ "n", "t" }, "<A-i>", function()
   terminal:toggle()
 end, { noremap = true, silent = true, desc = "terminal toggle floating term" })
 
+map("n", "<A-o>", "<cmd>:execute 'terminal' | startinsert<cr>", { desc = "open terminal buffer" })
+
 -- whichkey
 map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
 
