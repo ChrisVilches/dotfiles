@@ -2,7 +2,7 @@
 local map = vim.keymap.set
 
 -- Some useful native tricks:
--- gwip
+-- gq/gw (formatting) + ap/ip (paragraph motion)
 -- g; g,
 -- gi
 -- g&
