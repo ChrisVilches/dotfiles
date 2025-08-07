@@ -9,7 +9,6 @@ map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find o
 map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
 map("n", "<leader>cm", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
 map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
-map("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
 -- This kinda works (shows the full diagnostic message) but still truncates it most of the times.
 -- At least it's much better than before.
 map(
