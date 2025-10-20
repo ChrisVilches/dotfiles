@@ -176,6 +176,13 @@ pacman-size() {
   LC_ALL=C.UTF-8 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | LC_ALL=C.UTF-8 sort -h
 }
 
+randtime() {
+  hour=$((RANDOM % 4 + 20))      # 20–23
+  min=$((RANDOM % 60))           # 0–59
+  sec=$((RANDOM % 60))           # 0–59
+  printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
+}
+
 export TERM_KEEP_DB_PATH=~/.term-keep.db
 export TERM_KEEP_SUMMARY_MAX_LENGTH=100
 
