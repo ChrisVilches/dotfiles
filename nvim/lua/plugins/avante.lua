@@ -3,18 +3,21 @@ return {
   event = "VeryLazy",
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
   opts = {
-    provider = "openai",
     -- Remove the annoying hint popup when in visual mode. It originally shows these suggestions:
     -- <leader>aa ask (open the AI sidebar)
     -- <leader>ae edit (write a prompt where you explain how to edit the selected code/text)
     hints = { enabled = false },
-    openai = {
-      endpoint = "https://api.openai.com/v1",
-      model = "gpt-4o",
-      timeout = 30000, -- timeout in milliseconds
-      temperature = 0,
-      max_tokens = 4096,
-      -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+    providers = {
+      openai = {
+        endpoint = "https://api.openai.com/v1",
+        model = "gpt-4o",
+        timeout = 30000, -- timeout in milliseconds
+        max_tokens = 4096,
+        -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+        extra_request_body = {
+          temperature = 0,
+        },
+      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
