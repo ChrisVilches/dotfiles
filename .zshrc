@@ -192,12 +192,16 @@ tk() {
   term_keep "$@"
 }
 
-memo() {
-  local dir=/tmp/memos
-  mkdir -p $dir
-  local id="$(date '+%b%d-%H%M%S')"
-  cd $dir # This is mainly so that neovim sets the directory as project root.
-  $EDITOR $dir/$id.md
+# Quick Memo
+qm() {
+  cd ~/memos
+  bash add-quick.sh
+}
+
+# Journal Memo
+jm() {
+  cd ~/memos
+  bash add-note.sh journal "$@"
 }
 
 # NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`
