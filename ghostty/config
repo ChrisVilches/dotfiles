@@ -18,12 +18,12 @@
 # Config syntax crash course
 # ==========================
 # ghostty +list-themes
-# theme = lovelace
-theme = duskfox
+# theme = Lovelace
+theme = Duskfox
 # theme = Mariana
 # theme = GruvboxDarkHard
 # theme = Everblush
-# theme = OneHalfDark
+# theme = One Half Dark
 
 # NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
