@@ -192,19 +192,19 @@ tk() {
   term_keep "$@"
 }
 
-# Quick Memo
+# Quick Note (memo)
 qn() {
   cd ~/memos
   bash add-quick.sh
 }
 
-# Journal Memo
+# Journal Note
 jn() {
   cd ~/memos
   bash add-note.sh journal "$@"
 }
 
-# Work Memo
+# Work Note
 wn() {
   cd ~/memos
   bash add-note.sh work "$@"
