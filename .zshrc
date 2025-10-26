@@ -193,15 +193,21 @@ tk() {
 }
 
 # Quick Memo
-qm() {
+qn() {
   cd ~/memos
   bash add-quick.sh
 }
 
 # Journal Memo
-jm() {
+jn() {
   cd ~/memos
   bash add-note.sh journal "$@"
+}
+
+# Work Memo
+wn() {
+  cd ~/memos
+  bash add-note.sh work "$@"
 }
 
 # NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`

@@ -17,6 +17,7 @@ o.laststatus = 3
 o.showmode = false
 opt.incsearch = true
 opt.wrapscan = true
+opt.linebreak = true
 
 o.clipboard = "unnamedplus"
 o.cursorline = true

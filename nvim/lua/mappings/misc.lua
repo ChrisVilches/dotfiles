@@ -41,3 +41,6 @@ end, { desc = "whichkey query lookup" })
 
 map("n", "<leader>z", require "toggle-fullscreen", { noremap = true, silent = true })
 map("n", "-", "<CMD>Oil --float --preview<CR>", { desc = "Oil: open parent directory" })
+
+-- markview
+map("n", "<leader>m!", "<cmd>Markview toggle<CR>", { desc = "Markview: toggle" })
