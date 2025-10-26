@@ -192,6 +192,13 @@ tk() {
   term_keep "$@"
 }
 
+n() {
+  local prev="$(pwd)"
+  cd ~/memos
+  nvim && bash ./sync-git.sh
+  cd "$prev"
+}
+
 # Quick Note (memo)
 qn() {
   cd ~/memos
