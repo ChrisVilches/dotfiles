@@ -34,3 +34,8 @@ xnoremap <C-j> 6j
 " Move 6 lines up with Ctrl+k
 nnoremap <C-k> 6k
 xnoremap <C-k> 6k
+
+" Move selected lines up/down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
