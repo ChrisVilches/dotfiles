@@ -176,10 +176,21 @@ pacman-size() {
   LC_ALL=C.UTF-8 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | LC_ALL=C.UTF-8 sort -h
 }
 
+# randtime <start_hour> <end_hour>
+# Generates a random time in HH:MM:SS format.
+# Arguments:
+#   start_hour - the first hour (0–23) of the range
+#   end_hour   - the last hour (0–23) of the range
 randtime() {
-  hour=$((RANDOM % 4 + 20))      # 20–23
-  min=$((RANDOM % 60))           # 0–59
-  sec=$((RANDOM % 60))           # 0–59
+  local start_hour=$1
+  local end_hour=$2
+  if [[ -z $start_hour || -z $end_hour || $start_hour -gt $end_hour ]]; then
+    echo "Usage: randtime <start_hour> <end_hour>" >&2
+    return 1
+  fi
+  hour=$((RANDOM % (end_hour - start_hour + 1) + start_hour))
+  min=$((RANDOM % 60))
+  sec=$((RANDOM % 60))
   printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
 }
 
