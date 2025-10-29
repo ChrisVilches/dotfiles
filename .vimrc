@@ -27,11 +27,9 @@ vnoremap <C-s> <Esc>:w<CR>gv
 " Quit the current window with <leader>q
 nnoremap <silent> <leader>q :q<CR>
 
-" Move 6 lines up/down
+" Jump 6 lines up/down
 nnoremap <C-j> 6j
 xnoremap <C-j> 6j
-
-" Move 6 lines up with Ctrl+k
 nnoremap <C-k> 6k
 xnoremap <C-k> 6k
 
