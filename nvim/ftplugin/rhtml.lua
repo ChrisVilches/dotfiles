@@ -1,3 +1,5 @@
+-- TODO: This opens the file with absolute path, which makes it too long.
+-- Compare the original path with the newly opened one, and the new one is longer.
 local function toggle_lang_view()
   local abs_path = vim.api.nvim_buf_get_name(0)
   if abs_path == "" then
