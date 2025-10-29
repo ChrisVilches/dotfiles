@@ -12,6 +12,16 @@ return {
     local action_set = require "telescope.actions.set"
     telescope.setup {
       defaults = {
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+        },
         sorting_strategy = "ascending",
         layout_config = {
           prompt_position = "top",
