@@ -25,9 +25,13 @@ return {
   -- },
   config = function()
     local function handle_restore()
-      if current_dir_is_git_repo() then
-        restore_nvim_tree()
-      end
+      -- Without the `vim.schedule` it sometimes doesn't load the LSP, highlights,
+      -- ftplugin, etc.
+      vim.schedule(function()
+        if current_dir_is_git_repo() then
+          restore_nvim_tree()
+        end
+      end)
     end
 
     require("auto-session").setup {
