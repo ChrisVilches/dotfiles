@@ -79,4 +79,16 @@ vim.schedule(function()
   require "mappings/navigation"
   require "mappings/telescope"
   require "mappings/themes"
+
+  -- This is mainly to ensure Language Server Protocol (LSP) features,
+  -- syntax highlighting, and the associated ftplugin (filetype plugin)
+  -- are correctly loaded for these specific files.
+  local custom_filetypes = {
+    jbuilder = "ruby",
+    rhtml = "rhtml",
+  }
+
+  for ext, ft in pairs(custom_filetypes) do
+    vim.filetype.add { extension = { [ext] = ft } }
+  end
 end)
