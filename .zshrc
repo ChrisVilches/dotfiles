@@ -115,11 +115,12 @@ eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
-# TODO: Fix this. I'm not sure if I should hardcode ~/dotfiles here, since it will be different on other PCs.
-# or should I make the convention to put it there?
-source ~/dotfiles/key-bindings.zsh
+# Sourced file directory (so it gets /dotfiles folder).
+ZSHRC_DIR="${${(%):-%x}:A:h}"
 
-PATH=~/programs/scripts:$PATH
+source $ZSHRC_DIR/fzf-key-bindings.zsh
+
+PATH=$ZSHRC_DIR/scripts:$PATH
 PATH=~/go/bin:$PATH
 alias cpy='xsel -b'
 alias gs='git status'
@@ -132,6 +133,7 @@ alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
 
+# TODO: Research whether ripgrep or fzf is better for this task. And what are the differences.
 search-text(){
   if [ ! -z "$1" ]
   then
