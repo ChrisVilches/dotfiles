@@ -14,13 +14,6 @@ return {
     "tpope/vim-surround",
     event = "BufEnter",
   },
-  -- {
-  -- TODO: This one is trash compared to multicursor.lua. Remove!!!!
-  -- That one requires almost no usage learning (no muscle memory), it simply works.
-  --   "mg979/vim-visual-multi",
-  --   event = "BufEnter",
-  --   enabled = false,
-  -- },
   {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
