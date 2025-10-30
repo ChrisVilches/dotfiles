@@ -115,8 +115,9 @@ eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
-# Add some nice fzf key bindings (CTRL-R, CTRL-T, etc).
-source /usr/share/fzf/key-bindings.zsh
+# TODO: Fix this. I'm not sure if I should hardcode ~/dotfiles here, since it will be different on other PCs.
+# or should I make the convention to put it there?
+source ~/dotfiles/key-bindings.zsh
 
 PATH=~/programs/scripts:$PATH
 PATH=~/go/bin:$PATH
@@ -227,6 +228,16 @@ wn() {
   cd ~/memos
   bash add-note.sh work "$@"
 }
+
+# TODO: This is for getting started using fzf in a custom way that matches my workflow.
+# Find and edit
+
+# TODO: Try something like this too: git branch | fzf | xargs git checkout
+# (list all branches, find using fuzzy search, then checkout to that one).
+#
+# TODO: Another pretty good one git log --oneline | fzf | awk '{print $1}' | xargs git show
+# TODO: More stuff: git status | grep modified | fzf -m | awk '{print $2}' | xargs git diff
+# allow "newly created files" too, and use different commands (git diff for modified, and cat for new)
 
 # NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`
 #       (older versions don't set this env variable).
