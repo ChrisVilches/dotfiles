@@ -20,6 +20,9 @@ set background=dark
 nnoremap <silent> <leader>wt :set wrap!<CR>
 nnoremap <silent> <Esc> :nohlsearch<CR><Esc>
 
+" Copy whole file to clipboard
+nnoremap <C-c> :%y+<CR>
+
 " Save file with Ctrl+S
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>a
