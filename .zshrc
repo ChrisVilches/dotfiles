@@ -130,7 +130,10 @@ alias e=$EDITOR
 
 if [[ -n $SSH_CONNECTION ]]; then
   st() {
-    # TODO: add checks (for when input is empty, etc).
+    if [ -z "$1" ]; then
+      return 0
+    fi
+
     grep \
     --exclude-dir={.git,tmp,log,deps,node_modules,vendor,dist,build,target,,_build,.ipynb_checkpoints} \
     -r "$1" .
