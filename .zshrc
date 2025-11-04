@@ -106,11 +106,6 @@ fi
 # Put here things that cannot be committed (private keys, private IPs, etc).
 [[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
 
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
-
 eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
