@@ -21,6 +21,8 @@ return {
           "--column",
           "--smart-case",
           "--hidden",
+          "--glob",
+          "!.git/*",
         },
         sorting_strategy = "ascending",
         layout_config = {
