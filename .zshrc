@@ -128,23 +128,16 @@ alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
 
-# TODO: Research whether ripgrep or fzf is better for this task. And what are the differences.
-search-text(){
-  if [ ! -z "$1" ]
-  then
-    # grep --exclude-dir={.git,tmp,log,deps,node_modules,vendor,dist,build,target,.dart_tool,.elixir_ls,_build,.ipynb_checkpoints} -r "$1" .
-    # TODO: Experiment to start using ripgrep.
-    #       May need to manually add more directories to ignore
-    #       (it seems it natively ignores some stuff like node_modules)
-    # TODO: Just like my previous script, it doesn't automatically open the file
-    #       or paste the filename on the terminal, so that's a bit inconvenient. FZF does have a binding
-    #       to do that, but it's not used here.
-    local remove_after_colon="s/:.*//"
-    rg --glob '!package-lock.json' --line-number --no-heading --color=always "$1" | fzf --ansi | sed $remove_after_colon
-  fi
-}
-
-alias st='search-text'
+if [[ -n $SSH_CONNECTION ]]; then
+  st() {
+    # TODO: add checks (for when input is empty, etc).
+    grep \
+    --exclude-dir={.git,tmp,log,deps,node_modules,vendor,dist,build,target,,_build,.ipynb_checkpoints} \
+    -r "$1" .
+  }
+else
+  alias st="search-text-ripgrep.sh"
+fi
 
 # Troubleshooting: When nodemon stops working, sometimes it's because Neovim/vim starts emitting
 # the "unlink" event, and after that no change event will be captured by nodemon. Kinda weird.
