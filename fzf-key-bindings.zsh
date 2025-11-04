@@ -33,6 +33,10 @@ __fzfcmd() {
 }
 
 fzf-file-widget() {
+  # Make editing the default action.
+  if [ -z "$LBUFFER" ]; then
+    LBUFFER="vim"
+  fi
   LBUFFER="${LBUFFER} $(__fsel)"
   local ret=$?
   zle reset-prompt
@@ -113,9 +117,11 @@ bindkey '^R' fzf-history-widget
 
 # Custom stuff, just to try it. Not very useful.
 fzf-ls() {
-  # Run fzf in full-screen, capture the selected item
-  local selected
-  selected=$(ls -lha | fzf)
+  # Run fzf, capture the selected item. Using --height is what makes it a
+  # "UI widget" inside the terminal. It's not because it's using
+  # fzf-tmux, which it isn't (actually that command splits the pane and
+  # looks very different).
+  local selected=$(ls -lha | fzf --height 50% --reverse)
 
   # If user picked something (didn't cancel)
   if [[ -n $selected ]]; then
