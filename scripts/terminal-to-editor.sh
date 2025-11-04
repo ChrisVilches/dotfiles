@@ -1,7 +1,4 @@
 #!/bin/sh
-# TODO: After committing the content changes, make another commit but
-# changing the script name (neovim -> editor) since now it's generic
-# and accepts vim too (and it's a bit faster).
 
 trim-empty-lines() {
   local remove_leading='/./,$!d'
@@ -13,8 +10,8 @@ ID="$(date '+%b%d-%H%M%S')"
 DIR="/tmp/term-captures"
 mkdir -p $DIR
 FILE="$DIR/$ID"
-# NVIM_SCROLL_DOWN="lua vim.schedule(function() vim.cmd('normal! G') end)"
-# EDITOR="nvim -c \"$NVIM_SCROLL_DOWN\""
+
+# EDITOR="nvim -c \"lua vim.schedule(function() vim.cmd('normal! G') end)\""
 EDITOR="vim -c 'normal! G'"
 
 tmux capture-pane -S -1000
