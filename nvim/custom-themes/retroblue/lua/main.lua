@@ -121,9 +121,9 @@ local function load_colorscheme(variant)
   set_treesitter()
   set_diagnostics()
 
-  -- TODO: More colors need to be applied for floating windows to render properly.
-  -- Currently, both my preview-file and toggle-fullscreen plugins don't show colors
-  -- properly because I haven't configured those colors correctly here.
+  -- (I don't care) Currently, both my preview-file and toggle-fullscreen
+  -- plugins don't show colors properly because I haven't configured those colors
+  -- correctly here.
   -- hi("NormalFloat", { fg = "#e0dbba", bg = blue_bg[1] })
   -- hi("FloatBorder", { fg = "#ff0000", bg = blue_bg[1] })
   -- hi("FloatTitle", { fg = "#76b4de", bg = blue_bg[1] })
