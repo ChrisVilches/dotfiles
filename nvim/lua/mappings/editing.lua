@@ -24,11 +24,10 @@ map("n", "<leader>frl", patterns.find_and_replace_line, { desc = "find and repla
 map("n", "<leader>frg", patterns.find_and_replace_global, { desc = "find and replace (global)" })
 map("v", "<leader>fr", patterns.find_and_replace_selected, { desc = "find and replace (selected lines)" })
 
--- TODO: Experimental
 map("n", "<leader>frc", patterns.find_and_replace_global_confirm, { desc = "find and replace (global + confirm)" })
 map("n", "<leader>/", ":let @/ = expand('<cword>')<cr>:set hlsearch<cr>", { desc = "search word", silent = true })
--- TODO: A bit hard to type but it's going in a good direction (just change? the keymap).
 map("x", "<leader>/", require "pattern-tools.auto_hl", { desc = "highlight selection incrementally", silent = true })
+-- TODO: I never really used this one (very hard to use)
 map({ "n", "x" }, "<leader>e", patterns.edit_with_macro, { desc = "set as search and start macro", silent = true })
 map("n", "<leader>rr", 'v"vy"vp', { desc = "repeat character", noremap = true })
 map("n", "<leader>rw", 'viw"vye"vp', { desc = "repeat word", noremap = true })
