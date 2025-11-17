@@ -128,6 +128,14 @@ alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
 
+git_branch_insert() {
+  local branch
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
+  LBUFFER+="$branch"
+}
+zle -N git_branch_insert
+bindkey '^B' git_branch_insert
+
 if [[ -n $SSH_CONNECTION ]]; then
   st() {
     if [ -z "$1" ]; then
