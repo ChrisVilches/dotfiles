@@ -1,4 +1,7 @@
 #!/bin/sh
+# TODO: I'm not sure why after closing vim, what I copied disappears
+# from the clipboard, even though it was there (I could paste it on Chrome, etc).
+# (it only fails on Vim, but on NeoVim it works properly).
 
 trim-empty-lines() {
   local remove_leading='/./,$!d'
