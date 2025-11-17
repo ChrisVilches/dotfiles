@@ -43,3 +43,7 @@ map("n", "-", "<CMD>Oil --float --preview<CR>", { desc = "Oil: open parent direc
 
 -- markview
 map("n", "<leader>m!", "<cmd>Markview toggle<CR>", { desc = "Markview: toggle" })
+
+-- window size
+map("n", "<c-w><<", "15<c-w><")
+map("n", "<c-w>>>", "15<c-w>>")

@@ -6,7 +6,10 @@ return {
     -- Remove the annoying hint popup when in visual mode. It originally shows these suggestions:
     -- <leader>aa ask (open the AI sidebar)
     -- <leader>ae edit (write a prompt where you explain how to edit the selected code/text)
+    -- <leader>an new ask (useful because otherwise it keeps the previous conversations and consume many tokens!)
+    -- <leader>aS stop current AI request (will print: "Request cancelled by user")
     hints = { enabled = false },
+    provider = "openai",
     providers = {
       openai = {
         endpoint = "https://api.openai.com/v1",
