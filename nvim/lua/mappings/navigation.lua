@@ -8,7 +8,7 @@ for i = 1, 6, 1 do
 end
 
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
-map("n", "<leader>fe", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
+map("n", "<c-w><c-t>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 
 map("n", "<leader>h", "<cmd>BufferLineCyclePrev<cr>", { desc = "tab prev" })
 map("n", "<leader>l", "<cmd>BufferLineCycleNext<cr>", { desc = "tab next" })
