@@ -8,7 +8,9 @@ return {
     -- <leader>ae edit (write a prompt where you explain how to edit the selected code/text)
     -- <leader>an new ask (useful because otherwise it keeps the previous conversations and consume many tokens!)
     -- <leader>aS stop current AI request (will print: "Request cancelled by user")
-    hints = { enabled = false },
+    selection = {
+      enabled = false,
+    },
     provider = "openai",
     providers = {
       openai = {
