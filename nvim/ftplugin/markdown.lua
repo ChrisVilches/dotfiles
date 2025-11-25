@@ -6,4 +6,18 @@ local function opts(desc)
   return { desc = "markdown: " .. desc, buffer = buf, noremap = true, silent = true, nowait = true }
 end
 
-map("n", "<leader>ok", "^f[ax<esc>", opts "Mark to-do item as completed")
+local function toggle_todo()
+  local mark = vim.api.nvim_get_current_line():match "^%s*-%s+%[%s*(x?)%s*%]"
+
+  local mark_map = {
+    ["x"] = " ",
+    [""] = "x",
+  }
+
+  if mark_map[mark] then
+    vim.cmd("normal! ^ci[" .. mark_map[mark])
+    vim.cmd "normal! f]w"
+  end
+end
+
+map("n", "<leader>ok", toggle_todo, opts "Toggle to-do item completion")
