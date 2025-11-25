@@ -15,4 +15,4 @@ else
   end=$(($2 + extra_lines))
 fi
 
-bat --style=numbers --color=always --highlight-line $2 --line-range $start:$end $1
+bat --style=numbers --color=always --highlight-line $2 --line-range $start:$end "$1"

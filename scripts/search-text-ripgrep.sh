@@ -20,5 +20,5 @@ fi
 echo "$rg_out" | fzf --ansi --delimiter : \
   --preview "bat-crop-focus-line.sh {1} {2}" \
   --preview-window=up:60%:wrap \
-  --bind 'enter:become(vim {1} +{2})'
+  --bind 'enter:become(echo {1}:{2})'
 
