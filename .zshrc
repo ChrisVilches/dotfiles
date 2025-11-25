@@ -147,7 +147,15 @@ if [[ -n $SSH_CONNECTION ]]; then
     -r "$1" .
   }
 else
-  alias st="search-text-ripgrep.sh"
+  st() {
+    local result="$(search-text-ripgrep.sh "$1")"
+    if [ -z "$result" ]; then
+      return 0
+    fi
+    local file="${result%%:*}"
+    local line="${result#*:}"
+    vim +$line $file
+  }
 fi
 
 # Troubleshooting: When nodemon stops working, sometimes it's because Neovim/vim starts emitting
