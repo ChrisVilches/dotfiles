@@ -4,8 +4,6 @@ local map = vim.keymap.set
 -- TODO: I'm currently not using C-h and C-l... map them to something nice.
 
 map("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "wrap toggle" })
-map("n", "<leader>sl", "<cmd>rightbelow vsplit<CR>", { desc = "split window right" })
-map("n", "<leader>sj", "<cmd>rightbelow split<CR>", { desc = "split window down" })
 
 -- Debugging stuff
 map("n", "<leader>db", require("dap").toggle_breakpoint, { desc = "toggle breakpoint" })
