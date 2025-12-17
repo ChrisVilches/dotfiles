@@ -10,6 +10,7 @@ return {
     local telescope = require "telescope"
     local actions = require "telescope.actions"
     local action_set = require "telescope.actions.set"
+    local action_state = require "telescope.actions.state"
     telescope.setup {
       defaults = {
         vimgrep_arguments = {
@@ -31,6 +32,14 @@ return {
         path_display = { "smart" },
         mappings = {
           n = {
+            p = function(prompt_bufnr)
+              -- Remove the trailing newline character when pasting an entire
+              -- line into the Telescope prompt. This ensures the
+              -- paste operation works correctly.
+              local current_picker = action_state.get_current_picker(prompt_bufnr)
+              local text = vim.fn.getreg("+"):gsub("\n$", "")
+              current_picker:set_prompt(text, false)
+            end,
             ["<C-j>"] = function(prompt_bufnr)
               action_set.shift_selection(prompt_bufnr, 6)
             end,

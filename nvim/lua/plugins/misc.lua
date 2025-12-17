@@ -6,11 +6,6 @@ return {
     end,
   },
   {
-    "akinsho/toggleterm.nvim",
-    version = "*",
-    config = true,
-  },
-  {
     "tpope/vim-surround",
     event = "BufEnter",
   },
