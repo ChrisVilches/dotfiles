@@ -15,19 +15,10 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
 
+-- TODO: I never use this. I usually leave it on autopilot (autocmd when saving the file).
 map("n", "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
-
-map("t", "<Esc>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
-
-local terminal = require("toggleterm.terminal").Terminal:new { direction = "float" }
-
-map({ "n", "t" }, "<A-i>", function()
-  terminal:toggle()
-end, { noremap = true, silent = true, desc = "terminal toggle floating term" })
-
-map("n", "<A-o>", "<cmd>:execute 'terminal' | startinsert<cr>", { desc = "open terminal buffer" })
 
 -- whichkey
 map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
