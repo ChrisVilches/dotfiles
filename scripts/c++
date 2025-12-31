@@ -20,8 +20,29 @@ DEV_FLAG="DEV"
 # Specially during competitive programming problems.
 # In fact, some of my current problems already show a lot of errors. Just turn them to warnings?
 # Or start using strict C++ from now on? decide on this issue later.
-QUALITY_FLAGS="-Wall -Wextra -Werror -pedantic -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wnull-dereference -Wdouble-promotion -Wformat=2"
-COMPILE_FLAGS="-O2 -std=c++23 $QUALITY_FLAGS -D$DEV_FLAG"
+QUALITY_FLAGS=(
+	-Wall
+	-Wextra
+	-Werror
+	-pedantic
+	-Wshadow
+	-Wnon-virtual-dtor
+	-Wold-style-cast
+	-Wcast-align
+	-Wunused
+	-Woverloaded-virtual
+	-Wpedantic
+	-Wnull-dereference
+	-Wdouble-promotion
+	-Wformat=2
+)
+
+COMPILE_FLAGS=(
+	-O2
+	-std=c++23
+	"${QUALITY_FLAGS[@]}"
+	-D"$DEV_FLAG"
+)
 
 color-stderr() (
 	set -o pipefail
@@ -54,7 +75,11 @@ OUT_FILE="$BIN_TEMP/$HASH"
 
 if [ ! -f "$OUT_FILE" ]; then
 	mkdir -p "$BIN_TEMP"
-	if g++ "$1" $COMPILE_FLAGS -o "$OUT_FILE"; then
-		color-stderr "$OUT_FILE"
+	g++ "$1" "${COMPILE_FLAGS[@]}" -o "$OUT_FILE"
+	gpp_exit=$?
+	if [ $gpp_exit -ne 0 ]; then
+		exit $gpp_exit
 	fi
 fi
+
+color-stderr "$OUT_FILE"
