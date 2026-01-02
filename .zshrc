@@ -128,6 +128,27 @@ alias l='ls -CF'
 alias lll='ll | less -R'
 alias e=$EDITOR
 
+# Git Status + fzf + read files/diff
+gz() {
+  git status --porcelain |
+  fzf -m |
+  while IFS= read -r line; do
+    local st file
+
+    st=${line[1,2]}
+    file=${line[4,-1]}
+
+    case "$st" in
+      M*|*M)
+        git diff -- "$file"
+        ;;
+      '??')
+        bat -- "$file" 2>/dev/null || cat -- "$file"
+        ;;
+    esac
+  done
+}
+
 git_branch_insert() {
   local branch
   branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
@@ -238,12 +259,6 @@ wn() {
   bash add-note.sh work "$@"
 }
 
-# TODO: This is for getting started using fzf in a custom way that matches my workflow.
-# Find and edit
-
-# TODO: Try something like this too: git branch | fzf | xargs git checkout
-# (list all branches, find using fuzzy search, then checkout to that one).
-#
 # TODO: Another pretty good one git log --oneline | fzf | awk '{print $1}' | xargs git show
 # TODO: More stuff: git status | grep modified | fzf -m | awk '{print $2}' | xargs git diff
 # allow "newly created files" too, and use different commands (git diff for modified, and cat for new)
