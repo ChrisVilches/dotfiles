@@ -16,26 +16,27 @@
 
 BIN_TEMP="/tmp/c++-bin-tmp"
 DEV_FLAG="DEV"
-# TODO: Not sure if having too many restrictions during development would make me slow.
-# Specially during competitive programming problems.
-# In fact, some of my current problems already show a lot of errors. Just turn them to warnings?
-# Or start using strict C++ from now on? decide on this issue later.
-QUALITY_FLAGS=(
-	-Wall
-	-Wextra
-	-Werror
-	-pedantic
-	-Wshadow
-	-Wnon-virtual-dtor
-	-Wold-style-cast
-	-Wcast-align
-	-Wunused
-	-Woverloaded-virtual
-	-Wpedantic
-	-Wnull-dereference
-	-Wdouble-promotion
-	-Wformat=2
-)
+
+if [ -n "$NOWARN" ]; then
+	QUALITY_FLAGS=()
+else
+	QUALITY_FLAGS=(
+		-Wall
+		-Wextra
+		-Werror
+		-pedantic
+		-Wshadow
+		-Wnon-virtual-dtor
+		-Wold-style-cast
+		-Wcast-align
+		-Wunused
+		-Woverloaded-virtual
+		-Wpedantic
+		-Wnull-dereference
+		-Wdouble-promotion
+		-Wformat=2
+	)
+fi
 
 COMPILE_FLAGS=(
 	-O2
