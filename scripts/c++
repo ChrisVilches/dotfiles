@@ -18,54 +18,54 @@ BIN_TEMP="/tmp/c++-bin-tmp"
 DEV_FLAG="DEV"
 
 if [ -n "$NOWARN" ]; then
-	QUALITY_FLAGS=()
+  QUALITY_FLAGS=()
 else
-	QUALITY_FLAGS=(
-		-Wall
-		-Wextra
-		-Werror
-		-pedantic
-		-Wshadow
-		-Wnon-virtual-dtor
-		-Wold-style-cast
-		-Wcast-align
-		-Wunused
-		-Woverloaded-virtual
-		-Wpedantic
-		-Wnull-dereference
-		-Wdouble-promotion
-		-Wformat=2
-	)
+  QUALITY_FLAGS=(
+    -Wall
+    -Wextra
+    -Werror
+    -pedantic
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Wcast-align
+    -Wunused
+    -Woverloaded-virtual
+    -Wpedantic
+    -Wnull-dereference
+    -Wdouble-promotion
+    -Wformat=2
+  )
 fi
 
 COMPILE_FLAGS=(
-	-O2
-	-std=c++23
-	"${QUALITY_FLAGS[@]}"
-	-D"$DEV_FLAG"
+  -O2
+  -std=c++23
+  "${QUALITY_FLAGS[@]}"
+  -D"$DEV_FLAG"
 )
 
 color-stderr() (
-	set -o pipefail
-	"$@" 2>&1 >&3 | sed $'s,.*,\e[31m&\e[m,' >&2
+  set -o pipefail
+  "$@" 2>&1 >&3 | sed $'s,.*,\e[31m&\e[m,' >&2
 ) 3>&1
 
 # Clean temp folder if there are too many files
 clean_temp_dir() {
-	local bin_temp_limit_files
-	local files_in_bin_temp
+  local bin_temp_limit_files
+  local files_in_bin_temp
 
-	bin_temp_limit_files=30
-	files_in_bin_temp=$(find "$BIN_TEMP" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)
+  bin_temp_limit_files=30
+  files_in_bin_temp=$(find "$BIN_TEMP" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)
 
-	if [[ $files_in_bin_temp -ge $bin_temp_limit_files ]]; then
-		rm $BIN_TEMP/*
-	fi
+  if [[ $files_in_bin_temp -ge $bin_temp_limit_files ]]; then
+    rm $BIN_TEMP/*
+  fi
 }
 
 if [ -z "$1" ]; then
-	echo "File path missing" >&2
-	exit 1
+  echo "File path missing" >&2
+  exit 1
 fi
 
 clean_temp_dir
@@ -75,12 +75,12 @@ HASH=$(sha1sum "$1" | cut -d ' ' -f 1)
 OUT_FILE="$BIN_TEMP/$HASH"
 
 if [ ! -f "$OUT_FILE" ]; then
-	mkdir -p "$BIN_TEMP"
-	g++ "$1" "${COMPILE_FLAGS[@]}" -o "$OUT_FILE"
-	gpp_exit=$?
-	if [ $gpp_exit -ne 0 ]; then
-		exit $gpp_exit
-	fi
+  mkdir -p "$BIN_TEMP"
+  g++ "$1" "${COMPILE_FLAGS[@]}" -o "$OUT_FILE"
+  gpp_exit=$?
+  if [ $gpp_exit -ne 0 ]; then
+    exit $gpp_exit
+  fi
 fi
 
 color-stderr "$OUT_FILE"
