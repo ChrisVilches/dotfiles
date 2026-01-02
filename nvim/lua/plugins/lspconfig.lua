@@ -1,17 +1,14 @@
 local function config_servers()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-
   vim.lsp.config("bashls", {
     filetypes = { "bash", "sh", "zsh" },
   })
 
-  -- TODO: I have to make sure the capabilities (autocompletion) is doing something useful,
-  -- and not just polluting the code without improving anything.
-  vim.lsp.config("*", {
-    capabilities = capabilities,
-  })
+  -- To verify if capabilities are working, disable the entire LSP for a language
+  -- and compare behaviors. Autocompletion is difficult to disable via
+  -- configuration, so the menu might show the same candidates. However,
+  -- disabling the LSP will clearly remove those provided by it.
+  -- Configuring LSP servers can be challenging as mason-lspconfig
+  -- handles some configurations automatically.
 end
 
 local function config_extra()
@@ -33,14 +30,11 @@ return {
   config = function()
     require("mason-lspconfig").setup()
 
-    -- TODO: Remove this. It seems it's not necessary anymore.
-    -- Test LSP responsiveness and attachment for a while. Then remove this.
-    -- vim.api.nvim_create_autocmd("LspAttach", {
-    --   callback = function(args)
-    --     local bufnr = args.buf
-    --     require "mappings.lsp"(bufnr)
-    --   end,
-    -- })
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(args)
+        require "mappings.lsp"(args.buf)
+      end,
+    })
 
     config_servers()
     config_extra()
