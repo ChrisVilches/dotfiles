@@ -26,10 +26,6 @@ function M.get_escaped_selection()
   return convert_very_nomagic(get_selection())
 end
 
-function M.go_to_normal_mode()
-  vim.cmd [[exe "normal \<esc>"]]
-end
-
 function M.feed_keys(keys)
   keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
   vim.fn.feedkeys(keys, "n")
