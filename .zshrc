@@ -189,7 +189,7 @@ listen() {
     local dir filename
     dir=$(dirname -- "$1")
     filename=$(basename -- "$1")
-    watchexec --clear --restart --watch "$dir" --filter "$filename" "$2"
+    watchexec --timings --clear --restart --watch "$dir" --filter "$filename" "$2"
 }
 
 listencp() {
