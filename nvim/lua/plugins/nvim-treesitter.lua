@@ -2,6 +2,11 @@ return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
   event = { "BufReadPre", "BufNewFile" },
+  -- TODO: It seems we need to upgrade soon, but currently
+  -- it breaks a lot. Research how to do the upgrade correctly.
+  -- This "branch = master" is the current workaround.
+  -- https://github.com/nvim-treesitter/nvim-treesitter
+  branch = "master",
   config = function()
     require("nvim-treesitter.configs").setup {
       auto_install = true,
