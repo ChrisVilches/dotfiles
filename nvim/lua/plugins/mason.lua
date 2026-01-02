@@ -4,27 +4,5 @@
 
 return {
   "williamboman/mason.nvim",
-  dependencies = {
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-  },
-  config = function()
-    require("mason").setup()
-    require("mason-tool-installer").setup {
-      ensure_installed = {
-        "autopep8",
-        "clangd",
-        "css-lsp",
-        -- "eslint",
-        "gopls",
-        "html-lsp",
-        "lua-language-server",
-        "php-cs-fixer",
-        "prettier",
-        "pyright",
-        "rust-analyzer",
-        "stylua",
-        "luacheck",
-      },
-    }
-  end,
+  config = true,
 }
