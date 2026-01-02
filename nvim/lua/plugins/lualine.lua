@@ -1,3 +1,26 @@
+local no_lsp = "No LSP"
+
+local function format_lsp_progress(messages)
+  if #messages > 0 then
+    return " " .. table.concat(messages, " ")
+  end
+
+  local active_clients = vim.lsp.get_clients { bufnr = 0 }
+
+  if #active_clients <= 0 then
+    return no_lsp
+  end
+
+  local client_names = {}
+  for _, client in ipairs(active_clients) do
+    if client and client.name ~= "" then
+      table.insert(client_names, " " .. client.name)
+    end
+  end
+
+  return table.concat(client_names, " ")
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   lazy = false,
@@ -24,7 +47,15 @@ return {
         },
         lualine_c = {
           function()
-            return require("lsp-progress").progress()
+            local res = require("lsp-progress").progress { format = format_lsp_progress }
+
+            -- This is necessary because sometimes the plugin above doesn't
+            -- output anything.
+            if #res == 0 then
+              return no_lsp
+            end
+
+            return res
           end,
         },
       },
