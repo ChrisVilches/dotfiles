@@ -1,8 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+# NOTE: Don't use "shellcheck disable=..." as it makes LSP difficult to verify
+# whether it's working or not.
+
 # Path to your Oh My Zsh installation.
-# shellcheck disable=all
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -105,7 +107,6 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Put here things that cannot be committed (private keys, private IPs, etc).
-# shellcheck disable=SC1090
 [[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
 
 eval "$(fnm env --use-on-cd)"
@@ -113,7 +114,6 @@ eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
 # Sourced file directory (so it gets /dotfiles folder).
-# shellcheck disable=all
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
 source "$ZSHRC_DIR/fzf-key-bindings.zsh"
@@ -267,10 +267,6 @@ wn() {
     cd ~/memos || return 1
     bash add-note.sh work "$@"
 }
-
-# TODO: Another pretty good one git log --oneline | fzf | awk '{print $1}' | xargs git show
-# TODO: More stuff: git status | grep modified | fzf -m | awk '{print $2}' | xargs git diff
-# allow "newly created files" too, and use different commands (git diff for modified, and cat for new)
 
 # NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`
 #       (older versions don't set this env variable).
