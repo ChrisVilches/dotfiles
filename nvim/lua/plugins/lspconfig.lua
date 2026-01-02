@@ -1,13 +1,25 @@
-local function on_init(client)
-  -- TODO: Should i do something like this in my LSP? (this was in the Quarto kickstarter).
-  -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-  -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+local function config_servers()
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  if client.server_capabilities then
-    -- Disable semantic tokens to prevent errors from incomplete LSP support.
-    client.server_capabilities.semanticTokensProvider = false
-  end
+  vim.lsp.config("bashls", {
+    filetypes = { "bash", "sh", "zsh" },
+  })
+
+  -- TODO: I have to make sure the capabilities (autocompletion) is doing something useful,
+  -- and not just polluting the code without improving anything.
+  vim.lsp.config("*", {
+    capabilities = capabilities,
+  })
+end
+
+local function config_extra()
+  -- Avoid underlining the whole text when there's a diagnostic.
+  vim.diagnostic.config {
+    underline = false,
+    virtual_text = true,
+  }
 end
 
 return {
@@ -21,21 +33,16 @@ return {
   config = function()
     require("mason-lspconfig").setup()
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-      callback = function(args)
-        local bufnr = args.buf
-        require "mappings.lsp"(bufnr)
-      end,
-    })
+    -- TODO: Remove this. It seems it's not necessary anymore.
+    -- Test LSP responsiveness and attachment for a while. Then remove this.
+    -- vim.api.nvim_create_autocmd("LspAttach", {
+    --   callback = function(args)
+    --     local bufnr = args.buf
+    --     require "mappings.lsp"(bufnr)
+    --   end,
+    -- })
 
-    vim.lsp.config("bashls", {
-      filetypes = { "bash", "sh", "zsh" },
-    })
-
-    -- Avoid underlining the whole text when there's a diagnostic.
-    vim.diagnostic.config {
-      underline = false,
-      virtual_text = true,
-    }
+    config_servers()
+    config_extra()
   end,
 }

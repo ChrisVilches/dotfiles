@@ -24,7 +24,10 @@ end
 return {
   "nvim-lualine/lualine.nvim",
   lazy = false,
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    { "linrongbin16/lsp-progress.nvim", config = true },
+  },
   config = function()
     -- These are for the lsp-progress block.
     vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
