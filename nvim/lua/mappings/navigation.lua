@@ -10,10 +10,10 @@ end
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
 map("n", "<c-w><c-t>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 
-map("n", "<leader>h", "<cmd>BufferLineCyclePrev<cr>", { desc = "tab prev" })
-map("n", "<leader>l", "<cmd>BufferLineCycleNext<cr>", { desc = "tab next" })
-map("n", "<leader><C-h>", "<cmd>BufferLineMovePrev<CR>", { desc = "buffer move prev" })
-map("n", "<leader><C-l>", "<cmd>BufferLineMoveNext<CR>", { desc = "buffer move next" })
+map("n", "<c-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "tab prev" })
+map("n", "<c-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "tab next" })
+map("n", "<leader><c-h>", "<cmd>BufferLineMovePrev<CR>", { desc = "buffer move prev" })
+map("n", "<leader><c-l>", "<cmd>BufferLineMoveNext<CR>", { desc = "buffer move next" })
 
 map(
   "n",

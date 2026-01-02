@@ -1,8 +1,6 @@
 -- Each plugin file may also have some mappings.
 local map = vim.keymap.set
 
--- TODO: I'm currently not using C-h and C-l... map them to something nice.
-
 map("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "wrap toggle" })
 
 -- Debugging stuff
