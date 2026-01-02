@@ -2,13 +2,14 @@
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
+# shellcheck disable=all
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="jispwoso"
+export ZSH_THEME="jispwoso"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,9 +71,9 @@ ZSH_THEME="jispwoso"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions)
+export plugins=(git zsh-autosuggestions)
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
@@ -83,9 +84,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+    export EDITOR='vim'
 else
-  export EDITOR='nvim'
+    export EDITOR='nvim'
 fi
 
 # Compilation flags
@@ -104,6 +105,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Put here things that cannot be committed (private keys, private IPs, etc).
+# shellcheck disable=SC1090
 [[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
 
 eval "$(fnm env --use-on-cd)"
@@ -111,9 +113,10 @@ eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
 # Sourced file directory (so it gets /dotfiles folder).
+# shellcheck disable=all
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
-source $ZSHRC_DIR/fzf-key-bindings.zsh
+source "$ZSHRC_DIR/fzf-key-bindings.zsh"
 
 PATH=$ZSHRC_DIR/scripts:$PATH
 PATH=~/go/bin:$PATH
@@ -126,57 +129,60 @@ alias ll='ls -alF --block-size=MB --color=always'
 alias la='ls -A'
 alias l='ls -CF'
 alias lll='ll | less -R'
-alias e=$EDITOR
+e() {
+    "$EDITOR" "$@"
+}
 
 # Git Status + fzf + read files/diff
 gz() {
-  git status --porcelain |
-  fzf -m |
-  while IFS= read -r line; do
-    local st file
+    git status --porcelain |
+    fzf -m |
+    while IFS= read -r line; do
+        local st file
 
-    st=${line[1,2]}
-    file=${line[4,-1]}
+        st=${line[1,2]}
+        file=${line[4,-1]}
 
-    case "$st" in
-      M*|*M)
-        git diff -- "$file"
-        ;;
-      '??')
-        bat -- "$file" 2>/dev/null || cat -- "$file"
-        ;;
-    esac
-  done
+        case "$st" in
+            M*|*M)
+                git diff -- "$file"
+                ;;
+            '??')
+                bat -- "$file" 2>/dev/null || cat -- "$file"
+                ;;
+        esac
+    done
 }
 
 git_branch_insert() {
-  local branch
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
-  LBUFFER+="$branch"
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
+    LBUFFER+="$branch"
 }
 zle -N git_branch_insert
 bindkey '^B' git_branch_insert
 
 if [[ -n $SSH_CONNECTION ]]; then
-  st() {
-    if [ -z "$1" ]; then
-      return 0
-    fi
+    st() {
+        if [ -z "$1" ]; then
+            return 0
+        fi
 
-    grep \
-    --exclude-dir={.git,tmp,log,deps,node_modules,vendor,dist,build,target,,_build,.ipynb_checkpoints} \
-    -r "$1" .
-  }
+        grep \
+            --exclude-dir={.git,tmp,log,deps,node_modules,vendor,dist,build,target,,_build,.ipynb_checkpoints} \
+            -r "$1" .
+    }
 else
-  st() {
-    local result="$(search-text-ripgrep.sh "$1")"
-    if [ -z "$result" ]; then
-      return 0
-    fi
-    local file="${result%%:*}"
-    local line="${result#*:}"
-    vim +$line $file
-  }
+    st() {
+        local result
+        result="$(search-text-ripgrep.sh "$1")"
+        if [ -z "$result" ]; then
+            return 0
+        fi
+        local file="${result%%:*}"
+        local line="${result#*:}"
+        vim "+$line" "$file"
+    }
 fi
 
 # Troubleshooting: When nodemon stops working, sometimes it's because Neovim/vim starts emitting
@@ -189,22 +195,24 @@ fi
 # (chokidar also lacks the functionality that kills the previous execution, so I can't use it)
 
 listen() {
-  npx nodemon --watch $1 --exec $2
+    npx nodemon --watch "$1" --exec "$2"
 }
 
 listencp() {
-  # Try to remove the "data" prefix, if any
-  local datafile=$(echo $2 | sed 's/^data//g')
-  local cmd="c++ $1 < data$datafile | cpdiff -l -d ans$datafile"
-  listen $1 "$cmd"
+    # Try to remove the "data" prefix, if any
+    local datafile
+    local cmd
+    datafile=${2#data}
+    cmd="c++ $1 < data$datafile | cpdiff -l -d ans$datafile"
+    listen "$1" "$cmd"
 }
 
 leet() {
-  listen $2 "leetcode.rb $1 $2 /tmp/leetsrc.cpp /tmp/leetans && c++ /tmp/leetsrc.cpp | cpdiff /tmp/leetans"
+    listen "$2" "leetcode.rb $1 $2 /tmp/leetsrc.cpp /tmp/leetans && c++ /tmp/leetsrc.cpp | cpdiff /tmp/leetans"
 }
 
 pacman-size() {
-  LC_ALL=C.UTF-8 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | LC_ALL=C.UTF-8 sort -h
+    LC_ALL=C.UTF-8 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | LC_ALL=C.UTF-8 sort -h
 }
 
 # randtime <start_hour> <end_hour>
@@ -213,50 +221,51 @@ pacman-size() {
 #   start_hour - the first hour (0–23) of the range
 #   end_hour   - the last hour (0–23) of the range
 randtime() {
-  local start_hour=$1
-  local end_hour=$2
-  if [[ -z $start_hour || -z $end_hour || $start_hour -gt $end_hour ]]; then
-    echo "Usage: randtime <start_hour> <end_hour>" >&2
-    return 1
-  fi
-  hour=$((RANDOM % (end_hour - start_hour + 1) + start_hour))
-  min=$((RANDOM % 60))
-  sec=$((RANDOM % 60))
-  printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
+    local start_hour=$1
+    local end_hour=$2
+    if [[ -z $start_hour || -z $end_hour || $start_hour -gt $end_hour ]]; then
+        echo "Usage: randtime <start_hour> <end_hour>" >&2
+        return 1
+    fi
+    hour=$((RANDOM % (end_hour - start_hour + 1) + start_hour))
+    min=$((RANDOM % 60))
+    sec=$((RANDOM % 60))
+    printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
 }
 
 export TERM_KEEP_DB_PATH=~/.term-keep.db
 export TERM_KEEP_SUMMARY_MAX_LENGTH=100
 
 tk() {
-  # Randomize this variable so I can test both with logo and without.
-  export TERM_KEEP_HIDE_LOGO=$((RANDOM % 2))
-  term_keep "$@"
+    # Randomize this variable so I can test both with logo and without.
+    export TERM_KEEP_HIDE_LOGO=$((RANDOM % 2))
+    term_keep "$@"
 }
 
 n() {
-  local prev="$(pwd)"
-  cd ~/memos
-  nvim && bash ./sync-git.sh
-  cd "$prev"
+    local prev
+    prev="$(pwd)"
+    cd ~/memos || return 1
+    nvim && bash ./sync-git.sh
+    cd "$prev" || return 1
 }
 
 # Quick Note (memo)
 qn() {
-  cd ~/memos
-  bash add-quick.sh
+    cd ~/memos || return 1
+    bash add-quick.sh
 }
 
 # Journal Note
 jn() {
-  cd ~/memos
-  bash add-note.sh journal "$@"
+    cd ~/memos || return 1
+    bash add-note.sh journal "$@"
 }
 
 # Work Note
 wn() {
-  cd ~/memos
-  bash add-note.sh work "$@"
+    cd ~/memos || return 1
+    bash add-note.sh work "$@"
 }
 
 # TODO: Another pretty good one git log --oneline | fzf | awk '{print $1}' | xargs git show
@@ -266,12 +275,12 @@ wn() {
 # NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`
 #       (older versions don't set this env variable).
 if [ "$TERM_PROGRAM" = "tmux" ]; then
-  # Get the first unattached session, if any.
-  first_unattached_session=$(tmux ls -F '#{session_attached} #{session_name}' 2> /dev/null | grep ^0 -m 1 | cut -c3-)
+    # Get the first unattached session, if any.
+    first_unattached_session=$(tmux ls -F '#{session_attached} #{session_name}' 2> /dev/null | grep ^0 -m 1 | cut -c3-)
 
-  # If there's an unattached session, attach that one.
-  if [ -n "$first_unattached_session" ]; then
-    exec tmux switch -t $first_unattached_session
-  fi
+    # If there's an unattached session, attach that one.
+    if [ -n "$first_unattached_session" ]; then
+        exec tmux switch -t "$first_unattached_session"
+    fi
 fi
 
