@@ -36,6 +36,5 @@ return {
   -- https://github.com/folke/trouble.nvim
   -- https://github.com/mbbill/undotree
   -- https://github.com/gbprod/substitute.nvim
-  -- https://github.com/jake-stewart/multicursor.nvim
   -- https://github.com/nvim-telescope/telescope-smart-history.nvim
 }
