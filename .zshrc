@@ -185,25 +185,17 @@ else
     }
 fi
 
-# Troubleshooting: When nodemon stops working, sometimes it's because Neovim/vim starts emitting
-# the "unlink" event, and after that no change event will be captured by nodemon. Kinda weird.
-# This can be fixed by changing neovim settings using:
-# :set nowritebackup
-# However I'm not sure if this disables some nice useful Neovim features.
-# Nodemon works OK with one --watch <file> though (the issue above happens with multiple files).
-# Note that chokidar also has this same problem when using two files. Maybe it's OS related.
-# (chokidar also lacks the functionality that kills the previous execution, so I can't use it)
-
 listen() {
-    npx nodemon --watch "$1" --exec "$2"
+    local dir filename
+    dir=$(dirname -- "$1")
+    filename=$(basename -- "$1")
+    watchexec --clear --restart --watch "$dir" --filter "$filename" "$2"
 }
 
 listencp() {
     # Try to remove the "data" prefix, if any
-    local datafile
-    local cmd
-    datafile=${2#data}
-    cmd="c++ $1 < data$datafile | cpdiff -l -d ans$datafile"
+    local datafile=${2#data}
+    local cmd="c++ $1 < data$datafile | cpdiff -l -d ans$datafile"
     listen "$1" "$cmd"
 }
 
