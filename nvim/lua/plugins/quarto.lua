@@ -1,6 +1,3 @@
--- TODO: Error: close a quarto file, then open it again, a Diagnostics-related (and Otter) error appears.
--- Probably triage. It can't be solved easily. On the kickstarter this error doesn't happen but it's hard
--- to understand what's the difference between my setup and the kickstarter one.
 local function add_snippets()
   -- These snippets are added here instead of in the ftplugin to prevent them
   -- from being added multiple times, which would occur each time a qmd file is opened.
@@ -20,6 +17,7 @@ jupyter: python3
     luasnip.parser.parse_snippet("```{python}", "```{python}\n$1\n```"),
   })
 end
+
 return {
   "quarto-dev/quarto-nvim",
   ft = { "quarto" },
