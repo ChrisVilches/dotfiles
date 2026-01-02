@@ -1,4 +1,3 @@
--- TODO: Needs a lot of testing and debugging but it seems to be working alright.
 local util = require "pattern-tools.util"
 
 local group = nil

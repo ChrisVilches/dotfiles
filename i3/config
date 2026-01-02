@@ -73,8 +73,10 @@ tiling_drag modifier titlebar
 
 # start a terminal
 bindsym $mod+Return exec --no-startup-id ghostty -e tmux; workspace 1; move container to workspace 1
-# TODO: Comment this better. Google Chrome now needs this shit. Copy the data files to another folder,
-# and then pass that as user-data-dir flag. Only then you can start the debugger
+
+# Chrome no longer allows remote debugging on the default profile. Remote
+# debugging flags are ignored unless you launch Chrome with a custom user data
+# directory.
 bindsym $mod+c exec --no-startup-id google-chrome-stable --user-data-dir=/home/chris/.config/chrome-debug-profile --remote-debugging-port=9222 --force-dark-mode --profile-directory="Default"; workspace 2; move container to workspace 2
 bindsym $mod+$win+c exec --no-startup-id google-chrome-stable --user-data-dir=/home/chris/.config/chrome-debug-profile --remote-debugging-port=9222 --force-dark-mode -profile-directory="Profile 1"; workspace 3; move container to workspace 3
 bindsym $mod+d exec "rofi -modi drun,run -show drun"
