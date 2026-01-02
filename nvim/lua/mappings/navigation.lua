@@ -25,8 +25,3 @@ map(
 map("n", "<leader>x", require("buffer-close").close, { desc = "buffer close" })
 map("n", "<leader>X", require("buffer-close").close_force, { desc = "buffer close (force)" })
 map("n", "<leader>tr", require("buffer-close").reopen_last, { desc = "tab re-open" })
--- TODO: The only bad thing about using // mapping is that typing / doesn't immediately
--- turn it into search mode. So I'm using f/ for now. Verify if this is easy to type.
--- TODO: It's kinda crappy, I think I'll never use it. Remove this comment,
--- commented out mapping, and the custom plugin files.
--- map("n", "f/", require "two-key-search", { desc = "search using two characters" })
