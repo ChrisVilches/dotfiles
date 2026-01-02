@@ -28,6 +28,10 @@ return {
       end,
     })
 
+    vim.lsp.config("bashls", {
+      filetypes = { "bash", "sh", "zsh" },
+    })
+
     -- Avoid underlining the whole text when there's a diagnostic.
     vim.diagnostic.config {
       underline = false,

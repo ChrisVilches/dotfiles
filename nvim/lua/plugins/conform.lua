@@ -10,6 +10,7 @@ return {
         cpp = { "clang-format" },
         python = { "autopep8" },
         quarto = { "injected" },
+        zsh = { "beautysh" },
         -- php = { "php-cs-fixer" },
         -- css = { "prettier" },
         -- html = { "prettier" },

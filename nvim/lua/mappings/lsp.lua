@@ -21,6 +21,10 @@ return function(bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "List workspace folders")
 
+  map("n", "<leader>ds", function()
+    vim.diagnostic.setqflist { open = true }
+  end, opts "Show diagnostics")
+
   map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
   map("n", "<leader>ra", vim.lsp.buf.rename, opts "Rename symbol")
 
