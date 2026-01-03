@@ -1,12 +1,24 @@
 # Put it on ~/.oh-my-zsh/custom/themes/
 
-local ret_status="%(%{$fg_bold[red]%}➜ %s)"
-PROMPT=$'%{$fg[green]%}%n@%m: %{$reset_color%}%{$fg[blue]%}%/ %{$reset_color%}%{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}
-${ret_status} %{$reset_color%} '
+autoload -Uz add-zsh-hook
 
-PROMPT2="%{$fg_blod[black]%}%_> %{$reset_color%}"
+# This makes it easy to move vertically in tmux using { and }.
+__prompt=0
+function print_newline_in_between() {
+    if (( __prompt == 1 )); then
+        echo
+    fi
 
-ZSH_THEME_GIT_PROMPT_PREFIX="git:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+    __prompt=1
+}
+
+precmd_functions+=(print_newline_in_between)
+
+export ZSH_THEME_GIT_PROMPT_PREFIX="%{$bg[black]%}%{$fg[green]%}"
+export ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+export ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%} %{$fg[yellow]%}✗%{$reset_color%}"
+export ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}%{$reset_color%}"
+
+export PROMPT=$'%{$bg[black]$fg[red]%}%n%{$reset_color%} %{$bg[black]$fg[blue]%}%m%{$reset_color%} %{$bg[black]$fg[yellow]%}%~%{$reset_color%} $(git_prompt_info)\n'
+export PROMPT2="%{$fg_bold[yellow]%}%_> %{$reset_color%}"
+
