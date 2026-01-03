@@ -12,7 +12,9 @@ function print_newline_in_between() {
     __prompt=1
 }
 
-precmd_functions+=(print_newline_in_between)
+# It glitches a bit when executing `clear` or sourcing .zshrc again.
+# Clearing using CTRL+L seems to work well.
+add-zsh-hook precmd print_newline_in_between
 
 export ZSH_THEME_GIT_PROMPT_PREFIX="%{$bg[black]%}%{$fg[green]%}"
 export ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
