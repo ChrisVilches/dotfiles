@@ -201,7 +201,10 @@ listencp() {
 }
 
 leet() {
-    listen "$2" "leetcode.rb $1 $2 /tmp/leetsrc.cpp /tmp/leetans && c++ /tmp/leetsrc.cpp | cpdiff /tmp/leetans"
+    local src="/tmp/leetsrc.cpp"
+    local ans="/tmp/leetans"
+    local run="c++ $src | cpdiff $ans"
+    listen "$2" "leetcode.py $1 $2 $src $ans && $run"
 }
 
 pacman-size() {
