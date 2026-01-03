@@ -2,8 +2,6 @@
 
 import json
 import sys
-import re
-
 
 # Checks if a value is a nested array of numbers (list of lists of int/float)
 # Parameters: value - any Python object
