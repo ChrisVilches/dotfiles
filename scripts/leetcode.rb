@@ -156,13 +156,7 @@ def find_main_method_name(code)
   # Method name is before '('
   method_name = sig_line.split('(').first.split(' ').last
 
-  # Extract parameter list between '(' and ')'
-  if sig_line.include?('(') && sig_line.include?(')')
-    param_list = sig_line.match(/\((.*?)\)/)[1]
-    param_count = param_list.empty? ? 0 : param_list.count(',') + 1
-  else
-    param_count = 0
-  end
+  param_count = code.split('public:')[1].split(')')[0].count(',') + 1
 
   [method_name, param_count]
 end
@@ -186,37 +180,17 @@ def parse_leet_file(config_path, target_program_path)
 
   blocks = []
   current_block = []
-  in_block = false
-  lines.each do |line|
-    # Check for dash separator line (only dashes, at least 3)
-    if line.strip == "---"
-      raise "Dash separator line must have at least 3 dashes, got '#{line}'" if line.length < 3
 
-      # Found dash separator
-      if in_block
-        # Finalize current block
-        blocks << current_block unless current_block.empty?
-        current_block = []
-        in_block = false
-      end
-      next
-    # elsif line =~ /-/
-    #   # line contains dash but also other characters
-    #   raise "Dash separator line contains non-dash characters: '#{line}'"
-    end
-    # Skip blank lines outside blocks? Actually blank lines inside blocks are ignored
-    # We'll collect non-blank lines to define block boundaries
-    if line.strip.empty?
-      # Blank line, ignore
-      next
+  lines.map(&:strip).reject(&:empty?).each do |line|
+    if line =~ %r{^leetcode/}
+      blocks << current_block
+      current_block = []
     end
 
-    # Non-blank line
-    in_block ||= true
     current_block << line
   end
-  # Add last block if any
-  blocks << current_block unless current_block.empty?
+  blocks << current_block
+  blocks.reject!(&:empty?)
 
   target_block = blocks.find { |block| block.first == target_program_path }
   raise "No block found for program #{target_program_path}" unless target_block
