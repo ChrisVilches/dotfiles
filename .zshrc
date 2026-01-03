@@ -129,6 +129,7 @@ alias ll='ls -alF --block-size=MB --color=always'
 alias la='ls -A'
 alias l='ls -CF'
 alias lll='ll | less -R'
+alias oc='opencode'
 e() {
     "$EDITOR" "$@"
 }
