@@ -70,7 +70,7 @@ fi
 
 clean_temp_dir
 
-HASH=$(sha1sum "$1" | cut -d ' ' -f 1)
+HASH=$(echo "${COMPILE_FLAGS[*]} $(cat "$1")" | sha1sum | cut -d ' ' -f 1)
 
 OUT_FILE="$BIN_TEMP/$HASH"
 
