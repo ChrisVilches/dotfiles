@@ -1,11 +1,10 @@
--- Remove trailing white space.
+-- Remove trailing white space and leading empty lines.
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
   callback = function()
     local save_cursor = vim.fn.getpos "."
-    pcall(function()
-      vim.cmd [[%s/\s\+$//e]]
-    end)
+    vim.cmd [[%s/\s\+$//e]]
+    vim.cmd [[%s/\%^\n\+//e]]
     vim.fn.setpos(".", save_cursor)
   end,
 })

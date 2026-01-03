@@ -27,6 +27,16 @@ vim.api.nvim_create_autocmd({ "BufWrite" }, {
   end,
 })
 
+-- Fix code blocks (four or more backticks into three)
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  buffer = 0,
+  callback = function()
+    local save_cursor = vim.fn.getpos "."
+    vim.cmd [[%s/^```\+$/```/e]]
+    vim.fn.setpos(".", save_cursor)
+  end,
+})
+
 local ns = vim.api.nvim_create_namespace "QuartoHighlight"
 vim.api.nvim_set_hl(ns, "@markup.codecell", { link = "CursorLine" })
 vim.api.nvim_set_hl(ns, "@markup.codecellborder", { link = "CursorColumn" })

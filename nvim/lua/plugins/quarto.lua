@@ -14,7 +14,11 @@ format:
 jupyter: python3
 ---]]
     ),
-    luasnip.parser.parse_snippet("```{python}", "```{python}\n$1\n```"),
+    -- NOTE: Occasionally, this may result in four or more backticks being
+    -- printed, likely due to autopairs or another autocompletion plugin. This
+    -- can be corrected by using an autocmd to replace multiple backticks with
+    -- three.
+    luasnip.parser.parse_snippet("```{python}", "```{python}\n$1\n```\n"),
   })
 end
 
