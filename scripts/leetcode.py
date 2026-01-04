@@ -69,9 +69,7 @@ def cpp_output_value(var_name, type_):
         'number_array': f'for (auto x : {var_name}) {{ cout << x << \' \'; }}; cout << endl;',
         'bool_array': f'for (auto x : {var_name}) {{ cout << (x ? "true" : "false") << \' \'; }}; cout << endl;',
         'string_array': f'for (auto x : {var_name}) {{ cout << x << \' \'; }}; cout << endl;',
-        # TODO: Not sure if this would throw compilation error because it's copying "x" instead
-        # of using references.
-        'string_nested_array': f'for(auto& row : {var_name}) {{ for(auto x : row) {{ cout << x << \' \';}}; cout<<endl;}}',
+        'string_nested_array': f'for(auto& row : {var_name}) {{ for(auto& x : row) {{ cout << x << \' \';}}; cout<<endl;}}',
         'number_nested_array': f'for(auto& row : {var_name}) {{ for(auto x : row) {{ cout << x << \' \';}}; cout<<endl;}}',
     }
     if type_ not in mapping:
