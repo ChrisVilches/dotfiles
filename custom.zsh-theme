@@ -1,21 +1,5 @@
 # Put it on ~/.oh-my-zsh/custom/themes/
 
-autoload -Uz add-zsh-hook
-
-# This makes it easy to move vertically in tmux using { and }.
-__prompt=0
-function print_newline_in_between() {
-    if (( __prompt == 1 )); then
-        echo
-    fi
-
-    __prompt=1
-}
-
-# It glitches a bit when executing `clear` or sourcing .zshrc again.
-# Clearing using CTRL+L seems to work well.
-add-zsh-hook precmd print_newline_in_between
-
 export ZSH_THEME_GIT_PROMPT_PREFIX="%{$bg[black]%}%{$fg[green]%}"
 export ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 export ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%} %{$fg[yellow]%}✗%{$reset_color%}"
