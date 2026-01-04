@@ -11,9 +11,6 @@ return function(bufnr)
   map("n", "<leader>sh", vim.lsp.buf.signature_help, opts "Show signature help")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
   map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
-  -- Fixes inconsistent hover behavior in some LSPs (e.g., Go opens a window
-  -- instead of a floating popup).
-  map("n", "K", vim.lsp.buf.hover, opts "LSP Hover")
 
   map("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
