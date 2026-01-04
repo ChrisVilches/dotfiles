@@ -23,5 +23,6 @@ return {
 -- Main fold usage:
 -- za to fold a block
 -- za to unfold a block
+-- zM to fold all
 -- zR to unfold all
 -- There are many other ways to fold, but these are the simplest ways.
