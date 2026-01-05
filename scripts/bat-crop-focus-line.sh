@@ -4,7 +4,6 @@
 # range of lines around it, cropping the rest.
 
 extra_lines=10
-total=$((2 * extra_lines))
 
 start=$(($2 - extra_lines))
 if [ $start -lt 1 ]; then
@@ -15,4 +14,4 @@ else
   end=$(($2 + extra_lines))
 fi
 
-bat --style=numbers --color=always --highlight-line $2 --line-range $start:$end "$1"
+bat --style=numbers --color=always --highlight-line "$2" --line-range $start:$end "$1"
