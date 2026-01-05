@@ -13,7 +13,7 @@ local function get_todos()
   local rg_flags = {
     "--line-number",
     "--no-heading",
-    "--color=always",
+    "--color=never",
   }
 
   local todo_pattern = "T" .. "O" .. "D" .. "O" .. ":"
@@ -34,9 +34,7 @@ local function get_todos()
 
   local entries = {}
   for line in result:gmatch "[^\r\n]+" do
-    -- Remove ANSI color codes
-    local clean_line = line:gsub("\27%[[%d;]*m", "")
-    local file, line_num, content = clean_line:match "^([^:]+):(%d+):(.+)$"
+    local file, line_num, content = line:match "^([^:]+):(%d+):(.+)$"
     if file and line_num and content then
       table.insert(entries, {
         filename = file,
