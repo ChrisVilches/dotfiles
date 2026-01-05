@@ -1,6 +1,7 @@
 -- Each plugin file may also have some mappings.
 local map = vim.keymap.set
 
+map("n", "<leader>to", require("todos").show_todos, { desc = "show todos", noremap = true, silent = true })
 map("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "wrap toggle" })
 
 -- Debugging stuff
