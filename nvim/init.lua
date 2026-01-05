@@ -92,3 +92,16 @@ vim.schedule(function()
     vim.filetype.add { extension = { [ext] = ft } }
   end
 end)
+
+vim.schedule(function()
+  local cwd = vim.fn.getcwd()
+  local nvim_cmds_path = cwd .. "/nvim_utils.lua"
+  if vim.uv.fs_stat(nvim_cmds_path) then
+    local ok, err = pcall(function()
+      dofile(nvim_cmds_path)
+    end)
+    if not ok then
+      vim.notify("Failed to load nvim_cmds.lua: " .. err, vim.log.levels.WARN)
+    end
+  end
+end)
