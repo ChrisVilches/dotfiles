@@ -24,6 +24,15 @@ return {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
   },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && npm install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
+  },
   -- TODO: Try in the future:
   -- Friendly snippets (currently I only use it for Lua because it's the default, but
   -- do it for other languages as well)
