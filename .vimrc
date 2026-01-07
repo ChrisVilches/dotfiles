@@ -30,6 +30,8 @@ vnoremap <C-s> <Esc>:w<CR>gv
 
 " Quit the current window with <leader>q
 nnoremap <silent> <leader>q :q<CR>
+" This one is because of my muscle memory (I tend to want to close all windows)
+nnoremap <silent> <leader>Q :qa<CR>
 
 " Jump 6 lines up/down
 nnoremap <C-j> 6j
