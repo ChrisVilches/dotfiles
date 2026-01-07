@@ -8,7 +8,7 @@ local function map(keymap, telescope_cmd, desc)
 end
 
 -- More pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
-map("fw", "live_grep", "live grep")
+map("fw", "live_grep theme=ivy", "live grep")
 map("fg", "grep_string", "grep string")
 map("fh", "help_tags", "help page")
 map("ma", "marks", "find marks")
@@ -19,7 +19,7 @@ map("flw", "lsp_workspace_symbols", "Lists LSP document symbols in the current w
 map("cm", "git_commits", "git commits")
 map("gt", "git_status", "git status")
 map("fa", "find_files follow=true no_ignore=true hidden=true", "find all files")
-map("ff", "frecency workspace=CWD ", "find files (frecency)")
+map("ff", 'frecency workspace=CWD path_display={"truncate"} theme=ivy', "find files (frecency)")
 
 vim.keymap.set("n", "<leader>re", function()
   require("telescope.builtin").registers { initial_mode = "normal" }
