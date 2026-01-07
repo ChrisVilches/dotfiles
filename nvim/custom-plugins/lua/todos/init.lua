@@ -1,5 +1,11 @@
 local M = {}
 
+local ignored_dirs = {}
+
+function M.set_ignored_dirs(dirs)
+  ignored_dirs = dirs
+end
+
 local function get_todos()
   local rg_glob_flags = {
     "--glob",
@@ -9,6 +15,11 @@ local function get_todos()
     "--glob",
     "!log",
   }
+
+  for _, dir in ipairs(ignored_dirs) do
+    table.insert(rg_glob_flags, "--glob")
+    table.insert(rg_glob_flags, "!" .. dir .. "/**")
+  end
 
   local rg_flags = {
     "--line-number",
