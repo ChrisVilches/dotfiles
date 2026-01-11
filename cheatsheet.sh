@@ -100,3 +100,41 @@ xargs -I{} echo "[[_CURSOR_{}]]" # Wrap string inside a left and right strings
 # read -r stdintext && echo "[$stdintext]_CURSOR_" # Wrap string inside a left and right strings
 
 bindkey -L | bat --color=always --language=zsh --plain | fzf --ansi # see available mappings for zsh
+
+pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | sort -h # pacman show sorted by size
+pacman -Qe                                                                        # explicitly installed packages only
+pacman -Qd                                                                        # packages installed as dependencies
+pacman -Qm                                                                        # foreign packages (AUR / not in repos)
+
+pacman -Qi neovim # detailed info about an installed package
+pacman -Ql neovim # list files owned by the package
+pacman -Qk neovim # verify installed files vs database
+
+pacman -Qo /usr/bin/nvim # who owns this package or binary
+
+pacman -Qs ripgrep # search installed packages
+pacman -Ss ripgrep # search in all repos
+
+pacman -Qtd # orphaned dependencies (safe to review/remove)
+
+sudo pacman -Rns "$(pacman -Qdtq)" # Remove orphans
+
+pactree neovim     # dependency tree
+pactree -r openssl # reverse deps (who needs it?)
+
+du -sh *                         # Show the total size of each item in the current directory (human-readable)
+du -sh .                         # Show the total size of the current directory
+du -h --max-depth=1 /            # Summarize disk usage of top-level directories under /
+du -ah . | sort -h               # List all files/dirs with sizes and sort from smallest to largest
+du -ah . | sort -rh | head -n 10 # Find the 10 largest files/directories here
+du -xhd1 /                       # Like --max-depth=1, but stay on the same filesystem (ignore mounted drives)
+du -sh ~/.cache                  # Quickly see how big a cache directory is 🧹
+du -ch *.log | tail -n 1         # Show the cumulative size of matching files (e.g., logs)
+
+df -h               # Show free/used space on all mounted filesystems
+df -h /             # Show disk usage for the filesystem containing /
+df -Th              # Show filesystem types along with usage (ext4, btrfs, tmpfs, etc.)
+df -i               # Show inode usage (useful when “disk full” isn’t about bytes)
+df -h --total       # Add a total line summarizing all filesystems
+df -h | sort -k5 -h # Sort filesystems by usage percentage
+df -h /home         # Check space specifically for /home
