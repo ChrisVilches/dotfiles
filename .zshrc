@@ -116,7 +116,9 @@ eval "$(zoxide init zsh)"
 # Sourced file directory (so it gets /dotfiles folder).
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
-source "$ZSHRC_DIR/fzf-key-bindings.zsh"
+if [[ $- == *i* ]]; then
+    source "$ZSHRC_DIR/fzf-key-bindings.zsh"
+fi
 
 PATH=$ZSHRC_DIR/scripts:$PATH
 PATH=~/go/bin:$PATH
