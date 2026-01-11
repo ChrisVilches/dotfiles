@@ -33,11 +33,11 @@
 # theme = Builtin Pastel Dark
 # theme = Catppuccin Frappe
 # theme = Catppuccin Macchiato
-# theme = Catppuccin Mocha
+theme = Catppuccin Mocha
 # theme = Cobalt Next Minimal
 # theme = Ghostty Default Style Dark
 # theme = GitHub Dark Colorblind
-theme = GitHub Dark Default
+# theme = GitHub Dark Default
 # theme = GitHub Dark Dimmed
 # theme = GitHub Dark High Contrast
 
