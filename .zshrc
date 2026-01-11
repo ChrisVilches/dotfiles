@@ -163,6 +163,14 @@ git_branch_insert() {
 zle -N git_branch_insert
 bindkey '^B' git_branch_insert
 
+llm-fix-command() {
+    source "$ZSHRC_DIR/scripts/llm_fix_command_widget.zsh"
+    prompt_llm
+}
+# Tip: you can do "undo" in ZSH to go back to the original command.
+zle -N llm-fix-command
+bindkey '^X^L' llm-fix-command
+
 if [[ -n $SSH_CONNECTION ]]; then
     st() {
         if [ -z "$1" ]; then
