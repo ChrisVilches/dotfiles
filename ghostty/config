@@ -18,12 +18,28 @@
 # Config syntax crash course
 # ==========================
 # ghostty +list-themes
-# theme = Lovelace
-theme = Duskfox
+# theme = Duskfox
+# theme = Argonaut
 # theme = Mariana
 # theme = GruvboxDarkHard
 # theme = Everblush
 # theme = One Half Dark
+# theme = Birds Of Paradise
+# theme = Blazer
+# theme = Blue Berry Pie
+# theme = Bluloco Dark
+# theme = Box
+# theme = Broadcast
+# theme = Builtin Pastel Dark
+# theme = Catppuccin Frappe
+# theme = Catppuccin Macchiato
+# theme = Catppuccin Mocha
+# theme = Cobalt Next Minimal
+# theme = Ghostty Default Style Dark
+# theme = GitHub Dark Colorblind
+theme = GitHub Dark Default
+# theme = GitHub Dark Dimmed
+# theme = GitHub Dark High Contrast
 
 # NOTE: Adjust padding settings for optimal appearance when using Neovim.
 # window-padding-x = 10
@@ -32,6 +48,8 @@ theme = Duskfox
 window-padding-color = extend
 adjust-underline-thickness=-1
 
+# You can verify these fonts by creating a Markdown document and rendering it inside Neovim.
+# It should show all types of fonts properly (italic, bold, etc).
 font-family=RobotoMono Nerd Font
 font-size = 16
 keybind = ctrl+enter=unbind
