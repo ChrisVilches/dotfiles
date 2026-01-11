@@ -20,13 +20,10 @@ map("cm", "git_commits", "git commits")
 map("gt", "git_status", "git status")
 map("fa", "find_files follow=true no_ignore=true hidden=true", "find all files")
 map("ff", 'frecency workspace=CWD path_display={"truncate"} theme=ivy', "find files (frecency)")
+map("<tab>", "buffers", "show current buffers")
 
 vim.keymap.set("n", "<leader>re", function()
   require("telescope.builtin").registers { initial_mode = "normal" }
-end)
-
-vim.keymap.set("n", "<leader><tab>", function()
-  require("telescope.builtin").buffers { initial_mode = "normal" }
 end)
 
 vim.keymap.set("n", "<leader>th", function()

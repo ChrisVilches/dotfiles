@@ -9,6 +9,10 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
+-- TODO: --preview is bugged. When opened for the first time, it initially
+-- focuses on the first file, but if you reopen it, it will focus on the
+-- current file (the first behavior is incorrect).
+map("n", "<leader>e", "<CMD>Oil --float --preview<CR>", { desc = "File explorer" })
 
 -- Hover
 -- Fixes inconsistent hover behavior in some LSPs (e.g., Golang opens a window
