@@ -1,3 +1,24 @@
+local function open_file_smart(node)
+  local path = node.absolute_path
+
+  -- directories behave normally
+  if node.type == "directory" then
+    require("nvim-tree.api").node.open.edit()
+    return
+  end
+
+  -- try to detect binary / non-text files
+  local info = vim.fn.system(string.format("file --mime %q", path))
+  local is_binary = info:match "charset=binary"
+  local is_empty = info:find("inode/x-empty", 1, true)
+
+  if is_empty or not is_binary then
+    require("nvim-tree.api").node.open.edit()
+  else
+    vim.fn.jobstart({ "xdg-open", path }, { detach = true })
+  end
+end
+
 local function on_attach(bufnr)
   local api = require "nvim-tree.api"
 
@@ -25,6 +46,11 @@ local function on_attach(bufnr)
       require("preview-file").preview_file(node.absolute_path)
     end
   end, opts "Preview selected file in a floating window")
+
+  vim.keymap.set("n", "<CR>", function()
+    local node = api.tree.get_node_under_cursor()
+    open_file_smart(node)
+  end, opts "Open smart")
 end
 
 return {
