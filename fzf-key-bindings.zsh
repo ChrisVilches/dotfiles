@@ -6,21 +6,6 @@
 # This file came from fzf itself (examples folder).
 # Check the ones with `bindkey`, these are the enabled ones.
 
-# Paste the selected file path(s) into the command line
-__fsel() {
-    local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
-        -o -type f -print \
-        -o -type d -print \
-        -o -type l -print 2> /dev/null | cut -b3-"}"
-    setopt localoptions pipefail no_aliases 2> /dev/null
-    eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
-        echo -n "${(q)item} "
-    done
-    local ret=$?
-    echo
-    return $ret
-}
-
 __fzf_use_tmux__() {
     [ -n "$TMUX_PANE" ] && [ "${FZF_TMUX:-0}" != 0 ] && [ ${LINES:-40} -gt 15 ]
 }
@@ -30,18 +15,25 @@ __fzfcmd() {
     echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
 }
 
-fzf-file-widget() {
-    # Make editing the default action.
-    if [ -z "$LBUFFER" ]; then
-        LBUFFER="vim"
-    fi
-    LBUFFER="${LBUFFER} $(__fsel)"
-    local ret=$?
-    zle reset-prompt
-    return $ret
+find-file-smart() {
+    local key file out
+
+    out="$(find . -type f | fzf --expect=enter,ctrl-t,ctrl-v,ctrl-b,ctrl-l,ctrl-n)" || return
+
+    key=${out%%$'\n'*}
+    file=${out#*$'\n'}
+
+    case $key in
+        enter|'') LBUFFER+=" $file" ;;
+        ctrl-t)   zle -I; cat "$file" ;;
+        ctrl-v)   LBUFFER+="vim $file" ;;
+        ctrl-b)   LBUFFER+="bat $file" ;;
+        ctrl-l)   LBUFFER+="less $file" ;;
+        ctrl-n)   LBUFFER+="nvim $file" ;;
+    esac
 }
-zle     -N   fzf-file-widget
-bindkey '^T' fzf-file-widget
+zle -N find-file-smart
+bindkey '^T' find-file-smart
 
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {
@@ -118,6 +110,8 @@ bindkey '^R' fzf-history-widget
 # NOTE: It seems using $CURSOR doesn't work, because gsub doesn't work with the $.
 CURSOR_MARKER='_CURSOR_'
 
+# TODO: A command with a "\n" will render a newline in the description. It should be kept as is.
+# sed 's/,/\n/g'
 format_cheatsheet_entries() {
     awk -v cursor="$CURSOR_MARKER" '{
     output = $0
