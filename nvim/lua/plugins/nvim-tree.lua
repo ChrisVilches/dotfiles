@@ -39,14 +39,6 @@ local function on_attach(bufnr)
   vim.keymap.set("n", "K", api.node.show_info_popup, opts "Show information")
   vim.keymap.del("n", "<C-k>", { buffer = bufnr })
 
-  vim.keymap.set("n", "p", function()
-    local node = api.tree.get_node_under_cursor()
-
-    if node and node.absolute_path then
-      require("preview-file").preview_file(node.absolute_path)
-    end
-  end, opts "Preview selected file in a floating window")
-
   vim.keymap.set("n", "<CR>", function()
     local node = api.tree.get_node_under_cursor()
     open_file_smart(node)

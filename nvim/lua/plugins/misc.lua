@@ -14,13 +14,6 @@ return {
     end,
   },
   {
-    -- This plugins adds gb/gbc bindings to comment as blocks (e.g. in C++ it uses /* */ instead of //)
-    -- Can also be integrated with TreeSitter.
-    "numToStr/Comment.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    config = true,
-  },
-  {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
   },

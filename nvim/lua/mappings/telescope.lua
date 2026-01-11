@@ -28,3 +28,21 @@ end)
 vim.keymap.set("n", "<leader><tab>", function()
   require("telescope.builtin").buffers { initial_mode = "normal" }
 end)
+
+vim.keymap.set("n", "<leader>th", function()
+  local actions = require "telescope.actions"
+  local action_state = require "telescope.actions.state"
+
+  require("telescope.builtin").colorscheme {
+    enable_preview = true,
+    attach_mappings = function()
+      actions.select_default:replace(function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        require("theme-store").save(selection.value)
+        vim.cmd("colorscheme " .. selection.value)
+      end)
+      return true
+    end,
+  }
+end, { desc = "theme picker" })

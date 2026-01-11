@@ -78,7 +78,6 @@ vim.schedule(function()
   require "mappings/misc"
   require "mappings/navigation"
   require "mappings/telescope"
-  require "mappings/themes"
 
   -- This is mainly to ensure Language Server Protocol (LSP) features,
   -- syntax highlighting, and the associated ftplugin (filetype plugin)
