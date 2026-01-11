@@ -34,6 +34,7 @@ find . -type f -type f -perm -u+x                                             # 
 find . -type f \( -name "*.cpp_CURSOR_" \) | fzf                              # Find all files with extension
 find . -type f \( -name "*.jpg" -o -name "*.png" \) | fzf | xargs -r xdg-open # Find all photos / images and open them
 git diff                                                                      # Differences in git
+git log --name-only                                                           # git log (name only)
 gzip file.txt                                                                 # compresses the file "file.txt" and renames it as "file.txt.gz".
 lsof -i :5999                                                                 # find program using port
 netstat -tuln                                                                 # Shows all listening TCP and UDP connections.
