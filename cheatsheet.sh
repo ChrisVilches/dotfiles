@@ -8,11 +8,6 @@
 # command.
 # TODO: Some commands are fake/dummy from when I was testing the tool. Prune!
 
-# TODO: I think some of these commands mistakenly use `xargs -r` but it seems fzf
-# will print a non-zero code if the selection is empty, and IT SEEMS (not sure) that
-# the bash pipe | will not continue if the code is non-zero, so in that sense the -r isn't necessary
-# but I'm not sure?????
-
 cat file_CURSOR_ | nl                        # Show line numbers to command output
 chmod u+rwx file.txt                         # grants read, write, and execute permissions to the owner of the file.
 chown user file.txt                          # changes the owner of "file.txt" to the specified user.
