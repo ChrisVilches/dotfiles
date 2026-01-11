@@ -123,7 +123,10 @@ eval "$(zoxide init zsh)"
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
 if [[ $- == *i* ]]; then
+    # TODO: Change the name to zle-widgets-fzf
+    # because they are only for widgets, and not normal fzf stuff.
     source "$ZSHRC_DIR/fzf-key-bindings.zsh"
+    source "$ZSHRC_DIR/zle-widgets.zsh"
 fi
 
 PATH=$ZSHRC_DIR/scripts:$PATH
@@ -162,22 +165,6 @@ gz() {
         esac
     done
 }
-
-git_branch_insert() {
-    local branch
-    branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
-    LBUFFER+="$branch"
-}
-zle -N git_branch_insert
-bindkey '^B' git_branch_insert
-
-llm-fix-command() {
-    source "$ZSHRC_DIR/scripts/llm_fix_command_widget.zsh"
-    prompt_llm
-}
-# Tip: you can do "undo" in ZSH to go back to the original command.
-zle -N llm-fix-command
-bindkey '^X^L' llm-fix-command
 
 if [[ -n $SSH_CONNECTION ]]; then
     st() {
@@ -223,10 +210,6 @@ leet() {
     listen "$2" "leetcode.py $1 $2 $src $ans && $run"
 }
 
-pacman-size() {
-    LC_ALL=C.UTF-8 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | LC_ALL=C.UTF-8 sort -h
-}
-
 # randtime <start_hour> <end_hour>
 # Generates a random time in HH:MM:SS format.
 # Arguments:
@@ -243,15 +226,6 @@ randtime() {
     min=$((RANDOM % 60))
     sec=$((RANDOM % 60))
     printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
-}
-
-export TERM_KEEP_DB_PATH=~/.term-keep.db
-export TERM_KEEP_SUMMARY_MAX_LENGTH=100
-
-tk() {
-    # Randomize this variable so I can test both with logo and without.
-    export TERM_KEEP_HIDE_LOGO=$((RANDOM % 2))
-    term_keep "$@"
 }
 
 n() {
