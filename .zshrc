@@ -73,7 +73,7 @@ export ZSH_THEME="custom"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-export plugins=(git zsh-autosuggestions)
+export plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf-tab)
 
 source "$ZSH/oh-my-zsh.sh"
 
@@ -108,6 +108,12 @@ fi
 
 # Put here things that cannot be committed (private keys, private IPs, etc).
 [[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
+
+# Remove the annoying way the exclamation mark is used in zsh (for history expansion).
+setopt nobanghist
+
+# Display hidden files in the file completion selection menu. Use fzf-tab to quickly locate files.
+setopt GLOB_DOTS
 
 eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
@@ -249,10 +255,15 @@ tk() {
 }
 
 n() {
-    local prev
+    local prev init_code
     prev="$(pwd)"
     cd ~/memos || return 1
-    nvim && bash ./sync-git.sh
+    init_code='
+           require("todos").set_ignored_dirs({ "archived" })
+           require("nvim_utils")
+    '
+    nvim -c "lua $init_code"
+    bash ./sync-git.sh
     cd "$prev" || return 1
 }
 
