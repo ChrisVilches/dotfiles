@@ -123,9 +123,7 @@ eval "$(zoxide init zsh)"
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
 if [[ $- == *i* ]]; then
-    # TODO: Change the name to zle-widgets-fzf
-    # because they are only for widgets, and not normal fzf stuff.
-    source "$ZSHRC_DIR/fzf-key-bindings.zsh"
+    source "$ZSHRC_DIR/zle-widgets-fzf.zsh"
     source "$ZSHRC_DIR/zle-widgets.zsh"
 fi
 
