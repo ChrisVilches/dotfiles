@@ -1,5 +1,6 @@
 let mapleader = " "
 
+colorscheme unokai
 set linebreak
 set nowrap
 set number
@@ -13,9 +14,6 @@ set smartcase
 set showmatch
 set clipboard=unnamedplus
 syntax on
-
-"Not sure, kinda sucks
-set background=dark
 
 nnoremap <silent> <leader>wt :set wrap!<CR>
 nnoremap <silent> <Esc> :nohlsearch<CR><Esc>
