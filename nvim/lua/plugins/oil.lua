@@ -222,11 +222,9 @@ local oil = {
   lazy = false,
 }
 
-return oil
-
--- return {
---   "refractalize/oil-git-status.nvim",
---   config = true,
---   lazy = false,
---   dependencies = oil,
--- }
+return {
+  "refractalize/oil-git-status.nvim",
+  config = true,
+  lazy = false,
+  dependencies = oil,
+}
