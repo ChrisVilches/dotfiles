@@ -1,3 +1,5 @@
+# TODO: LSP isn't working on this file and the other widget one.
+
 git_branch_insert() {
     local branch
     branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
@@ -49,7 +51,7 @@ Output format:
 
 Only output the command and comments. Nothing else."
 
-_get_full_prompt() {
+_get_user_prompt() {
     cat <<EOF
 The user typed this line in their terminal:
 
@@ -61,7 +63,7 @@ _get_llm_model() {
     if [[ -n "$LLM_MODEL" ]]; then
         echo "$LLM_MODEL"
     else
-        echo "$(llm models default)"
+        llm models default
     fi
 }
 
@@ -69,14 +71,14 @@ _execute_call() {
     local llm_result tmp_err err
 
     tmp_err=$(mktemp)
-    llm_result=$(llm --model "$2" --system "$llm_system_prompt" "$(_get_full_prompt $1)" 2>"$tmp_err")
+    llm_result=$(llm --model "$2" --system "$llm_system_prompt" "$(_get_user_prompt $1)" 2>"$tmp_err")
 
     local llm_call_status=$?
     err=$(<"$tmp_err")
     rm -f "$tmp_err"
 
     if [[ $llm_call_status -ne 0 ]]; then
-        echo "Error: Command execution failed. $err"
+        echo "$err"
         return 1
     fi
 
@@ -110,7 +112,7 @@ function llm-fix-command {
         fi
         zle -M ""
     else
-        zle -M "$llm_result"
+        zle -M "Error: Command execution failed. $llm_result"
     fi
 }
 
