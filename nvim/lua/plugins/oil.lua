@@ -67,7 +67,7 @@ local oil = {
       ["q"] = { "actions.close", mode = "n" },
       ["g?"] = { "actions.show_help", mode = "n" },
       ["<CR>"] = "actions.select",
-      ["l"] = "actions.select", -- TODO: Not sure about this one.
+      ["l"] = "actions.select",
       ["<C-s>"] = { "actions.select", opts = { vertical = true } },
       ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
       ["<C-t>"] = { "actions.select", opts = { tab = true } },

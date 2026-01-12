@@ -108,8 +108,6 @@ bindkey '^R' fzf-history-widget
 # NOTE: It seems using $CURSOR doesn't work, because gsub doesn't work with the $.
 CURSOR_MARKER='_CURSOR_'
 
-# TODO: A command with a "\n" will render a newline in the description. It should be kept as is.
-# sed 's/,/\n/g'
 format_cheatsheet_entries() {
     awk -v cursor="$CURSOR_MARKER" '{
     output = $0
