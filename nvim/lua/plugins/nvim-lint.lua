@@ -10,6 +10,7 @@ return {
       ruby = { "rubocop" },
       kotlin = { "ktlint" },
       go = { "revive" },
+      zsh = { "shellcheck" },
     }
 
     vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
