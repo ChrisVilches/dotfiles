@@ -105,8 +105,6 @@ fzf-history-widget() {
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
 
-# TODO: Finally try to refactor and audit this code (cheatsheet picker) because
-# I coded some of this while half asleep. Using LLMs obviously.
 # NOTE: It seems using $CURSOR doesn't work, because gsub doesn't work with the $.
 CURSOR_MARKER='_CURSOR_'
 
@@ -151,7 +149,7 @@ cheatsheet_picker() {
           echo {4}
           echo
           echo -e "\033[1mCommand:\033[0m"
-          echo {3} | bat --language=zsh --color=always --plain'
+          echo -E {3} | bat --language=zsh --color=always --plain'
 
 
     # TODO: Not sure what some of these options are.
