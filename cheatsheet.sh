@@ -33,6 +33,7 @@ find . -type f -size +10M                                                     # 
 find . -type f -type f -perm -u+x                                             # find files executable by owner
 find . -type f \( -name "*.cpp_CURSOR_" \) | fzf                              # Find all files with extension
 find . -type f \( -name "*.jpg" -o -name "*.png" \) | fzf | xargs -r xdg-open # Find all photos / images and open them
+find . \( -name node_modules -o -name .git \) -prune -o -type f               # find files and prune some folders like node_modules and .git
 git diff                                                                      # Differences in git
 git log --name-only                                                           # git log (name only)
 gzip file.txt                                                                 # compresses the file "file.txt" and renames it as "file.txt.gz".

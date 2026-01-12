@@ -18,7 +18,8 @@ __fzfcmd() {
 find-file-smart() {
     local key file out
 
-    out="$(find . -type f | fzf --expect=enter,ctrl-t,ctrl-y,ctrl-v,ctrl-b,ctrl-l,ctrl-n)" || return
+    local expect_keys="enter,ctrl-t,ctrl-y,ctrl-v,ctrl-b,ctrl-l,ctrl-n"
+    out="$(find . \( -name node_modules -o -name .git \) -prune -o -type f | fzf --expect="$expect_keys")" || return
 
     key=${out%%$'\n'*}
     file=${out#*$'\n'}
