@@ -1,5 +1,3 @@
-# TODO: LSP isn't working on this file and the other widget one.
-
 git_branch_insert() {
     local branch
     branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
