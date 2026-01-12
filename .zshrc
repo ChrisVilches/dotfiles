@@ -3,6 +3,10 @@
 
 # NOTE: Don't use "shellcheck disable=..." as it makes LSP difficult to verify
 # whether it's working or not.
+# NOTE: Use this Lua code to check the source of diagnostics. Some come from LSP
+# and others from the linter, which can be useful for troubleshooting why diagnostics
+# aren't being shown (or why they are being shown, etc).
+# print(vim.inspect(vim.diagnostic.get(0)))
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
