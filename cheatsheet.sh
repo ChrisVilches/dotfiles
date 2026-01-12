@@ -139,3 +139,5 @@ df -i               # Show inode usage (useful when “disk full” isn’t abou
 df -h --total       # Add a total line summarizing all filesystems
 df -h | sort -k5 -h # Sort filesystems by usage percentage
 df -h /home         # Check space specifically for /home
+
+rm -rf ~/.local/share/nvim/auto_session ~/.local/share/nvim/sessions # remove neovim sessions
