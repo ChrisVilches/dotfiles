@@ -36,23 +36,23 @@ def get_type(value):
     Returns: string representing the type ('number', 'string', 'bool', 'number_array', 'bool_array',
              'string_array', 'number_nested_array', 'string_nested_array')
     Raises: ValueError if the type is not recognized"""
+    if isinstance(value, bool):
+        return 'bool'
     if isinstance(value, (int, float)):
         return 'number'
     if nested_number_array(value):
         return 'number_nested_array'
+    if isinstance(value, list) and value and isinstance(value[0], bool):
+        return 'bool_array'
     if isinstance(value, list) and value and isinstance(
             value[0], (int, float)):
         return 'number_array'
-    if isinstance(value, list) and value and isinstance(value[0], bool):
-        return 'bool_array'
     if nested_string_array(value):
         return 'string_nested_array'
     if isinstance(value, list) and value and isinstance(value[0], str):
         return 'string_array'
     if isinstance(value, str):
         return 'string'
-    if isinstance(value, bool):
-        return 'bool'
     raise ValueError(f"Invalid type: {type(value)} ({repr(value)})")
 
 
@@ -65,7 +65,7 @@ def cpp_output_value(var_name, type_):
     mapping = {
         'number': f'cout << {var_name} << endl;',
         'string': f'cout << {var_name} << endl;',
-        'bool': 'cout << (res ? "true" : "false") << endl;',
+        'bool': f'cout << ({var_name} ? "true" : "false") << endl;',
         'number_array': f'for (auto x : {var_name}) {{ cout << x << \' \'; }}; cout << endl;',
         'bool_array': f'for (auto x : {var_name}) {{ cout << (x ? "true" : "false") << \' \'; }}; cout << endl;',
         'string_array': f'for (auto x : {var_name}) {{ cout << x << \' \'; }}; cout << endl;',
@@ -88,12 +88,17 @@ def cpp_arg_definition(var_name, value):
         return f'int {var_name} = {value};'
     if type_ == 'string':
         return f'string {var_name} = "{value}";'
+    if type_ == 'bool':
+        return f'bool {var_name} = {"true" if value else "false"};'
     if type_ == 'number_nested_array':
         s = str(value).replace('[', '{').replace(']', '}')
         return f'vector<vector<int>> {var_name}{s};'
     if type_ == 'number_array':
         s = str(value).replace('[', '{').replace(']', '}')
         return f'vector<int> {var_name}{s};'
+    if type_ == 'bool_array':
+        s = json.dumps(value).replace('[', '{').replace(']', '}')
+        return f'vector<bool> {var_name}{s};'
     if type_ == 'string_nested_array':
         s = json.dumps(value).replace('[', '{').replace(']', '}')
         return f'vector<vector<string>> {var_name}{s};'
