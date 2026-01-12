@@ -26,6 +26,9 @@ return {
         local json = vim.fn.json_decode(extra_data)
         if json.colorscheme then
           vim.cmd("colorscheme " .. json.colorscheme)
+          vim.schedule(function()
+            vim.cmd("colorscheme " .. json.colorscheme)
+          end)
         end
       end,
     }
