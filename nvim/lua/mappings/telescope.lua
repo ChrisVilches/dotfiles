@@ -36,7 +36,6 @@ vim.keymap.set("n", "<leader>th", function()
       actions.select_default:replace(function(prompt_bufnr)
         local selection = action_state.get_selected_entry()
         actions.close(prompt_bufnr)
-        require("theme-store").save(selection.value)
         vim.cmd("colorscheme " .. selection.value)
       end)
       return true

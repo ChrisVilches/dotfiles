@@ -13,6 +13,21 @@ return {
   config = function()
     require("auto-session").setup {
       auto_create = current_dir_is_git_repo,
+      save_extra_data = function(_)
+        local colorscheme = vim.g.colors_name
+        if not colorscheme then
+          return
+        end
+        return vim.fn.json_encode {
+          colorscheme = colorscheme,
+        }
+      end,
+      restore_extra_data = function(_, extra_data)
+        local json = vim.fn.json_decode(extra_data)
+        if json.colorscheme then
+          vim.cmd("colorscheme " .. json.colorscheme)
+        end
+      end,
     }
   end,
 }
