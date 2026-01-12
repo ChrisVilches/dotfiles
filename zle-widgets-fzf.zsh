@@ -166,7 +166,8 @@ cheatsheet_picker() {
 }
 
 cheatsheet_widget() {
-    local selected=$(cheatsheet_picker)
+    local selected
+    selected=$(cheatsheet_picker)
 
     if [[ -n "$selected" ]]; then
         if [[ "$selected" == *"$CURSOR_MARKER"* ]]; then

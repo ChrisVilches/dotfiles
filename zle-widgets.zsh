@@ -20,7 +20,6 @@ git_insert_commit() {
         LBUFFER+="[$BRANCH] "
     fi
 
-    # TODO: Solving the LSP message changes the behavior (it breaks the prompt)
     RBUFFER="\""
 }
 zle -N git_insert_commit
@@ -69,7 +68,7 @@ _execute_call() {
     local llm_result tmp_err err
 
     tmp_err=$(mktemp)
-    llm_result=$(llm --model "$2" --system "$llm_system_prompt" "$(_get_user_prompt $1)" 2>"$tmp_err")
+    llm_result=$(llm --model "$2" --system "$llm_system_prompt" "$(_get_user_prompt "$1")" 2>"$tmp_err")
 
     local llm_call_status=$?
     err=$(<"$tmp_err")
@@ -85,20 +84,18 @@ _execute_call() {
 
 # Test using a theme with characters in the prompt to ensure proper rendering and resetting.
 function llm-fix-command {
+    local llm_model llm_result
     local cmd="$LBUFFER$RBUFFER"
 
     zle -M "Wait..."
     zle -R
 
-    local llm_model="$(_get_llm_model)"
+    llm_model="$(_get_llm_model)"
 
     zle -M "($llm_model) LLM'ing... ⏳"
     zle -R
 
-    local llm_result
-    llm_result="$(_execute_call $cmd $llm_model)"
-
-    if [[ $? -eq 0 ]]; then
+    if llm_result="$(_execute_call "$cmd" "$llm_model")"; then
         # Position the cursor at the first #. This is useful for removing the comment
         # and adding a new prompt.
         if [[ "$llm_result" == *"#"* ]]; then
