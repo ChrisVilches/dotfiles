@@ -41,6 +41,7 @@ return {
       --   Alternative:
       --   "MeanderingProgrammer/render-markdown.nvim",
       branch = "main",
+      ft = { "markdown" },
       opts = {
         preview = {
           filetypes = { "markdown", "Avante" },
