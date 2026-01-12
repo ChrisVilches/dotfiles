@@ -57,6 +57,15 @@ vim.schedule(function()
   require "mappings/navigation"
   require "mappings/telescope"
 
+  -- The session plugin sets this variable (the plugin isn't lazy, so it happens before this)
+  if not vim.g.session_colorscheme_loaded then
+    local default_theme = "github_dark_dimmed"
+    vim.cmd.colorscheme(default_theme)
+    vim.schedule(function()
+      vim.cmd.colorscheme(default_theme)
+    end)
+  end
+
   -- This is mainly to ensure Language Server Protocol (LSP) features,
   -- syntax highlighting, and the associated ftplugin (filetype plugin)
   -- are correctly loaded for these specific files.

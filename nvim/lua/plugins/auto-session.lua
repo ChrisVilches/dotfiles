@@ -27,9 +27,10 @@ return {
       restore_extra_data = function(_, extra_data)
         local json = vim.fn.json_decode(extra_data)
         if json.colorscheme then
-          vim.cmd("colorscheme " .. json.colorscheme)
+          vim.g.session_colorscheme_loaded = true
+          vim.cmd.colorscheme(json.colorscheme)
           vim.schedule(function()
-            vim.cmd("colorscheme " .. json.colorscheme)
+            vim.cmd.colorscheme(json.colorscheme)
           end)
         end
       end,
