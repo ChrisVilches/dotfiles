@@ -1,3 +1,12 @@
+copy-to-clipboard() {
+    zle .kill-buffer
+    print -rn -- "$CUTBUFFER" | xsel -b
+    zle .yank
+    zle -M "Yanked ${#CUTBUFFER} characters"
+}
+zle -N copy-to-clipboard
+bindkey '^X^Y' copy-to-clipboard
+
 git_branch_insert() {
     local branch
     branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
