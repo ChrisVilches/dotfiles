@@ -18,7 +18,7 @@ __fzfcmd() {
 find-file-smart() {
     local key file out
 
-    out="$(find . -type f | fzf --expect=enter,ctrl-t,ctrl-v,ctrl-b,ctrl-l,ctrl-n)" || return
+    out="$(find . -type f | fzf --expect=enter,ctrl-t,ctrl-y,ctrl-v,ctrl-b,ctrl-l,ctrl-n)" || return
 
     key=${out%%$'\n'*}
     file=${out#*$'\n'}
@@ -30,6 +30,7 @@ find-file-smart() {
         ctrl-b)   LBUFFER+="bat $file" ;;
         ctrl-l)   LBUFFER+="less $file" ;;
         ctrl-n)   LBUFFER+="nvim $file" ;;
+        ctrl-y)   printf '%s' "$file" | xsel -b && echo "yanked $file" && zle -I ;;
     esac
 }
 zle -N find-file-smart
