@@ -19,7 +19,6 @@ require("buffer-close").listen_closed_buffers()
 map("n", "<leader>tx", function()
   local curr_bufnr = vim.api.nvim_get_current_buf()
 
-  -- TODO: What happens with unnamed ones?
   for _, buf in ipairs(require("buffer-close").listed_buffers()) do
     if curr_bufnr ~= buf and vim.bo[buf].modified then
       vim.notify("Some buffers are unsaved", vim.log.levels.WARN)
