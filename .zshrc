@@ -261,15 +261,7 @@ wn() {
     bash add-note.sh work "$@"
 }
 
-# NOTE: This didn't work with an older version of tmux. Verified it works with version `tmux next-3.5`
-#       (older versions don't set this env variable).
-if [ "$TERM_PROGRAM" = "tmux" ]; then
-    # Get the first unattached session, if any.
-    first_unattached_session=$(tmux ls -F '#{session_attached} #{session_name}' 2> /dev/null | grep ^0 -m 1 | cut -c3-)
-
-    # If there's an unattached session, attach that one.
-    if [ -n "$first_unattached_session" ]; then
-        exec tmux switch -t "$first_unattached_session"
-    fi
-fi
+get_unattached_sessions() {
+    tmux ls | awk -F':| ' '$NF != "(attached)" {print $1}'
+}
 

@@ -6,7 +6,6 @@
 # NOTE: If there are multiple # in the command, it will work as long as there's
 # a last # for the comment. So make sure to add a comment explaining the
 # command.
-# TODO: Some commands are fake/dummy from when I was testing the tool. Prune!
 
 cat file_CURSOR_ | nl                        # Show line numbers to command output
 chmod u+rwx file.txt                         # grants read, write, and execute permissions to the owner of the file.
@@ -144,3 +143,7 @@ df -h /home         # Check space specifically for /home
 rm -rf ~/.local/share/nvim/auto_session ~/.local/share/nvim/sessions # remove neovim sessions
 
 tail -f ~/.local/state/nvim/lsp.log # see neovim lsp log
+
+tmux kill-session -t 1234 # tmux kill a session
+
+journalctl -xef # see and follow syslogs

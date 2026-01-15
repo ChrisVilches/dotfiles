@@ -5,8 +5,8 @@ return {
   version = "*",
   opts = {
     options = {
-      mode = "tabs",
-      separator_style = "slant",
+      separator_style = "slope",
+      -- separator_style = "slant" | "slope" | "thick" | "thin" | { 'any', 'any' },
     },
   },
   config = true,

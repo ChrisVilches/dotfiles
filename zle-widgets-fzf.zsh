@@ -152,7 +152,7 @@ cheatsheet_picker() {
           echo -E {3} | bat --language=zsh --color=always --plain'
 
 
-    # TODO: Not sure what some of these options are.
+    # NOTE: I'm not sure what some of these options are, but it works fine.
     local opts="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index $FZF_CTRL_R_OPTS +m"
 
     grep -Ev '^\s*($|#)' "$CHEATSHEET" | \

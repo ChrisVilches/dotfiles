@@ -1,8 +1,7 @@
 copy-to-clipboard() {
-    zle .kill-buffer
-    print -rn -- "$CUTBUFFER" | xsel -b
-    zle .yank
-    zle -M "Yanked ${#CUTBUFFER} characters"
+    if [[ -z "$BUFFER" ]]; then return; fi
+    print -rn -- "$BUFFER" | xsel -b
+    zle -M "Yanked ${#BUFFER} characters"
 }
 zle -N copy-to-clipboard
 bindkey '^X^Y' copy-to-clipboard
