@@ -48,6 +48,14 @@ require("lazy").setup {
   },
 }
 
+-- TODO: not sure about this, because the plugin is also being loaded by Lazy with my configuration
+-- in the worst case scenario, it's probably not doing anything bad though (just load it again)
+require("sessions").load_session()
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = require("sessions").save_session,
+})
+
 vim.schedule(function()
   require "options"
   require "autocmds"
@@ -56,15 +64,6 @@ vim.schedule(function()
   require "mappings/misc"
   require "mappings/navigation"
   require "mappings/telescope"
-
-  -- The session plugin sets this variable (the plugin isn't lazy, so it happens before this)
-  if not vim.g.session_colorscheme_loaded then
-    local default_theme = "github_dark_dimmed"
-    vim.cmd.colorscheme(default_theme)
-    vim.schedule(function()
-      vim.cmd.colorscheme(default_theme)
-    end)
-  end
 
   -- This is mainly to ensure Language Server Protocol (LSP) features,
   -- syntax highlighting, and the associated ftplugin (filetype plugin)
