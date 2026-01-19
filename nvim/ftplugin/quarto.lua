@@ -1,5 +1,6 @@
 local buf = vim.api.nvim_get_current_buf()
 
+-- TODO: Try to remove the vim.schedule since I removed the atrocious auto-session plugin and maybe it works now!
 -- Why "vim.schedule" is necessary:
 -- The expected event when lazy loading the Quarto plugin should be:
 -- ● quarto-nvim 10.76ms  quarto

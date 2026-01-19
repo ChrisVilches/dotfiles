@@ -1,9 +1,7 @@
-local buf = vim.api.nvim_get_current_buf()
-
 local map = vim.keymap.set
 
 local function opts(desc)
-  return { desc = "markdown: " .. desc, buffer = buf, noremap = true, silent = true, nowait = true }
+  return { desc = "markdown: " .. desc, buffer = 0, noremap = true, silent = true, nowait = true }
 end
 
 local function toggle_todo()
