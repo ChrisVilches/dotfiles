@@ -1,5 +1,10 @@
 local M = {}
 
+-- TODO: options get overriden (even ones I explicitly set in options.lua)
+-- but it seems this is the expected behavior so I'm not going to complain... maybe just document
+-- it and/or create a function to reset them. Or have a configuration for options that are always
+-- set AFTER the session is loaded. That'd be cool, but it also needs to get documented!!!!!
+
 local function session_name_from_cwd()
   local cwd = vim.loop.cwd() or vim.fn.getcwd()
   -- turn /home/user/project into home__user__project

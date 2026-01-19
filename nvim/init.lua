@@ -48,32 +48,29 @@ require("lazy").setup {
   },
 }
 
+-- TODO: Still experimental (continue testing), I removed the "vim.schedule" and put the load_session at the end,
+-- it seems to work for now!
+
+require "options"
+require "autocmds"
+require "commands"
+require "mappings/editing"
+require "mappings/misc"
+require "mappings/navigation"
+require "mappings/telescope"
+
+-- This is mainly to ensure Language Server Protocol (LSP) features,
+-- syntax highlighting, and the associated ftplugin (filetype plugin)
+-- are correctly loaded for these specific files.
+local custom_filetypes = {
+  jbuilder = "ruby",
+  rhtml = "rhtml",
+}
+
+for ext, ft in pairs(custom_filetypes) do
+  vim.filetype.add { extension = { [ext] = ft } }
+end
+
 -- TODO: not sure about this, because the plugin is also being loaded by Lazy with my configuration
 -- in the worst case scenario, it's probably not doing anything bad though (just load it again)
 require("sessions").load_session()
-
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = require("sessions").save_session,
-})
-
-vim.schedule(function()
-  require "options"
-  require "autocmds"
-  require "commands"
-  require "mappings/editing"
-  require "mappings/misc"
-  require "mappings/navigation"
-  require "mappings/telescope"
-
-  -- This is mainly to ensure Language Server Protocol (LSP) features,
-  -- syntax highlighting, and the associated ftplugin (filetype plugin)
-  -- are correctly loaded for these specific files.
-  local custom_filetypes = {
-    jbuilder = "ruby",
-    rhtml = "rhtml",
-  }
-
-  for ext, ft in pairs(custom_filetypes) do
-    vim.filetype.add { extension = { [ext] = ft } }
-  end
-end)
