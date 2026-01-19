@@ -1,5 +1,8 @@
 local M = {}
 
+-- TODO: maybe closed buffers should be displayed in such a way that the most recently closed one appears first.
+-- not sure how it works currently.
+
 local closed_buffers = {}
 
 local function save_closed_buffer(filepath)

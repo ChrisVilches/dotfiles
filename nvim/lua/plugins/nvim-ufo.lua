@@ -1,5 +1,5 @@
 local function config()
-  -- NOTE: The auto session plugin may disable or change some of these options.
+  -- NOTE: The session plugin may disable or change some of these options.
 
   vim.o.foldcolumn = "0" -- '0' is not bad
   vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

@@ -31,8 +31,8 @@ map("n", "<leader>wk", function()
   vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
 end, { desc = "whichkey query lookup" })
 
--- markview
-map("n", "<leader>m!", "<cmd>Markview toggle<CR>", { desc = "Markview: toggle" })
+-- markdown
+map("n", "<leader>m!", "<cmd>Markview toggle<CR>", { desc = "Markdown: toggle" })
 
 -- window size
 map("n", "<c-w><<", "15<c-w><")

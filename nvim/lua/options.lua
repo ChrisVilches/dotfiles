@@ -9,7 +9,7 @@ opt.scrolloff = 8
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Recommended by auto-session plugin
+-- TODO: may need to tweak some options to store and restore the cursor position correctly.
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -------------------------------------- options ------------------------------------------
