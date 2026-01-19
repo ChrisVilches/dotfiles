@@ -18,6 +18,20 @@ return {
     event = "VeryLazy",
   },
   {
+    "OXY2DEV/markview.nvim",
+    --   Alternative:
+    --   "MeanderingProgrammer/render-markdown.nvim",
+    branch = "main",
+    ft = { "markdown" },
+    opts = {
+      -- preview = {
+      --   filetypes = { "markdown", "Avante" },
+      --   ignore_buftypes = {},
+      -- },
+      max_length = 99999,
+    },
+  },
+  {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     build = "cd app && npm install",

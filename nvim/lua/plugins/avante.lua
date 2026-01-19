@@ -36,19 +36,5 @@ return {
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "nvim-tree/nvim-web-devicons",
     "nvim-telescope/telescope.nvim",
-    {
-      "OXY2DEV/markview.nvim",
-      --   Alternative:
-      --   "MeanderingProgrammer/render-markdown.nvim",
-      branch = "main",
-      ft = { "markdown" },
-      opts = {
-        preview = {
-          filetypes = { "markdown", "Avante" },
-          ignore_buftypes = {},
-        },
-        max_length = 99999,
-      },
-    },
   },
 }
