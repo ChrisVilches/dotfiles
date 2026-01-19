@@ -140,7 +140,7 @@ df -h --total       # Add a total line summarizing all filesystems
 df -h | sort -k5 -h # Sort filesystems by usage percentage
 df -h /home         # Check space specifically for /home
 
-rm -rf ~/.local/share/nvim/auto_session ~/.local/share/nvim/sessions # remove neovim sessions
+rm -rf ~/.local/share/nvim/sessions # remove neovim sessions
 
 tail -f ~/.local/state/nvim/lsp.log # see neovim lsp log
 
