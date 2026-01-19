@@ -1,23 +1,16 @@
 local buf = vim.api.nvim_get_current_buf()
 
--- TODO: Try to remove the vim.schedule since I removed the atrocious auto-session plugin and maybe it works now!
--- Why "vim.schedule" is necessary:
--- The expected event when lazy loading the Quarto plugin should be:
--- ● quarto-nvim 10.76ms  quarto
--- (instead of this script triggering the lazy load)
--- If this script is the first one to trigger the Quarto plugin load, it won't load
--- properly (e.g. code won't be highlighted).
-vim.schedule(function()
-  local map = vim.keymap.set
-  local function opts(desc)
-    return { desc = "quarto: " .. desc, buffer = buf, noremap = true, silent = true, nowait = true }
-  end
-  map("n", "<CR>", ":QuartoSend<CR>", opts "run cell")
-  map("n", "<localleader>R", ":QuartoSendAll<CR>", opts "run all cells")
-  map("n", "<localleader>a", ":QuartoActivate<CR>", opts "activate")
-  map("n", "[", ":TSTextobjectGotoPreviousStart @block.inner<CR>", opts "go to prev block")
-  map("n", "]", ":TSTextobjectGotoNextStart @block.inner<CR>", opts "go to next block")
-end)
+local map = vim.keymap.set
+
+local function opts(desc)
+  return { desc = "quarto: " .. desc, buffer = buf, noremap = true, silent = true, nowait = true }
+end
+
+map("n", "<CR>", ":QuartoSend<CR>", opts "run cell")
+map("n", "<localleader>R", ":QuartoSendAll<CR>", opts "run all cells")
+map("n", "<localleader>a", ":QuartoActivate<CR>", opts "activate")
+map("n", "[", ":TSTextobjectGotoPreviousStart @block.inner<CR>", opts "go to prev block")
+map("n", "]", ":TSTextobjectGotoNextStart @block.inner<CR>", opts "go to next block")
 
 -- Autocommand to activate LSP for new files because Otter cannot detect code blocks in empty files initially.
 vim.api.nvim_create_autocmd({ "BufWrite" }, {
