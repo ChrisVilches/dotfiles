@@ -230,7 +230,11 @@ randtime() {
     printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
 }
 
-note-nvim() {
+n() {
+    local prev
+    prev="$(pwd)"
+    cd ~/memos || return 1
+
     local init_code='
            require("todos").set_ignored_dirs({ "archived" })
            require("nvim_utils")
@@ -240,35 +244,28 @@ note-nvim() {
     else
         nvim -c "lua $init_code"
     fi
-}
 
-n() {
-    local prev
-    prev="$(pwd)"
-    cd ~/memos || return 1
-    note-nvim "$1"
     bash ./sync-git.sh
     cd "$prev" || return 1
 }
 
-# TODO: these aren't starting the nvim_utils and other options. And they need the note-nvim which is defined here lol.
-# but the editor call is inside the add-...sh files.
-# Quick Note (memo)
 qn() {
     cd ~/memos || return 1
-    bash add-quick.sh
+    n "quick/$(date '+%Y-%m-%d')-$(date '+%H%M%S').md"
 }
 
 # Journal Note
 jn() {
+    if [[ -z "$1" ]]; then return 1; fi
     cd ~/memos || return 1
-    bash add-note.sh journal "$@"
+    n "journal/$(date '+%Y-%m-%d')-$1.md"
 }
 
 # Work Note
 wn() {
+    if [[ -z "$1" ]]; then return 1; fi
     cd ~/memos || return 1
-    bash add-note.sh work "$@"
+    n "work/$(date '+%Y-%m-%d')-$1.md"
 }
 
 get_unattached_sessions() {
