@@ -53,8 +53,6 @@ return {
           keymaps = {
             ["af"] = "@function.outer",
             ["if"] = "@function.inner",
-            ["=l"] = "@assignment.lhs",
-            ["=r"] = "@assignment.rhs",
           },
         },
       },
