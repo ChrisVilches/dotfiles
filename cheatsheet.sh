@@ -100,7 +100,7 @@ xargs -I{} echo "[[_CURSOR_{}]]" # Wrap string inside a left and right strings
 # and it messes the document highlighting up (it seems it's not 100% valid syntax).
 # read -r stdintext && echo "[$stdintext]_CURSOR_" # Wrap string inside a left and right strings
 
-bindkey -L | bat --color=always --language=zsh --plain | fzf --ansi # see available mappings for zsh
+{ bindkey -M emacs -L && bindkey -L; } | bat --color=always --language=zsh --plain | fzf --ansi # see available mappings for zsh
 
 pacman -Qi | awk '/^Name/{name=$3} /^Installed Size/{print $4$5, name}' | sort -h # pacman show sorted by size
 pacman -Qe                                                                        # explicitly installed packages only
