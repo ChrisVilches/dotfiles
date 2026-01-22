@@ -10,6 +10,11 @@ git_branch_insert() {
     local branch
     branch=$(git symbolic-ref --short HEAD 2>/dev/null) || branch=$(git describe --tags --exact-match 2>/dev/null) || return
     LBUFFER+="$branch"
+    # TODO: adding reset-prompt or redisplay makes the command appear "red" (due to highlighting plugin) because it's a wrong command.
+    # removing it doesn't highlight it. I think I should add it, and this may be related to the other issue where the LLM generated text
+    # doesn't get highlighted properly.
+    # But I want to know which one is the proper one! understand the difference between reset-prompt and redisplay.
+    zle reset-prompt
 }
 zle -N git_branch_insert
 bindkey '^B' git_branch_insert
@@ -89,6 +94,9 @@ _execute_call() {
 
     echo "$llm_result"
 }
+
+# TODO: I think there's a slight bug in this widget where if the comment is longer than what was previously there, it won't be highlighted
+# fully with the right color.
 
 # Test using a theme with characters in the prompt to ensure proper rendering and resetting.
 function llm-fix-command {

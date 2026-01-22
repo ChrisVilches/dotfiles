@@ -122,7 +122,7 @@ format_cheatsheet_entries() {
     }
 
     cmd_clean = output
-    gsub(cursor, "", cmd_clean)
+    gsub(cursor, "✏️", cmd_clean)
     gsub(cursor, "", display)
 
     printf "%s\t%s\t%s\t%s\n", display, output, cmd_clean, desc
@@ -159,27 +159,39 @@ cheatsheet_picker() {
         tr -s ' ' | \
         bat --color=always --plain --language=zsh | \
         format_cheatsheet_entries | \
-        FZF_DEFAULT_OPTS="$opts" fzf --ansi --delimiter='\t' --with-nth=1 --preview-window right:wrap --preview "$preview_cmd" | \
-        awk -F'\t' '{print $2}'
+        FZF_DEFAULT_OPTS="$opts" fzf --expect=ctrl-x,enter --ansi --delimiter='\t' --with-nth=1 --preview-window right:wrap --preview "$preview_cmd" | \
+        awk -F'\t' 'NR==2 { print $2; next } { print }'
 }
 
 cheatsheet_widget() {
-    local selected
-    selected=$(cheatsheet_picker)
+    output=$(cheatsheet_picker)
+    key=${output%%$'\n'*}
+    selected=${output#*$'\n'}
 
     if [[ -n "$selected" ]]; then
-        if [[ "$selected" == *"$CURSOR_MARKER"* ]]; then
-            # Split at the first occurrence of the marker
-            # The second occurrence will be displayed (it's expected to put only one cursor marker).
-            local before="${selected%%"$CURSOR_MARKER"*}"
-            local after="${selected#*"$CURSOR_MARKER"}"
-            LBUFFER+="$before"
-            RBUFFER="$after$RBUFFER"
-        else
-            # No marker, insert normally
-            LBUFFER+="$selected"
-        fi
+        case $key in
+            enter)
+                if [[ "$selected" == *"$CURSOR_MARKER"* ]]; then
+                    # Split at the first occurrence of the marker
+                    # The second occurrence will be displayed (it's expected to put only one cursor marker).
+                    local before="${selected%%"$CURSOR_MARKER"*}"
+                    local after="${selected#*"$CURSOR_MARKER"}"
+                    LBUFFER+="$before"
+                    RBUFFER="$after$RBUFFER"
+                else
+                    # No marker, insert normally
+                    LBUFFER+="$selected"
+                fi
+                ;;
+            ctrl-x)
+                # Avoid attempting to use the cursor as there is no way to edit the command here.
+                LBUFFER="$selected"
+                RBUFFER=""
+                zle accept-line
+                ;;
+        esac
     fi
+
     zle reset-prompt
 }
 zle -N cheatsheet_widget
