@@ -123,6 +123,10 @@ eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
+# Make it the same as in bash
+# (kill-line is ^K by default)
+bindkey '^U' backward-kill-line
+
 # Sourced file directory (so it gets /dotfiles folder).
 ZSHRC_DIR="${${(%):-%x}:A:h}"
 
