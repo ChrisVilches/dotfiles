@@ -122,8 +122,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # NOTE: Make sure the PID can be found using pidof (make sure there are no name collisions).
-bindsym $mod+y exec echo 1 > /proc/$(pidof -s timebox)/fd/0
-bindsym $mod+u exec echo 3 > /proc/$(pidof -s timebox)/fd/0
+bindsym $mod+y exec echo 1 > /proc/$(pidof -s timebox-i3)/fd/0
+bindsym $mod+u exec echo 3 > /proc/$(pidof -s timebox-i3)/fd/0
 
 # switch to workspace
 bindsym $mod+1 workspace number 1
