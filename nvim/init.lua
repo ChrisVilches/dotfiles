@@ -48,9 +48,6 @@ require("lazy").setup {
   },
 }
 
--- TODO: Still experimental (continue testing), I removed the "vim.schedule" and put the load_session at the end,
--- it seems to work for now!
-
 require "options"
 require "autocmds"
 require "commands"
@@ -64,13 +61,11 @@ require "mappings/telescope"
 -- are correctly loaded for these specific files.
 local custom_filetypes = {
   jbuilder = "ruby",
-  rhtml = "rhtml",
+  rhtml = "html",
 }
 
 for ext, ft in pairs(custom_filetypes) do
   vim.filetype.add { extension = { [ext] = ft } }
 end
 
--- TODO: not sure about this, because the plugin is also being loaded by Lazy with my configuration
--- in the worst case scenario, it's probably not doing anything bad though (just load it again)
-require("sessions").load_session()
+require("sessions").init()

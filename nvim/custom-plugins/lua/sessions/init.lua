@@ -1,20 +1,12 @@
-local M = {}
-
 -- TODO: sometimes the first buffer is an Oil view lol... wtf
-
--- TODO: don't know how to reproduce this consistently, but it's keeping a file in the arglist, and it doesn't go away
--- (in memos repo, it's the file add-note.sh)
-
--- TODO: Maybe try to do all the usage I do in nvim/init.lua inside the setup (or config=true) of this plugin
--- so that it's executed automatically.
---
--- TODO: works bad with my command "wn some-note", it should just open the file I told it to, maybe I should disable
--- using sessions in that case, but I still want to load the theme. This requires some careful consideration on how to implement it.
+-- Update: haven't been able to reproduce this lately. Maybe just remove.
 
 -- TODO: options get overriden (even ones I explicitly set in options.lua)
 -- but it seems this is the expected behavior so I'm not going to complain... maybe just document
 -- it and/or create a function to reset them. Or have a configuration for options that are always
 -- set AFTER the session is loaded. That'd be cool, but it also needs to get documented!!!!!
+-- Update: I think this can be easily fixed by simply loading my options after the init. Both things are done manually
+-- so I can control the order of things loading. But I still need to document these things!
 
 local function session_name_from_cwd()
   local cwd = vim.fn.getcwd()
@@ -73,22 +65,13 @@ local function handle_file_arglist(file_arglist)
   end
 end
 
--- TODO: a method to debug the session file would be nice, but considering that I'm doing a lot of custom
--- logic outside of that file, it would be meaningless, since some things wouldn't be clear as to why they
--- are happening simply by looking at the session file. Maybe try editing the session file itself? That'd
--- be very awkward and weird though (and perhaps even harder to debug from the code side).
-
-function M.load_session()
+local function load_session()
   -- Save the argument list Neovim was opened with before the session file changes it when it's sourced.
   local original_file_arglist = get_file_arglist()
 
   local path = session_path()
   if vim.fn.filereadable(path) == 1 then
     vim.cmd("source " .. vim.fn.fnameescape(path))
-
-    -- TODO: Experimental: I find it weird that the arguments get stuck in the session. But I'm not sure
-    -- what are some other side effects of doing this. Like, in which situations would this be an issue, or
-    -- have some unintended effects??????
     vim.cmd "%argdel"
   end
 
@@ -98,8 +81,16 @@ function M.load_session()
   handle_file_arglist(original_file_arglist)
 end
 
-function M.save_session()
-  save_session(session_path())
-end
+-- TODO: format in PC with stylua.
 
-return M
+return {
+  init = function()
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      callback = function()
+        save_session(session_path())
+      end
+    })
+
+    load_session()
+  end
+}

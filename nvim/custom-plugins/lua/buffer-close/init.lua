@@ -1,18 +1,15 @@
 local M = {}
-
--- TODO: maybe closed buffers should be displayed in such a way that the most recently closed one appears first.
--- not sure how it works currently.
+-- TODO: format once again in my PC (with working stylua). Formatter doesn't work on this PC lol.
 
 local closed_buffers = {}
 
 local function save_closed_buffer(filepath)
-  local entry = vim.tbl_filter(function(item)
-    return item.file_path == filepath
-  end, closed_buffers)[1]
-
-  if entry == nil then
-    table.insert(closed_buffers, filepath)
+  for _, item in ipairs(closed_buffers) do
+    if item == filepath then
+      return
+    end
   end
+  table.insert(closed_buffers, filepath)
 end
 
 function M.listed_buffers()
@@ -51,7 +48,7 @@ function M.reopen()
       prompt_title = "Closed Buffers",
       sorter = conf.generic_sorter {},
       finder = finders.new_table {
-        results = closed_buffers,
+        results = vim.fn.reverse(vim.deepcopy(closed_buffers)),
         entry_maker = function(entry)
           return { value = entry, display = entry, ordinal = entry }
         end,
