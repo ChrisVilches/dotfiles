@@ -149,7 +149,3 @@ tmux kill-session -t 1234 # tmux kill a session
 journalctl -xef # see and follow syslogs
 
 _dir="$(dirs -p | fzf --no-multi | sed "s|^~|$HOME|")" && cd "$_dir" # recent directory menu (quick list for recent folders/directories)
-
-# TODO: this probably needs & and disown. It doesn't work as is. But the problem is that adding those things will format
-# this in two lines, which is not accepted by the cheatsheet widget.
-nohup xdg-open "https://youtube.com/results?search_query=_CURSOR_" >/dev/null 2>&1 # Find videos on youtube. youtube search

@@ -81,16 +81,14 @@ local function load_session()
   handle_file_arglist(original_file_arglist)
 end
 
--- TODO: format in PC with stylua.
-
 return {
   init = function()
     vim.api.nvim_create_autocmd("VimLeavePre", {
       callback = function()
         save_session(session_path())
-      end
+      end,
     })
 
     load_session()
-  end
+  end,
 }

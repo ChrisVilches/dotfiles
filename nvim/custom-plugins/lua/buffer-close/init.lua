@@ -1,5 +1,4 @@
 local M = {}
--- TODO: format once again in my PC (with working stylua). Formatter doesn't work on this PC lol.
 
 local closed_buffers = {}
 
