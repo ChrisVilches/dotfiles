@@ -23,8 +23,22 @@ end
 
 -- TODO: shouldn't save some options!!!! specially ones that I can modify accidentally. Ok, but at least I can
 -- easily debug what's being saved and tweak accordingly.
+-- I think this can be done by simply saving them and then let the user decide if they want to load options after
+-- loading the session (to override them). This works (verified). I need to continue using the init() function called by the user.
 -- TODO: tweak the vim.o.sessionoptions value here.
 -- TODO: I don't want to store folds.
+
+-- NOTE:
+-- Telescope theme pickers preview colorschemes by temporarily applying them.
+-- If a variant shares the same base name (e.g. "ayu-mirage" → "ayu"), the
+-- preview may switch `vim.g.colors_name` to the base scheme without changing
+-- the actual appearance. When the picker closes, Neovim may therefore believe
+-- the active scheme is "ayu" instead of "ayu-mirage".
+--
+-- A workaround could ignore certain ColorScheme events, but this is unreliable:
+-- depending on how the picker previews or restores themes, legitimate changes
+-- may also be filtered out. Because of this ambiguity, the session simply saves
+-- whatever `vim.g.colors_name` currently reports.
 local function save_session(path)
   local scheme = vim.g.colors_name or "default"
 

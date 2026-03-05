@@ -1,31 +1,18 @@
 local themes = {
-  {
-    "catppuccin/nvim",
-    config = function(_, opts)
-      require("catppuccin").setup(opts)
-    end,
-  },
+  { "catppuccin/nvim" },
   {
     "Shatur/neovim-ayu",
     config = function()
-      require("ayu").setup { overrides = { Normal = { bg = "None" } } }
+      require("ayu").setup { mirage = true }
     end,
   },
   { "ellisonleao/gruvbox.nvim" },
   { "folke/tokyonight.nvim" },
   { "rebelot/kanagawa.nvim" },
-  {
-    "projekt0n/github-nvim-theme",
-    config = function()
-      require("github-theme").setup { options = { transparent = false } }
-    end,
-  },
-  {
-    "navarasu/onedark.nvim",
-    config = function()
-      require("onedark").setup { style = "darker" }
-    end,
-  },
+  { "projekt0n/github-nvim-theme" },
+  -- TODO: commit this one (nightfox), but remove a few.
+  -- TODO: commit the ayu changes. It didn't work well with those color overrides (bufferline looked bad)
+  { "EdenEast/nightfox.nvim" },
 }
 
 for _, plugin in ipairs(themes) do
