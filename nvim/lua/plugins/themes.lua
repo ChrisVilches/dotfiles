@@ -10,8 +10,6 @@ local themes = {
   { "folke/tokyonight.nvim" },
   { "rebelot/kanagawa.nvim" },
   { "projekt0n/github-nvim-theme" },
-  -- TODO: commit this one (nightfox), but remove a few.
-  -- TODO: commit the ayu changes. It didn't work well with those color overrides (bufferline looked bad)
   { "EdenEast/nightfox.nvim" },
 }
 
