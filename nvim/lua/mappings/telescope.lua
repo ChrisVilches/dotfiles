@@ -26,6 +26,14 @@ vim.keymap.set("n", "<leader>re", function()
   require("telescope.builtin").registers { initial_mode = "normal" }
 end)
 
+-- TODO: Very nice, but I notice some results aren't very useful. CTRL+R in zsh + fzf gives much better results usually.
+vim.keymap.set("n", "<leader>:", function()
+  require("telescope.builtin").command_history {
+    sorting_strategy = "ascending",
+    sorter = require("telescope.sorters").get_fzy_sorter(),
+  }
+end)
+
 vim.keymap.set("n", "<leader>th", function()
   local actions = require "telescope.actions"
   local action_state = require "telescope.actions.state"

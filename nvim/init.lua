@@ -59,9 +59,12 @@ require "mappings/telescope"
 -- This is mainly to ensure Language Server Protocol (LSP) features,
 -- syntax highlighting, and the associated ftplugin (filetype plugin)
 -- are correctly loaded for these specific files.
+-- NOTE: My session plugin saves the filetype and loads it when the session is loaded, so some
+-- filetypes might be "cached" in the session data.
 local custom_filetypes = {
   jbuilder = "ruby",
   rhtml = "html",
+  tpp = "cpp",
 }
 
 for ext, ft in pairs(custom_filetypes) do
