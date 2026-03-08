@@ -63,8 +63,21 @@ return {
         explorer = {
           on_show = function(picker)
             -- NOTE: Found this "on" in snacks source code.
+            -- This closes the explorer when focus shifts away by checking if the filetype
+            -- changes from "snacks_*". The input within the explorer is a separate window,
+            -- so entering insert mode (for file search) triggers WinLeave. We only close
+            -- the explorer when focus leaves all Snacks GUI elements. Opening other pickers like
+            -- command history or word grep won't close the explorer, which is useful for
+            -- executing commands or searching command history within the explorer.
             picker.layout.root:on("WinLeave", function()
-              picker:close()
+              vim.schedule(function()
+                local next_win = vim.api.nvim_get_current_win()
+                local buf = vim.api.nvim_win_get_buf(next_win)
+                local filetype = vim.bo[buf].filetype
+                if not filetype:match "^snacks_" then
+                  picker:close()
+                end
+              end)
             end)
           end,
         },
