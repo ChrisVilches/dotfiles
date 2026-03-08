@@ -4,7 +4,10 @@ local function move(n, key)
   end
 end
 
--- NOTE: This is a workaround so that session plugins don't save Snacks widgets.
+-- NOTE: This is a workaround to prevent session plugins from saving Snacks widgets.
+-- Occasionally, the window to close might be the last one, which would cause it to fail.
+-- However, encountering zombie widgets is quite rare. This can occur by opening an explorer
+-- and executing :qa!
 local function close_zombie_snacks()
   vim.schedule(function()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
