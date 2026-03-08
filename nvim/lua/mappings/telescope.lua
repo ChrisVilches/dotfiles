@@ -9,7 +9,6 @@ end
 
 -- More pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
 map("fw", "live_grep theme=ivy", "live grep")
-map("fg", "grep_string", "grep string")
 map("fh", "help_tags", "help page")
 map("ma", "marks", "find marks")
 map("fo", "oldfiles", "find oldfiles")
@@ -26,12 +25,13 @@ vim.keymap.set("n", "<leader>re", function()
   require("telescope.builtin").registers { initial_mode = "normal" }
 end)
 
--- TODO: Very nice, but I notice some results aren't very useful. CTRL+R in zsh + fzf gives much better results usually.
+-- NOTE: Using Snacks instead of Telescope (TODO: maybe move somewhere else)
+vim.keymap.set("n", "<leader>fg", function()
+  require("snacks.picker").grep_word()
+end)
+
 vim.keymap.set("n", "<leader>:", function()
-  require("telescope.builtin").command_history {
-    sorting_strategy = "ascending",
-    sorter = require("telescope.sorters").get_fzy_sorter(),
-  }
+  require("snacks.picker").command_history()
 end)
 
 vim.keymap.set("n", "<leader>th", function()

@@ -9,10 +9,13 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
--- TODO: --preview is bugged. When opened for the first time, it initially
--- focuses on the first file, but if you reopen it, it will focus on the
--- current file (the first behavior is incorrect).
-map("n", "<leader>e", "<CMD>Oil --float --preview<CR>", { desc = "File explorer" })
+
+-- NOTE: The issue with NvimTree, where sometimes the explorer is the only window open, still remains with this plugin,
+-- but it's a bit better. Try to get into the habit of using CTRL+O (to close all but the current window) or close
+-- the explorer manually.
+map("n", "<leader>e", function()
+  require "snacks.explorer"()
+end, { desc = "File explorer" })
 
 -- Hover
 -- Fixes inconsistent hover behavior in some LSPs (e.g., Golang opens a window
