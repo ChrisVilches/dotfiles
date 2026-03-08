@@ -26,15 +26,17 @@ return {
       -- dashboard = { enabled = true },
       -- explorer = { enabled = true },
       indent = {
-        priority = 1,
         enabled = true, -- enable indent guides
-        char = "│",
-        only_current = true, -- Only show indent guides in the current window
-        only_scope = true, -- Only show indent guides of the scope
-        hl = "SnacksIndent", ---@type string|string[] hl groups for indent guides
         animate = {
           enabled = false,
         },
+        filter = function(buf)
+          if vim.bo[buf].filetype == "markdown" then
+            return false
+          end
+
+          return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
+        end,
       },
       input = { enabled = true },
       -- picker = { enabled = true },
