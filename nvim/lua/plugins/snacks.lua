@@ -40,6 +40,10 @@ return {
       end,
     },
     input = { enabled = true },
+
+    -- TODO: (high priority) this one doesn't work. It should work on <leader>fg (grep word)
+    -- as a sidenote, it should work even in insert mode, since you could press the arrows while on insert mode
+    -- to choose one item from the list.
     picker = {
       win = {
         input = {
