@@ -40,6 +40,19 @@ return {
     end,
     ft = { "markdown" },
   },
+  {
+    -- Without this plugin, the Lua LSP will complain about things like "vim.lsp.get_clients" when coding in Neovim
+    -- because it won't find the "vim" object.
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
   -- TODO: Try in the future:
   -- Friendly snippets (currently I only use it for Lua because it's the default, but
   -- do it for other languages as well)
