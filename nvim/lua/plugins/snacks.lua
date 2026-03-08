@@ -4,10 +4,21 @@ local function move(n, key)
   end
 end
 
--- TODO: amazing... maybe I can just stop using Oil and Telescope and just use this one lol...
--- move this plugin to its own directory.
--- But I think telescope is good enough for searching.
--- command_history is better on Snacks (GUI is nicer and commands are highlighted)
+-- NOTE: This is a workaround so that session plugins don't save Snacks widgets.
+local function close_zombie_snacks()
+  vim.schedule(function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local filetype = vim.bo[buf].filetype
+
+      if filetype:match "^snacks_" then
+        require "notify" "Closing zombie Snacks widget"
+        vim.api.nvim_win_close(win, false)
+      end
+    end
+  end)
+end
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -45,6 +56,18 @@ return {
     -- as a sidenote, it should work even in insert mode, since you could press the arrows while on insert mode
     -- to choose one item from the list.
     picker = {
+      sources = {
+        explorer = {
+          on_show = function(picker)
+            -- NOTE: Found this "on" in snacks source code.
+            picker.layout.root:on("WinLeave", function()
+              picker:close()
+            end)
+            -- TODO: not sure if this creates a memory leak, because maybe the event continues to be listened to?
+            -- (probably not, but research).
+          end,
+        },
+      },
       win = {
         input = {
           keys = {
@@ -68,4 +91,9 @@ return {
     -- statuscolumn = { enabled = true },
     -- words = { enabled = true },
   },
+
+  config = function(_, opts)
+    close_zombie_snacks()
+    require("snacks").setup(opts)
+  end,
 }

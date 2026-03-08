@@ -10,11 +10,6 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap = true, silent = true })
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
 
--- NOTE: The issue with NvimTree, where sometimes the explorer is the only window open, still remains with this plugin,
--- but it's a bit better. Try to get into the habit of using CTRL+O (to close all but the current window) or close
--- the explorer manually.
--- TODO: Closing all windows when an explorer is open, will save it to the session. I should remove it, somehow. This
--- brings back the same issues with NvimTree I had before lmao.
 map("n", "<leader>e", function()
   require "snacks.explorer"()
 end, { desc = "File explorer" })
