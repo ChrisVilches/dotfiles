@@ -66,8 +66,6 @@ return {
             picker.layout.root:on("WinLeave", function()
               picker:close()
             end)
-            -- TODO: not sure if this creates a memory leak, because maybe the event continues to be listened to?
-            -- (probably not, but research).
           end,
         },
       },
