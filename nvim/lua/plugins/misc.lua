@@ -14,8 +14,37 @@ return {
     end,
   },
   {
-    "stevearc/dressing.nvim",
-    event = "VeryLazy",
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    -- TODO: Experiment enabling more widgets.
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      -- bigfile = { enabled = true },
+      -- dashboard = { enabled = true },
+      -- explorer = { enabled = true },
+      indent = {
+        priority = 1,
+        enabled = true, -- enable indent guides
+        char = "│",
+        only_current = true, -- Only show indent guides in the current window
+        only_scope = true, -- Only show indent guides of the scope
+        hl = "SnacksIndent", ---@type string|string[] hl groups for indent guides
+        animate = {
+          enabled = false,
+        },
+      },
+      input = { enabled = true },
+      -- picker = { enabled = true },
+      -- notifier = { enabled = true },
+      -- quickfile = { enabled = true },
+      -- scope = { enabled = true },
+      -- scroll = { enabled = true },
+      -- statuscolumn = { enabled = true },
+      -- words = { enabled = true },
+    },
   },
   {
     "OXY2DEV/markview.nvim",
