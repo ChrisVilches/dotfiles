@@ -38,18 +38,5 @@ vim.keymap.set("n", "<leader>:", function()
 end)
 
 vim.keymap.set("n", "<leader>th", function()
-  local actions = require "telescope.actions"
-  local action_state = require "telescope.actions.state"
-
-  require("telescope.builtin").colorscheme {
-    enable_preview = true,
-    attach_mappings = function()
-      actions.select_default:replace(function(prompt_bufnr)
-        local selection = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        vim.cmd("colorscheme " .. selection.value)
-      end)
-      return true
-    end,
-  }
+  require("telescope.builtin").colorscheme { enable_preview = true }
 end, { desc = "theme picker" })
