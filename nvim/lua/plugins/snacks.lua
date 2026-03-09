@@ -5,19 +5,20 @@ local function move(n, key)
 end
 
 local function explorer_configure_auto_close(picker)
-  -- NOTE: Found this "on" in snacks source code.
+  local wins = picker.layout.wins
+
   picker.layout.root:on("WinLeave", function()
     vim.schedule(function()
       local next_win = vim.api.nvim_get_current_win()
 
       -- Windows inside the explorer that are whitelisted and don't close the explorer when focused.
-      local input = picker.layout.wins.input.win
-      local list = picker.layout.wins.list.win
-      local inside_picker = next_win == input or next_win == list
-
-      if not inside_picker then
-        picker:close()
+      for _, w in ipairs { wins.input.win, wins.list.win, wins.preview.win } do
+        if next_win == w then
+          return
+        end
       end
+
+      picker:close()
     end)
   end)
 end
@@ -59,7 +60,7 @@ return {
       },
     },
     indent = {
-      enabled = true, -- enable indent guides
+      enabled = true,
       animate = {
         enabled = false,
       },
@@ -111,6 +112,7 @@ return {
   },
 
   config = function(_, opts)
+    -- NOTE: Be aware that it may be necessary to wrap it in vim.schedule due to the order of plugin initialization.
     close_zombie_snacks()
     require("snacks").setup(opts)
   end,
