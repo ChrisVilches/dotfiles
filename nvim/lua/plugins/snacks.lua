@@ -81,6 +81,7 @@ return {
     -- it can be easily fixed).
     picker = {
       enabled = true,
+      -- TODO: Maybe make it bigger... I think the Telescope one looked better because it was bigger.
       layout = { preset = "ivy" },
       sources = {
         explorer = {

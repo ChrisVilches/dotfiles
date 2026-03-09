@@ -8,7 +8,6 @@ local function map(keymap, telescope_cmd, desc)
 end
 
 -- More pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
-map("fw", "live_grep theme=ivy", "live grep")
 map("fh", "help_tags", "help page")
 map("ma", "marks", "find marks")
 map("fo", "oldfiles", "find oldfiles")
@@ -24,19 +23,13 @@ vim.keymap.set("n", "<leader>re", function()
   require("telescope.builtin").registers { initial_mode = "normal" }
 end)
 
--- NOTE: Using Snacks instead of Telescope (TODO: maybe move somewhere else)
+local picker = require "snacks.picker"
+
+vim.keymap.set("n", "<leader>th", picker.colorschemes, { desc = "theme picker" })
+vim.keymap.set("n", "<leader>fw", picker.grep, { desc = "grep" })
+vim.keymap.set("n", "<leader>fg", picker.grep_word, { desc = "grep word" })
+vim.keymap.set("n", "<leader>:", picker.command_history, { desc = "command history" })
+
 vim.keymap.set("n", "<leader>ff", function()
-  Snacks.picker.files { matcher = { frecency = true } }
-end)
-
-vim.keymap.set("n", "<leader>fg", function()
-  require("snacks.picker").grep_word()
-end)
-
-vim.keymap.set("n", "<leader>:", function()
-  require("snacks.picker").command_history()
-end)
-
-vim.keymap.set("n", "<leader>th", function()
-  require("telescope.builtin").colorscheme { enable_preview = true }
-end, { desc = "theme picker" })
+  picker.files { matcher = { frecency = true } }
+end, { desc = "find files" })
