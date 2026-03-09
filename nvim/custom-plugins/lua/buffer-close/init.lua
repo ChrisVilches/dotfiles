@@ -36,42 +36,31 @@ function M.reopen()
     return
   end
 
-  local pickers = require "telescope.pickers"
-  local finders = require "telescope.finders"
-  local conf = require("telescope.config").values
-  local actions = require "telescope.actions"
-  local action_state = require "telescope.actions.state"
+  local items = vim.tbl_map(function(path)
+    return { file = path, text = path }
+  end, vim.fn.reverse(vim.deepcopy(closed_buffers)))
 
-  pickers
-    .new({}, {
-      prompt_title = "Closed Buffers",
-      sorter = conf.generic_sorter {},
-      finder = finders.new_table {
-        results = vim.fn.reverse(vim.deepcopy(closed_buffers)),
-        entry_maker = function(entry)
-          return { value = entry, display = entry, ordinal = entry }
-        end,
-      },
-      previewer = conf.file_previewer {},
-      attach_mappings = function(_, map)
-        map({ "i", "n" }, "<CR>", function(prompt_bufnr)
-          local selection = action_state.get_selected_entry()
-          actions.close(prompt_bufnr)
-          if selection then
-            vim.cmd("buffer " .. selection.value)
-            vim.bo.buflisted = true
-            for i, entry in ipairs(closed_buffers) do
-              if entry == selection.value then
-                table.remove(closed_buffers, i)
-                break
-              end
-            end
-          end
-        end)
-        return true
-      end,
-    })
-    :find()
+  require "snacks.picker" {
+    title = "Closed Buffers",
+    items = items,
+
+    confirm = function(picker, item)
+      if not item then
+        return
+      end
+
+      vim.cmd("edit " .. item.file)
+
+      for i, entry in ipairs(closed_buffers) do
+        if entry == item.file then
+          table.remove(closed_buffers, i)
+          break
+        end
+      end
+
+      picker:close()
+    end,
+  }
 end
 
 return M
