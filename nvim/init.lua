@@ -54,7 +54,7 @@ require "commands"
 require "mappings/editing"
 require "mappings/misc"
 require "mappings/navigation"
-require "mappings/telescope"
+require "mappings.pickers"
 
 -- This is mainly to ensure Language Server Protocol (LSP) features,
 -- syntax highlighting, and the associated ftplugin (filetype plugin)
