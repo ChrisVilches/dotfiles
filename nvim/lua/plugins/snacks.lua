@@ -80,6 +80,8 @@ return {
     -- 6j 6k also doesn't work when in search mode inside the explorer, but it's not that important (and I think
     -- it can be easily fixed).
     picker = {
+      enabled = true,
+      layout = { preset = "ivy" },
       sources = {
         explorer = {
           on_show = function(picker)
@@ -102,7 +104,6 @@ return {
         },
       },
     },
-    -- picker = { enabled = true },
     -- notifier = { enabled = true },
     -- quickfile = { enabled = true },
     -- scope = { enabled = true },

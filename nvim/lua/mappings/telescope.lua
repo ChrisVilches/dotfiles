@@ -18,7 +18,6 @@ map("flw", "lsp_workspace_symbols", "Lists LSP document symbols in the current w
 map("cm", "git_commits", "git commits")
 map("gt", "git_status", "git status")
 map("fa", "find_files follow=true no_ignore=true hidden=true", "find all files")
-map("ff", 'frecency workspace=CWD path_display={"truncate"} theme=ivy', "find files (frecency)")
 map("<tab>", "buffers", "show current buffers")
 
 vim.keymap.set("n", "<leader>re", function()
@@ -26,6 +25,10 @@ vim.keymap.set("n", "<leader>re", function()
 end)
 
 -- NOTE: Using Snacks instead of Telescope (TODO: maybe move somewhere else)
+vim.keymap.set("n", "<leader>ff", function()
+  Snacks.picker.files { matcher = { frecency = true } }
+end)
+
 vim.keymap.set("n", "<leader>fg", function()
   require("snacks.picker").grep_word()
 end)
