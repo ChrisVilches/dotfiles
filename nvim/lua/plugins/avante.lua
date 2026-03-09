@@ -34,6 +34,5 @@ return {
     --- The below dependencies are optional,
     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     "nvim-tree/nvim-web-devicons",
-    "nvim-telescope/telescope.nvim",
   },
 }
