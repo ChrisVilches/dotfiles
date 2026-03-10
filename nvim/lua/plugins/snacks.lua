@@ -1,8 +1,19 @@
-local function move(n, key)
-  return function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(n .. key, true, false, true), "n", false)
-  end
-end
+local picker_actions = {
+  list_down_many = function(picker)
+    picker.list:move(6)
+  end,
+  list_up_many = function(picker)
+    picker.list:move(-6)
+  end,
+}
+
+local picker_keys = {
+  ["<c-c>"] = { "cancel", mode = { "i", "n" } },
+  ["<c-j>"] = { "list_down_many", mode = { "i", "n" } },
+  ["<c-k>"] = { "list_up_many", mode = { "i", "n" } },
+  ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+  ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+}
 
 local function explorer_configure_auto_close(picker)
   local wins = picker.layout.wins
@@ -45,25 +56,10 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
-  -- TODO: Experiment enabling more widgets.
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-    -- bigfile = { enabled = true },
-    -- dashboard = { enabled = true },
-    explorer = {
-      enabled = true,
-      keys = {
-        ["<C-j>"] = move(6, "j"),
-        ["<C-k>"] = move(6, "k"),
-      },
-    },
     indent = {
       enabled = true,
-      animate = {
-        enabled = false,
-      },
+      animate = { enabled = false },
       filter = function(buf)
         if vim.bo[buf].filetype == "markdown" then
           return false
@@ -73,44 +69,25 @@ return {
       end,
     },
     input = { enabled = true },
-
-    -- TODO: (high priority) this one doesn't work. It should work on <leader>fg (grep word)
-    -- as a sidenote, it should work even in insert mode, since you could press the arrows while on insert mode
-    -- to choose one item from the list.
-    -- 6j 6k also doesn't work when in search mode inside the explorer, but it's not that important (and I think
-    -- it can be easily fixed).
     picker = {
+      actions = picker_actions,
       enabled = true,
-      -- TODO: Maybe make it bigger... I think the Telescope one looked better because it was bigger.
       layout = { preset = "ivy" },
       sources = {
         explorer = {
+          win = {
+            list = { keys = picker_keys },
+          },
           on_show = function(picker)
             explorer_configure_auto_close(picker)
           end,
         },
       },
       win = {
-        input = {
-          keys = {
-            ["<C-j>"] = move(6, "j"),
-            ["<C-k>"] = move(6, "k"),
-          },
-        },
-        list = {
-          keys = {
-            ["<C-j>"] = move(6, "j"),
-            ["<C-k>"] = move(6, "k"),
-          },
-        },
+        input = { keys = picker_keys },
+        list = { keys = picker_keys },
       },
     },
-    -- notifier = { enabled = true },
-    -- quickfile = { enabled = true },
-    -- scope = { enabled = true },
-    -- scroll = { enabled = true },
-    -- statuscolumn = { enabled = true },
-    -- words = { enabled = true },
   },
 
   config = function(_, opts)
