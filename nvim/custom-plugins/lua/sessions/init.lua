@@ -1,12 +1,5 @@
--- TODO: sometimes the first buffer is an Oil view lol... wtf
--- Update: haven't been able to reproduce this lately. Maybe just remove.
-
--- TODO: options get overriden (even ones I explicitly set in options.lua)
--- but it seems this is the expected behavior so I'm not going to complain... maybe just document
--- it and/or create a function to reset them. Or have a configuration for options that are always
--- set AFTER the session is loaded. That'd be cool, but it also needs to get documented!!!!!
--- Update: I think this can be easily fixed by simply loading my options after the init. Both things are done manually
--- so I can control the order of things loading. But I still need to document these things!
+-- TODO: document that some things like options get hardcoded in the session file and then the only way to clear them up
+-- is by removing the file (or by loading options.lua after the init(), etc).
 
 local function session_name_from_cwd()
   local cwd = vim.fn.getcwd()
@@ -21,15 +14,10 @@ local function session_path()
   return dir .. "/" .. session_name_from_cwd()
 end
 
--- TODO: shouldn't save some options!!!! specially ones that I can modify accidentally. Ok, but at least I can
--- easily debug what's being saved and tweak accordingly.
--- I think this can be done by simply saving them and then let the user decide if they want to load options after
--- loading the session (to override them). This works (verified). I need to continue using the init() function called by the user.
--- TODO: tweak the vim.o.sessionoptions value here.
 -- TODO: I don't want to store folds.
 
 -- NOTE:
--- Telescope theme pickers preview colorschemes by temporarily applying them.
+-- Theme pickers preview colorschemes by temporarily applying them.
 -- If a variant shares the same base name (e.g. "ayu-mirage" → "ayu"), the
 -- preview may switch `vim.g.colors_name` to the base scheme without changing
 -- the actual appearance. When the picker closes, Neovim may therefore believe

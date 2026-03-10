@@ -36,31 +36,27 @@ function M.reopen()
     return
   end
 
-  local items = vim.tbl_map(function(path)
-    return { file = path, text = path }
-  end, vim.fn.reverse(vim.deepcopy(closed_buffers)))
+  local items = vim.fn.reverse(vim.deepcopy(closed_buffers))
 
-  require "snacks.picker" {
-    title = "Closed Buffers",
-    items = items,
-
-    confirm = function(picker, item)
-      if not item then
-        return
-      end
-
-      vim.cmd("edit " .. item.file)
-
-      for i, entry in ipairs(closed_buffers) do
-        if entry == item.file then
-          table.remove(closed_buffers, i)
-          break
-        end
-      end
-
-      picker:close()
+  vim.ui.select(items, {
+    prompt = "Closed Buffers",
+    format_item = function(item)
+      return item
     end,
-  }
+  }, function(choice)
+    if not choice then
+      return
+    end
+
+    vim.cmd("edit " .. choice)
+
+    for i, entry in ipairs(closed_buffers) do
+      if entry == choice then
+        table.remove(closed_buffers, i)
+        break
+      end
+    end
+  end)
 end
 
 return M
