@@ -1,35 +1,33 @@
-local function map(keymap, telescope_cmd, desc)
-  vim.keymap.set(
-    "n",
-    "<leader>" .. keymap,
-    "<cmd>Telescope " .. telescope_cmd .. "<CR>",
-    { desc = "Telescope: " .. desc }
-  )
+local function map(keymap, fn, desc)
+  vim.keymap.set("n", "<leader>" .. keymap, fn, { desc = "Picker: " .. desc })
 end
-
--- More pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
-map("fh", "help_tags", "help page")
-map("ma", "marks", "find marks")
-map("fo", "oldfiles", "find oldfiles")
-map("fz", "current_buffer_fuzzy_find", "find in current buffer")
-map("flb", "lsp_document_symbols", "Lists LSP document symbols in the current buffer")
-map("flw", "lsp_workspace_symbols", "Lists LSP document symbols in the current workspace")
-map("cm", "git_commits", "git commits")
-map("gt", "git_status", "git status")
-map("fa", "find_files follow=true no_ignore=true hidden=true", "find all files")
-map("<tab>", "buffers", "show current buffers")
-
-vim.keymap.set("n", "<leader>re", function()
-  require("telescope.builtin").registers { initial_mode = "normal" }
-end)
 
 local picker = require "snacks.picker"
 
-vim.keymap.set("n", "<leader>th", picker.colorschemes, { desc = "theme picker" })
-vim.keymap.set("n", "<leader>fw", picker.grep, { desc = "grep" })
-vim.keymap.set("n", "<leader>fg", picker.grep_word, { desc = "grep word" })
-vim.keymap.set("n", "<leader>:", picker.command_history, { desc = "command history" })
+map("gs", picker.git_status, "git status")
+map("flb", picker.lsp_symbols, "see buffer LSP symbols")
+map("flw", picker.lsp_workspace_symbols, "see workspace LSP symbols")
+map("fh", picker.help, "help page")
+map("re", picker.registers, "see registers")
+map("<tab>", picker.buffers, "show current buffers")
+map("fz", picker.lines, "search lines")
+map("th", picker.colorschemes, "theme picker")
+map("fw", picker.grep, "grep")
+map("fg", picker.grep_word, "grep word")
+map(":", picker.command_history, "command history")
 
-vim.keymap.set("n", "<leader>ff", function()
-  picker.files { matcher = { frecency = true } }
-end, { desc = "find files" })
+map("ff", function()
+  picker.files { matcher = { frecency = true }, hidden = true }
+end, "find files")
+
+map("gl", function()
+  picker.git_log { confirm = "close" }
+end, "git log")
+
+map("to", function()
+  picker.grep_word {
+    glob = vim.g.todo_grep_globs,
+    regex = true,
+    search = "TO" .. "DO:|^\\s*-\\s*\\[\\s*\\]",
+  }
+end, "search TODOs")
