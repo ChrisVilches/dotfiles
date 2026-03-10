@@ -240,7 +240,7 @@ n() {
     cd ~/memos || return 1
 
     local init_code='
-           require("todos").set_ignored_dirs({ "archived" })
+           vim.g.todo_grep_globs = { "!archived/" }
            require("nvim_utils")
     '
     if [ -n "$1" ]; then
