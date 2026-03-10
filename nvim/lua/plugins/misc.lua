@@ -49,6 +49,10 @@ return {
       },
     },
   },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+  },
   -- TODO: Try in the future:
   -- Friendly snippets (currently I only use it for Lua because it's the default, but
   -- do it for other languages as well)

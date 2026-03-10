@@ -44,7 +44,15 @@ opt.shortmess:append "sI"
 o.signcolumn = "yes"
 o.splitbelow = true
 o.splitright = true
-o.timeoutlen = 400
+o.timeout = false
+
+-- ttimeout is necessary; otherwise, it won't work on some terminals (e.g., in
+-- one situation, it would paste from the clipboard immediately after launching
+-- Neovim). However, this makes ESC a bit slower (can't be helped). A longer length
+-- may be necessary when using Neovim via SSH.
+o.ttimeout = true
+o.ttimeoutlen = 2
+
 o.undofile = true
 
 -- interval for writing swap file to disk, also used by gitsigns

@@ -1,3 +1,7 @@
+-- TODO: CTRL+G is very useful! it sets or unsets the fixed word (grep vs grep_word) so you can
+-- have one fixed query and then use a second query (similar to my ripgrep + fzf finder).
+-- But I want to understand what it does and how it works (it seems it swaps both queries, but
+-- also an icon appears/disappears).
 local picker_actions = {
   list_down_many = function(picker)
     picker.list:move(6)
@@ -7,6 +11,9 @@ local picker_actions = {
   end,
 }
 
+-- TODO: the only bad thing about this is that in the explorer, I usually use ctrl+d and ctrl+u
+-- to scroll on the files (list), but in this case it scrolls the preview, however the preview isn't
+-- enabled by default initially, so the keymaps do nothing when the preview isn't visible.
 local picker_keys = {
   ["<c-f>"] = { "toggle_maximize", mode = { "i", "n" } },
   ["<c-c>"] = { "cancel", mode = { "i", "n" } },
