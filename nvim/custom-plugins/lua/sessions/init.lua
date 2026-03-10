@@ -59,15 +59,9 @@ local function load_session()
   -- Save the argument list Neovim was opened with before the session file changes it when it's sourced.
   local original_file_arglist = get_file_arglist()
 
-  local path = session_path()
-  if vim.fn.filereadable(path) == 1 then
-    vim.cmd("source " .. vim.fn.fnameescape(path))
-    vim.cmd "%argdel"
-  end
+  vim.cmd("silent! source " .. vim.fn.fnameescape(session_path()))
 
   load_theme()
-
-  -- If Neovim was started with files in the arguments, use those instead of the ones stored in the session.
   handle_file_arglist(original_file_arglist)
 end
 
