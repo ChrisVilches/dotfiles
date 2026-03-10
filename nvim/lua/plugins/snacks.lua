@@ -8,6 +8,7 @@ local picker_actions = {
 }
 
 local picker_keys = {
+  ["<c-f>"] = { "toggle_maximize", mode = { "i", "n" } },
   ["<c-c>"] = { "cancel", mode = { "i", "n" } },
   ["<c-j>"] = { "list_down_many", mode = { "i", "n" } },
   ["<c-k>"] = { "list_up_many", mode = { "i", "n" } },
