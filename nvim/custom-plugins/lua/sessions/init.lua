@@ -1,5 +1,7 @@
--- TODO: document that some things like options get hardcoded in the session file and then the only way to clear them up
--- is by removing the file (or by loading options.lua after the init(), etc).
+-- Some settings, like filetypes and options, may persist in the session,
+-- making them difficult to clear. To resolve this, you can either delete the
+-- session file or reload your options after initializing the session to override
+-- them.
 
 local function session_name_from_cwd()
   local cwd = vim.fn.getcwd()
@@ -14,23 +16,11 @@ local function session_path()
   return dir .. "/" .. session_name_from_cwd()
 end
 
--- NOTE:
--- Theme pickers preview colorschemes by temporarily applying them.
--- If a variant shares the same base name (e.g. "ayu-mirage" → "ayu"), the
--- preview may switch `vim.g.colors_name` to the base scheme without changing
--- the actual appearance. When the picker closes, Neovim may therefore believe
--- the active scheme is "ayu" instead of "ayu-mirage".
---
--- A workaround could ignore certain ColorScheme events, but this is unreliable:
--- depending on how the picker previews or restores themes, legitimate changes
--- may also be filtered out. Because of this ambiguity, the session simply saves
--- whatever `vim.g.colors_name` currently reports.
 local function save_session(path)
   local scheme = vim.g.colors_name or "default"
 
   vim.cmd("mksession! " .. vim.fn.fnameescape(path))
   vim.fn.writefile({
-    "",
     "let g:session_colorscheme = '" .. scheme .. "'",
   }, path, "a")
 end
