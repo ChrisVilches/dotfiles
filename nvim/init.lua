@@ -63,7 +63,6 @@ require "mappings.pickers"
 -- filetypes might be "cached" in the session data.
 local custom_filetypes = {
   jbuilder = "ruby",
-  rhtml = "html",
   tpp = "cpp",
 }
 
