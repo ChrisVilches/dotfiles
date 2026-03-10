@@ -14,8 +14,6 @@ local function session_path()
   return dir .. "/" .. session_name_from_cwd()
 end
 
--- TODO: I don't want to store folds.
-
 -- NOTE:
 -- Theme pickers preview colorschemes by temporarily applying them.
 -- If a variant shares the same base name (e.g. "ayu-mirage" → "ayu"), the
