@@ -1,7 +1,3 @@
--- TODO: CTRL+G is very useful! it sets or unsets the fixed word (grep vs grep_word) so you can
--- have one fixed query and then use a second query (similar to my ripgrep + fzf finder).
--- But I want to understand what it does and how it works (it seems it swaps both queries, but
--- also an icon appears/disappears).
 local picker_actions = {
   list_down_many = function(picker)
     picker.list:move(6)
