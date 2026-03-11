@@ -35,22 +35,12 @@ local function explorer_configure_auto_close(picker)
   end)
 end
 
--- NOTE: This is a workaround to prevent session plugins from saving Snacks widgets.
--- Occasionally, the window to close might be the last one, which would cause it to fail.
--- However, encountering zombie widgets is quite rare. This can occur by opening an explorer
--- and executing :qa!
-local function close_zombie_snacks()
-  vim.schedule(function()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      local filetype = vim.bo[buf].filetype
+local function indent_filter(buf)
+  if vim.bo[buf].filetype == "markdown" then
+    return false
+  end
 
-      if filetype:match "^snacks_" then
-        require "notify" "Closing zombie Snacks widget"
-        vim.api.nvim_win_close(win, false)
-      end
-    end
-  end)
+  return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
 end
 
 return {
@@ -61,13 +51,7 @@ return {
     indent = {
       enabled = true,
       animate = { enabled = false },
-      filter = function(buf)
-        if vim.bo[buf].filetype == "markdown" then
-          return false
-        end
-
-        return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
-      end,
+      filter = indent_filter,
     },
     input = { enabled = true },
     picker = {
@@ -90,10 +74,4 @@ return {
       },
     },
   },
-
-  config = function(_, opts)
-    -- NOTE: Be aware that it may be necessary to wrap it in vim.schedule due to the order of plugin initialization.
-    close_zombie_snacks()
-    require("snacks").setup(opts)
-  end,
 }

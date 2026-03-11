@@ -65,6 +65,17 @@ local function load_session()
   handle_file_arglist(original_file_arglist)
 end
 
+-- File explorer or similar plugins often cannot be restored correctly, resulting in windows that appear empty.
+-- This function closes all such empty windows to ensure a clean session restoration.
+local function clean_empty_windows()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.api.nvim_buf_get_name(buf) == "" then
+      vim.api.nvim_win_close(win, true)
+    end
+  end
+end
+
 return {
   init = function()
     vim.api.nvim_create_autocmd("VimLeavePre", {
@@ -74,5 +85,6 @@ return {
     })
 
     load_session()
+    clean_empty_windows()
   end,
 }
