@@ -31,3 +31,26 @@ map("to", function()
     search = "TO" .. "DO:|^\\s*-\\s*\\[\\s*\\]",
   }
 end, "search TODOs")
+
+map("gd", function()
+  local function get_lines(cmd)
+    local result = vim.system(cmd, { text = true }):wait()
+    return vim.split(vim.trim(result.stdout), "\n", { plain = true })
+  end
+
+  local compare = "refs/remotes/origin/HEAD"
+  local diff_filenames = get_lines { "git", "diff", compare .. "..HEAD", "--name-only" } or {}
+
+  picker {
+    title = "Diff against " .. compare .. " (committed content only)",
+    items = vim.tbl_map(function(line)
+      return { text = line, file = line }
+    end, diff_filenames),
+    format = "file",
+    preview = function(ctx)
+      local diff_lines = get_lines { "git", "diff", compare .. "..HEAD", "--", ctx.item.file }
+      ctx.preview:set_lines(diff_lines)
+      ctx.preview:highlight { ft = "diff" }
+    end,
+  }
+end, "see files modified in this branch")
