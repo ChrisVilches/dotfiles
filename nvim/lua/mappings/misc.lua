@@ -34,6 +34,5 @@ end, { desc = "whichkey query lookup" })
 map("n", "<leader>m!", "<cmd>Markview toggle<CR>", { desc = "Markdown: toggle" })
 
 -- window size
-map("n", "<c-w><<", "15<c-w><")
-map("n", "<c-w>>>", "15<c-w>>")
--- TODO: these don't work after removing timeout option.
+map("n", "<leader><c-w><", "15<c-w><")
+map("n", "<leader><c-w>>", "15<c-w>>")
