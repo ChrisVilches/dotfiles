@@ -35,7 +35,7 @@ end, "search TODOs")
 map("gd", function()
   local function get_lines(cmd)
     local result = vim.system(cmd, { text = true }):wait()
-    return vim.split(vim.trim(result.stdout), "\n", { plain = true })
+    return vim.split(vim.trim(result.stdout), "\n", { trimempty = true, plain = true })
   end
 
   local compare = "refs/remotes/origin/HEAD"
