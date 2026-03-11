@@ -11,9 +11,6 @@ local picker_actions = {
   end,
 }
 
--- TODO: the only bad thing about this is that in the explorer, I usually use ctrl+d and ctrl+u
--- to scroll on the files (list), but in this case it scrolls the preview, however the preview isn't
--- enabled by default initially, so the keymaps do nothing when the preview isn't visible.
 local picker_keys = {
   ["<c-f>"] = { "toggle_maximize", mode = { "i", "n" } },
   ["<c-c>"] = { "cancel", mode = { "i", "n" } },
