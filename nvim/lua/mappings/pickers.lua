@@ -39,7 +39,7 @@ map("gd", function()
   end
 
   local compare = "refs/remotes/origin/HEAD"
-  local diff_filenames = get_lines { "git", "diff", compare .. "..HEAD", "--name-only" } or {}
+  local diff_filenames = get_lines { "git", "diff", compare .. "..HEAD", "--name-only" }
 
   picker {
     title = "Diff against " .. compare .. " (committed content only)",
@@ -48,8 +48,8 @@ map("gd", function()
     end, diff_filenames),
     format = "file",
     preview = function(ctx)
-      local diff_lines = get_lines { "git", "diff", compare .. "..HEAD", "--", ctx.item.file }
-      ctx.preview:set_lines(diff_lines)
+      local diff_content = get_lines { "git", "diff", compare .. "..HEAD", "--", ctx.item.file }
+      ctx.preview:set_lines(diff_content)
       ctx.preview:highlight { ft = "diff" }
     end,
   }

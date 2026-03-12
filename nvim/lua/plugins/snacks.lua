@@ -67,6 +67,8 @@ return {
             explorer_configure_auto_close(picker)
           end,
         },
+        grep = { hidden = true },
+        grep_word = { hidden = true },
       },
       win = {
         input = { keys = picker_keys },
