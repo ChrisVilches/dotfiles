@@ -7,6 +7,14 @@ local function on_attach()
     gitsigns.blame_line { full = true }
   end, { desc = "Git blame" })
 
+  map("n", "<leader>g[", function()
+    gitsigns.nav_hunk "prev"
+  end, { desc = "prev hunk" })
+
+  map("n", "<leader>g]", function()
+    gitsigns.nav_hunk "next"
+  end, { desc = "next hunk" })
+
   -- There are more available
   -- map('n', '<leader>hs', gitsigns.stage_hunk)
   -- map('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end)
