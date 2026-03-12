@@ -111,7 +111,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Put here things that cannot be committed (private keys, private IPs, etc).
-[[ -f ~/.zshrc.private ]] && source ~/.zshrc.private
+source ~/.zshrc.private 2>/dev/null
 
 # Remove the annoying way the exclamation mark is used in zsh (for history expansion).
 setopt nobanghist
