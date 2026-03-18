@@ -60,6 +60,14 @@ return {
       layout = { preset = "ivy" },
       sources = {
         explorer = {
+          -- TODO: Consider this setup!!! it's pretty nice because it's similar to Oil, and forces you to
+          -- exit the picker (close it) when you don't want to use it. With this, I don't really need my old setup
+          -- to close it automatically. This one handles it seamlessly.
+          -- Also it handles the problem that CTRL+d/u seemingly does nothing when the preview window isn't visible.
+          layout = {
+            preset = "default", -- Forces the layout with a preview
+            preview = true, -- Ensures preview is active
+          },
           win = {
             list = { keys = picker_keys },
           },

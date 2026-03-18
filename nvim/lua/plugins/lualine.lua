@@ -34,8 +34,14 @@ return {
     vim.api.nvim_create_autocmd("User", {
       group = "lualine_augroup",
       pattern = "LspProgressStatusUpdated",
-      callback = require("lualine").refresh,
+      callback = function()
+        require("lualine").refresh()
+      end,
     })
+
+    require("lsp-progress").setup {
+      format = format_lsp_progress,
+    }
 
     require("lualine").setup {
       sections = {
@@ -50,7 +56,7 @@ return {
         },
         lualine_c = {
           function()
-            local res = require("lsp-progress").progress { format = format_lsp_progress }
+            local res = require("lsp-progress").progress()
 
             -- This is necessary because sometimes the plugin above doesn't
             -- output anything.

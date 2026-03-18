@@ -1,3 +1,9 @@
+-- TODO: there's something weird about LSP when loading a Lua project (e.g.
+-- dotfiles). This doesn't happen in C++ (Algorithms repository). When I load
+-- the project, LSP messages don't load, and a warning saying "vim object is
+-- not defined" appears. But if I go to another buffer (tab), and then go back,
+-- the LSP messages start appearing, and it loads properly, and the warning
+-- disappears.
 local function config_servers()
   vim.lsp.config("bashls", {
     filetypes = { "bash", "sh", "zsh" },
