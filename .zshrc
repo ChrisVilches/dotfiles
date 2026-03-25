@@ -81,7 +81,6 @@ export plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf-tab)
 
 source "$ZSH/oh-my-zsh.sh"
 
-
 # Set ZSH_AUTOSUGGEST_MANUAL_REBIND (it can be set to anything) to disable
 # automatic widget re-binding on each precmd. This can be a big boost to
 # performance, but you'll need to handle re-binding yourself if any of the
