@@ -31,6 +31,9 @@ nnoremap <silent> <leader>q :q<CR>
 " This one is because of my muscle memory (I tend to want to close all windows)
 nnoremap <silent> <leader>Q :qa<CR>
 
+nnoremap <silent> <leader>x :bd<CR>
+nnoremap <silent> <leader>X :bd!<CR>
+
 " Jump 6 lines up/down
 nnoremap <C-j> 6j
 xnoremap <C-j> 6j
