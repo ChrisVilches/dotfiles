@@ -33,6 +33,7 @@ find-file-smart() {
         ctrl-n)   LBUFFER+="nvim $file" ;;
         ctrl-y)   printf '%s' "$file" | xsel -b && echo "yanked $file" && zle -I ;;
     esac
+    zle redisplay
 }
 zle -N find-file-smart
 bindkey '^T' find-file-smart
