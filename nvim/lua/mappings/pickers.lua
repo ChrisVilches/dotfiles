@@ -21,7 +21,7 @@ map("ff", function()
 end, "find files")
 
 map("gl", function()
-  picker.git_log { confirm = "close" }
+  picker.git_log { confirm = "close", layout = { fullscreen = true } }
 end, "git log")
 
 map("to", function()
