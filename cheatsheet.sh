@@ -43,6 +43,7 @@ ps aux                                                                        # 
 ps aux --sort=-%cpu | head -n 20 | less -S                                    # show processes sorted by CPU usage
 ps aux --sort=-%cpu | fzf | awk '{print $2}' | xargs -r kill                  # find and kill process
 ps auxf                                                                       # process tree or forest
+grep -E "Dirty|Writeback" /proc/meminfo                                       # how many pages are currently waiting to be written back to the disk (`sync` cleans it up)
 tar -czvf archive.tar.gz files/                                               # creates a compressed tar archive named "archive.tar.gz" containing the files in the "files/" directory.
 two_cursors "[_CURSOR_]"                                                      # the _CURSOR_ here (in the comment) should be shown
 umask 022                                                                     # sets the default file permissions to read and write for the owner, and read-only for group and others.
