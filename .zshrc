@@ -144,7 +144,6 @@ if [[ $- == *i* ]]; then
 fi
 
 PATH=$ZSHRC_DIR/scripts:$PATH
-PATH=~/go/bin:$PATH
 alias cpy='xsel -b'
 alias gs='git status'
 alias gd='git diff'
