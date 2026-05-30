@@ -13,6 +13,8 @@ map("n", "<leader>e", function()
   require "snacks.explorer"()
 end, { desc = "File explorer" })
 
+map("n", "<leader>I", require("inspect").inspect, { desc = "Buffer Inspector" })
+
 -- Hover
 -- Fixes inconsistent hover behavior in some LSPs (e.g., Golang opens a window
 -- instead of a floating popup).
