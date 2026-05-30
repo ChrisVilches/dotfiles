@@ -30,9 +30,15 @@ end
 local function add_parser_tree(lines, parser, prefix)
   prefix = prefix or ""
 
-  for lang, child in pairs(parser:children()) do
-    table.insert(lines, string.format("%s├─ %s", prefix, lang))
-    add_parser_tree(lines, child, prefix .. "│  ")
+  local children = vim.tbl_keys(parser:children())
+  table.sort(children)
+
+  for i, lang in ipairs(children) do
+    local is_last = i == #children
+    local branch = is_last and "└─ " or "├─ "
+    local next_prefix = prefix .. (is_last and "   " or "│  ")
+    table.insert(lines, string.format("%s%s%s", prefix, branch, lang))
+    add_parser_tree(lines, parser:children()[lang], next_prefix)
   end
 end
 
@@ -49,11 +55,14 @@ function M.inspect()
     local bt = vim.bo[buf].buftype
     local loaded = vim.api.nvim_buf_is_loaded(buf) and "loaded" or "unloaded"
     local listed = vim.bo[buf].buflisted and "listed" or "unlisted"
-    local parser_name = "N/A"
-
     local parser = vim.treesitter.get_parser(buf)
+    local ts_status = treesitter_status(buf)
+
+    local ts_label
     if parser then
-      parser_name = parser:lang()
+      ts_label = string.format("Treesitter:  %s (%s)", ts_status, parser:lang())
+    else
+      ts_label = string.format("Treesitter:  %s", ts_status)
     end
 
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
@@ -61,8 +70,7 @@ function M.inspect()
     table.insert(lines, string.format("Filetype:    %s", ft ~= "" and ft or "none"))
     table.insert(lines, string.format("Buftype:     %s", bt ~= "" and bt or "normal"))
     table.insert(lines, string.format("LSP:         %s", lsp_status(buf)))
-    -- TODO: this output is too verbose: N/A (no filetype) (parser: N/A)
-    table.insert(lines, string.format("Treesitter:  %s (parser: %s)", treesitter_status(buf), parser_name))
+    table.insert(lines, ts_label)
 
     if parser then
       add_parser_tree(lines, parser)
