@@ -100,21 +100,17 @@ function M.inspect()
     local parser = vim.treesitter.get_parser(buf)
     local ts_status = treesitter_status(buf)
 
-    local ts_label
-    if parser then
-      ts_label = string.format("Treesitter:  %s (%s)", ts_status, parser:lang())
-    else
-      ts_label = string.format("Treesitter:  %s", ts_status)
-    end
-
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
     table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
     table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
-    table.insert(lines, string.format("  %s", ts_label))
+    table.insert(lines, string.format("  Treesitter:  %s", ts_status))
 
     if parser then
+      local root_lang = parser:lang()
+      local root_suffix = has_highlight_queries(root_lang) and "" or " (no highlights)"
+      table.insert(lines, string.format("  %s%s", root_lang, root_suffix))
       add_parser_tree(lines, parser)
       for _, lang in ipairs(missing_parsers(parser, buf)) do
         table.insert(lines, string.format("  ! %s (not installed)", lang))
