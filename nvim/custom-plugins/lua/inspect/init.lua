@@ -5,22 +5,6 @@ local M = {}
 -- If the parser tree looks incomplete, try scrolling through the file
 -- and re-running the inspector.
 
-local function treesitter_status(buf)
-  if vim.bo[buf].filetype == "" then
-    return "N/A (no filetype)"
-  end
-
-  if vim.treesitter.highlighter.active[buf] then
-    return "active"
-  end
-
-  if vim.treesitter.get_parser(buf) then
-    return "parser loaded, not highlighting"
-  end
-
-  return "inactive"
-end
-
 local function lsp_status(buf)
   local clients = vim.lsp.get_clients { bufnr = buf }
   local names = {}
@@ -134,7 +118,7 @@ function M.inspect()
         table.insert(lines, string.format("%s! %s (not installed)", child_prefix, lang))
       end
     else
-      table.insert(lines, string.format("  Treesitter:  %s", treesitter_status(buf)))
+      table.insert(lines, string.format("  Treesitter:  none"))
     end
 
     table.insert(lines, "")
