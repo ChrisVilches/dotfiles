@@ -21,6 +21,27 @@ local function format_lsp_progress(messages)
   return table.concat(client_names, " ")
 end
 
+local function format_treesitter_status()
+  local buf = vim.api.nvim_get_current_buf()
+
+  if vim.bo.filetype == "" then
+    -- This is crucial because without a filetype, Treesitter cannot locate its parser.
+    return "no filetype"
+  end
+
+  -- Other good icons:
+  -- 󰐆 󰔱 󰆧 󰙅 󰳐 󱏒
+  if vim.treesitter.highlighter.active[buf] then
+    return "󰙅" -- Treesitter is OK and using its highlighter
+  end
+
+  if vim.treesitter.get_parser(buf) then
+    return "󰀦" -- Treesitter parser exists, but it is not highlighting
+  end
+
+  return "󰅚" -- Treesitter is completely disabled for this file
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   lazy = false,
@@ -66,6 +87,7 @@ return {
 
             return res
           end,
+          format_treesitter_status,
         },
       },
     }
