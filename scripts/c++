@@ -35,6 +35,9 @@ else
     -Wnull-dereference
     -Wdouble-promotion
     -Wformat=2
+    -fno-sanitize-recover=undefined
+    -fno-omit-frame-pointer
+    "-fsanitize=address,undefined"
   )
 fi
 
