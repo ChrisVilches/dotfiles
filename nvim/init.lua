@@ -64,6 +64,7 @@ require "mappings.pickers"
 local custom_filetypes = {
   jbuilder = "ruby",
   tpp = "cpp",
+  slim = "slim",
 }
 
 for ext, ft in pairs(custom_filetypes) do
