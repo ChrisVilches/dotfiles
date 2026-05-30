@@ -51,8 +51,8 @@ local function missing_parsers(parser, buf)
 
     if lang then
       lang = vim.treesitter.language.get_lang(lang) or lang
-      local available = pcall(vim.treesitter.language.add, lang)
-      if not available and not seen[lang] then
+      local ok, _ = pcall(vim.treesitter.language.inspect, lang)
+      if not ok and not seen[lang] then
         seen[lang] = true
       end
     end
