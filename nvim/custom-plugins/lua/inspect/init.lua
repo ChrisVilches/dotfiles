@@ -1,10 +1,9 @@
 local M = {}
 
--- Known issues:
--- Sometimes nested parsers don't show immediately.
--- For some reason if you scroll the file up and/or down
--- to see more content, it starts to get displayed (not sure
--- if scrolling causes it, but that's how I reproduced it).
+-- Known issue: nested (injection) parsers may be absent if the
+-- injected code regions haven't been parsed yet -- typically when
+-- they're off-screen. Scrolling the buffer to bring those regions
+-- into view and re-running the inspector often resolves it.
 
 local function treesitter_status(buf)
   if vim.bo[buf].filetype == "" then
