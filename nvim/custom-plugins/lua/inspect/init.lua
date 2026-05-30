@@ -1,9 +1,9 @@
 local M = {}
 
--- Known issue: nested (injection) parsers may be absent if the
--- injected code regions haven't been parsed yet -- typically when
--- they're off-screen. Scrolling the buffer to bring those regions
--- into view and re-running the inspector often resolves it.
+-- Note: nested (injection) parsers sometimes don't appear in the tree
+-- unless the injected code regions have been scrolled into view.
+-- If the parser tree looks incomplete, try scrolling through the file
+-- and re-running the inspector.
 
 local function treesitter_status(buf)
   if vim.bo[buf].filetype == "" then
