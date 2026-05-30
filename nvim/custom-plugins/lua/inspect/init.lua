@@ -27,6 +27,41 @@ local function lsp_status(buf)
   return #names > 0 and table.concat(names, ", ") or "none"
 end
 
+local function missing_parsers(parser, buf)
+  local root_lang = parser:lang()
+  local ok, query = pcall(vim.treesitter.query.get, root_lang, "injections")
+  if not ok or not query then
+    return {}
+  end
+  local trees = parser:trees()
+  if not trees or #trees == 0 then
+    return {}
+  end
+  local root = trees[1]:root()
+  local installed = parser:children()
+  local seen = {}
+  for capture_id, node, metadata in query:iter_captures(root, buf, 0, -1) do
+    local capture_name = query.captures[capture_id]
+    local lang = nil
+
+    if capture_name == "injection.language" then
+      lang = vim.treesitter.get_node_text(node, buf)
+    elseif metadata and metadata["injection.language"] then
+      lang = metadata["injection.language"]
+    end
+
+    if lang then
+      lang = vim.treesitter.language.get_lang(lang) or lang
+      if not installed[lang] and not seen[lang] then
+        seen[lang] = true
+      end
+    end
+  end
+  local result = vim.tbl_keys(seen)
+  table.sort(result)
+  return result
+end
+
 local function add_parser_tree(lines, parser, prefix)
   prefix = prefix or "  "
 
@@ -74,6 +109,9 @@ function M.inspect()
 
     if parser then
       add_parser_tree(lines, parser)
+      for _, lang in ipairs(missing_parsers(parser, buf)) do
+        table.insert(lines, string.format("  ! %s (not installed)", lang))
+      end
     end
 
     table.insert(lines, "")
