@@ -154,6 +154,7 @@ alias la='ls -A'
 alias l='ls -CF'
 alias lll='ll | less -R'
 alias oc='opencode'
+alias occ='opencode --continue'
 e() {
     "$EDITOR" "$@"
 }
