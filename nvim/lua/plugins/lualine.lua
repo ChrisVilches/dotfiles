@@ -21,14 +21,20 @@ local function format_lsp_progress(messages)
   return table.concat(client_names, " ")
 end
 
-local function get_treesitter_warning()
-  local buf = vim.api.nvim_get_current_buf()
+local last_check = 0
+local cached = ""
 
-  if vim.bo.filetype ~= "" and vim.treesitter.highlighter.active[buf] then
-    return ""
+local function get_treesitter_warning()
+  local now = vim.loop.now()
+
+  if now - last_check > 3000 then
+    last_check = now
+    cached = require("inspect").treesitter_ok()
+        and ""
+        or "󰀦 Treesitter Warning"
   end
 
-  return "󰀦 Treesitter Warning"
+  return cached
 end
 
 return {

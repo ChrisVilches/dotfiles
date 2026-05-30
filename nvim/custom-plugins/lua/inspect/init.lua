@@ -77,8 +77,40 @@ local function add_parser_tree(lines, parser, prefix)
   end
 end
 
-local function buf_highlights_active(buf)
+local function highlights_active(buf)
   return vim.treesitter.highlighter.active[buf]
+end
+
+function M.treesitter_ok(buf)
+  buf = buf or vim.api.nvim_get_current_buf()
+  if not highlights_active(buf) then
+    return false
+  end
+  local parser = vim.treesitter.get_parser(buf)
+  if not parser then
+    return false
+  end
+  if not has_highlight_queries(parser:lang()) then
+    return false
+  end
+  local function traverse(p)
+    for lang, child in pairs(p:children()) do
+      if not has_highlight_queries(lang) then
+        return false
+      end
+      if not traverse(child) then
+        return false
+      end
+    end
+    return true
+  end
+  if not traverse(parser) then
+    return false
+  end
+  if #missing_parsers(parser, buf) > 0 then
+    return false
+  end
+  return true
 end
 
 function M.inspect()
@@ -105,7 +137,7 @@ function M.inspect()
       local root_lang = parser:lang()
       local root_suffix = ""
 
-      if not buf_highlights_active(buf) then
+      if not highlights_active(buf) then
         root_suffix = " (highlights disabled)"
       elseif not has_highlight_queries(root_lang) then
         root_suffix = " (no highlights)"
