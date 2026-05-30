@@ -38,7 +38,6 @@ local function missing_parsers(parser, buf)
     return {}
   end
   local root = trees[1]:root()
-  local installed = parser:children()
   local seen = {}
   for capture_id, node, metadata in query:iter_captures(root, buf, 0, -1) do
     local capture_name = query.captures[capture_id]
@@ -52,7 +51,8 @@ local function missing_parsers(parser, buf)
 
     if lang then
       lang = vim.treesitter.language.get_lang(lang) or lang
-      if not installed[lang] and not seen[lang] then
+      local available = pcall(vim.treesitter.language.add, lang)
+      if not available and not seen[lang] then
         seen[lang] = true
       end
     end
