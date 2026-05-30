@@ -88,6 +88,10 @@ local function add_parser_tree(lines, parser, prefix)
   end
 end
 
+local function buf_highlights_active(buf)
+  return vim.treesitter.highlighter.active[buf]
+end
+
 function M.inspect()
   local current = vim.api.nvim_get_current_buf()
   local lines = {}
@@ -102,23 +106,30 @@ function M.inspect()
     local loaded = vim.api.nvim_buf_is_loaded(buf) and "loaded" or "unloaded"
     local listed = vim.bo[buf].buflisted and "listed" or "unlisted"
     local parser = vim.treesitter.get_parser(buf)
-    local ts_status = treesitter_status(buf)
 
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
     table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
     table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
-    table.insert(lines, string.format("  Treesitter:  %s", ts_status))
-
     if parser then
       local root_lang = parser:lang()
-      local root_suffix = has_highlight_queries(root_lang) and "" or " (no highlights)"
-      table.insert(lines, string.format("  %s%s", root_lang, root_suffix))
-      add_parser_tree(lines, parser)
-      for _, lang in ipairs(missing_parsers(parser, buf)) do
-        table.insert(lines, string.format("  ! %s (not installed)", lang))
+      local root_suffix = ""
+
+      if not buf_highlights_active(buf) then
+        root_suffix = " (highlights disabled)"
+      elseif not has_highlight_queries(root_lang) then
+        root_suffix = " (no highlights)"
       end
+      local tree_prefix = "  Treesitter:  "
+      table.insert(lines, string.format("%s%s%s", tree_prefix, root_lang, root_suffix))
+      local child_prefix = string.rep(" ", #tree_prefix)
+      add_parser_tree(lines, parser, child_prefix)
+      for _, lang in ipairs(missing_parsers(parser, buf)) do
+        table.insert(lines, string.format("%s! %s (not installed)", child_prefix, lang))
+      end
+    else
+      table.insert(lines, string.format("  Treesitter:  %s", treesitter_status(buf)))
     end
 
     table.insert(lines, "")
