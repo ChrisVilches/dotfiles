@@ -28,7 +28,7 @@ local function lsp_status(buf)
 end
 
 local function add_parser_tree(lines, parser, prefix)
-  prefix = prefix or ""
+  prefix = prefix or "  "
 
   local children = vim.tbl_keys(parser:children())
   table.sort(children)
@@ -66,11 +66,11 @@ function M.inspect()
     end
 
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
-    table.insert(lines, string.format("Name:        %s", name ~= "" and name or "[No Name]"))
-    table.insert(lines, string.format("Filetype:    %s", ft ~= "" and ft or "none"))
-    table.insert(lines, string.format("Buftype:     %s", bt ~= "" and bt or "normal"))
-    table.insert(lines, string.format("LSP:         %s", lsp_status(buf)))
-    table.insert(lines, ts_label)
+    table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
+    table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
+    table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
+    table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
+    table.insert(lines, string.format("  %s", ts_label))
 
     if parser then
       add_parser_tree(lines, parser)
