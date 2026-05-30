@@ -28,35 +28,39 @@ local function lsp_status(buf)
 end
 
 local function missing_parsers(parser, buf)
-  local root_lang = parser:lang()
-  local ok, query = pcall(vim.treesitter.query.get, root_lang, "injections")
-  if not ok or not query then
-    return {}
-  end
-  local trees = parser:trees()
-  if not trees or #trees == 0 then
-    return {}
-  end
-  local root = trees[1]:root()
   local seen = {}
-  for capture_id, node, metadata in query:iter_captures(root, buf, 0, -1) do
-    local capture_name = query.captures[capture_id]
-    local lang = nil
+  local function traverse(p)
+    local root_lang = p:lang()
+    local ok, query = pcall(vim.treesitter.query.get, root_lang, "injections")
+    if ok and query then
+      local trees = p:trees()
+      if trees and #trees > 0 then
+        local root = trees[1]:root()
+        for capture_id, node, metadata in query:iter_captures(root, buf, 0, -1) do
+          local capture_name = query.captures[capture_id]
+          local lang = nil
 
-    if capture_name == "injection.language" then
-      lang = vim.treesitter.get_node_text(node, buf)
-    elseif metadata and metadata["injection.language"] then
-      lang = metadata["injection.language"]
-    end
+          if capture_name == "injection.language" then
+            lang = vim.treesitter.get_node_text(node, buf)
+          elseif metadata and metadata["injection.language"] then
+            lang = metadata["injection.language"]
+          end
 
-    if lang then
-      lang = vim.treesitter.language.get_lang(lang) or lang
-      local ok, _ = pcall(vim.treesitter.language.inspect, lang)
-      if not ok and not seen[lang] then
-        seen[lang] = true
+          if lang then
+            lang = vim.treesitter.language.get_lang(lang) or lang
+            local ok2, _ = pcall(vim.treesitter.language.inspect, lang)
+            if not ok2 and not seen[lang] then
+              seen[lang] = true
+            end
+          end
+        end
       end
     end
+    for _, child in pairs(p:children()) do
+      traverse(child)
+    end
   end
+  traverse(parser)
   local result = vim.tbl_keys(seen)
   table.sort(result)
   return result
