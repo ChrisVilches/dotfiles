@@ -27,6 +27,15 @@ local function lsp_status(buf)
   return #names > 0 and table.concat(names, ", ") or "none"
 end
 
+local function add_parser_tree(lines, parser, prefix)
+  prefix = prefix or ""
+
+  for lang, child in pairs(parser:children()) do
+    table.insert(lines, string.format("%s├─ %s", prefix, lang))
+    add_parser_tree(lines, child, prefix .. "│  ")
+  end
+end
+
 function M.inspect()
   local current = vim.api.nvim_get_current_buf()
   local lines = {}
@@ -35,17 +44,30 @@ function M.inspect()
     if not vim.api.nvim_buf_is_valid(buf) then
       return
     end
-    local name = vim.api.nvim_buf_get_name(buf)
+    local name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":.")
     local ft = vim.bo[buf].filetype
     local bt = vim.bo[buf].buftype
     local loaded = vim.api.nvim_buf_is_loaded(buf) and "loaded" or "unloaded"
+    local listed = vim.bo[buf].buflisted and "listed" or "unlisted"
+    local parser_name = "N/A"
 
-    table.insert(lines, string.format("Buffer #%d  [%s]", buf, loaded))
-    table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
-    table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
-    table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
-    table.insert(lines, string.format("  Treesitter:  %s", treesitter_status(buf)))
-    table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
+    local parser = vim.treesitter.get_parser(buf)
+    if parser then
+      parser_name = parser:lang()
+    end
+
+    table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
+    table.insert(lines, string.format("Name:        %s", name ~= "" and name or "[No Name]"))
+    table.insert(lines, string.format("Filetype:    %s", ft ~= "" and ft or "none"))
+    table.insert(lines, string.format("Buftype:     %s", bt ~= "" and bt or "normal"))
+    table.insert(lines, string.format("LSP:         %s", lsp_status(buf)))
+    -- TODO: this output is too verbose: N/A (no filetype) (parser: N/A)
+    table.insert(lines, string.format("Treesitter:  %s (parser: %s)", treesitter_status(buf), parser_name))
+
+    if parser then
+      add_parser_tree(lines, parser)
+    end
+
     table.insert(lines, "")
   end
 
