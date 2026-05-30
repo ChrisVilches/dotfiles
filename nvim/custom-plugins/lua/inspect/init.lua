@@ -62,18 +62,25 @@ local function missing_parsers(parser, buf)
   return result
 end
 
+-- Can be reproduced by removing the highlights.scm file.
+-- e.g. in ~/.local/share/nvim/site/queries/mermaid
+local function has_highlight_queries(lang)
+  local ok, query = pcall(vim.treesitter.query.get, lang, "highlights")
+  return ok and query ~= nil
+end
+
 local function add_parser_tree(lines, parser, prefix)
   prefix = prefix or "  "
-
-  local children = vim.tbl_keys(parser:children())
-  table.sort(children)
-
-  for i, lang in ipairs(children) do
-    local is_last = i == #children
+  local children = parser:children() -- cache once
+  local keys = vim.tbl_keys(children)
+  table.sort(keys)
+  for i, lang in ipairs(keys) do
+    local is_last = i == #keys
     local branch = is_last and "└─ " or "├─ "
     local next_prefix = prefix .. (is_last and "   " or "│  ")
-    table.insert(lines, string.format("%s%s%s", prefix, branch, lang))
-    add_parser_tree(lines, parser:children()[lang], next_prefix)
+    local suffix = has_highlight_queries(lang) and "" or " (no highlights)"
+    table.insert(lines, string.format("%s%s%s%s", prefix, branch, lang, suffix))
+    add_parser_tree(lines, children[lang], next_prefix) -- use cached table
   end
 end
 
