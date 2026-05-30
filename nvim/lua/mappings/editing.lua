@@ -31,6 +31,10 @@ map("n", "<leader>rr", 'v"vy"vp', { desc = "repeat character", noremap = true })
 map("n", "<leader>rw", 'viw"vye"vp', { desc = "repeat word", noremap = true })
 map("n", "<leader>rW", 'viW"vyE"vp', { desc = "repeat WORD", noremap = true })
 
+-- Incremental selection
+map({ "n", "x" }, "<leader>i", require("vim.treesitter._select").select_parent)
+map({ "n", "x" }, "<leader>d", require("vim.treesitter._select").select_child)
+
 -- Move selected text.
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
