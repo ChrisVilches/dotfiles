@@ -1,5 +1,11 @@
 local M = {}
 
+-- Known issues:
+-- Sometimes nested parsers don't show immediately.
+-- For some reason if you scroll the file up and/or down
+-- to see more content, it starts to get displayed (not sure
+-- if scrolling causes it, but that's how I reproduced it).
+
 local function treesitter_status(buf)
   if vim.bo[buf].filetype == "" then
     return "N/A (no filetype)"
