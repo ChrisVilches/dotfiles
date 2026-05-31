@@ -100,23 +100,32 @@ local function all_parsers_have_highlights(parser)
   return true
 end
 
-local function add_parser_tree(lines, parser, prefix)
-  prefix = prefix or "  "
-  local children = parser:children() -- cache once
-  local keys = vim.tbl_keys(children)
-  table.sort(keys)
-  for i, lang in ipairs(keys) do
-    local is_last = i == #keys
-    local branch = is_last and "└─ " or "├─ "
-    local next_prefix = prefix .. (is_last and "   " or "│  ")
-    local suffix = has_highlight_queries(lang) and "" or " (no highlights)"
-    table.insert(lines, string.format("%s%s%s%s", prefix, branch, lang, suffix))
-    add_parser_tree(lines, children[lang], next_prefix) -- use cached table
-  end
-end
-
 local function highlights_active(buf)
   return vim.treesitter.highlighter.active[buf]
+end
+
+local function add_parser_tree(lines, parser, buf, display_prefix, is_root, child_indent)
+  local lang = parser:lang()
+  local suffix = ""
+  if is_root and not highlights_active(buf) then
+    suffix = " (highlights disabled)"
+  elseif not has_highlight_queries(lang) then
+    suffix = " (no highlights)"
+  end
+
+  table.insert(lines, string.format("%s%s%s", display_prefix, lang, suffix))
+
+  child_indent = child_indent or string.rep(" ", #display_prefix)
+  local children = parser:children()
+  local keys = vim.tbl_keys(children)
+  table.sort(keys)
+  for i, child_lang in ipairs(keys) do
+    local is_last = i == #keys
+    local branch = is_last and "└─ " or "├─ "
+    local child_display = child_indent .. branch
+    local child_next_indent = child_indent .. (is_last and "   " or "│  ")
+    add_parser_tree(lines, children[child_lang], buf, child_display, false, child_next_indent)
+  end
 end
 
 function M.treesitter_ok(buf)
@@ -145,20 +154,12 @@ local function get_treesitter_display(buf)
   end
 
   local lines = {}
-
   parser:parse(true)
-  local root_lang = parser:lang()
-  local root_suffix = ""
 
-  if not highlights_active(buf) then
-    root_suffix = " (highlights disabled)"
-  elseif not has_highlight_queries(root_lang) then
-    root_suffix = " (no highlights)"
-  end
   local tree_prefix = "  Treesitter:  "
-  table.insert(lines, string.format("%s%s%s", tree_prefix, root_lang, root_suffix))
+  add_parser_tree(lines, parser, buf, tree_prefix, true)
+
   local child_prefix = string.rep(" ", #tree_prefix)
-  add_parser_tree(lines, parser, child_prefix)
   for _, lang in ipairs(missing_parsers(parser, buf)) do
     table.insert(lines, string.format("%s! %s (not installed)", child_prefix, lang))
   end
