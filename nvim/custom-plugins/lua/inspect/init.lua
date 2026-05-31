@@ -160,12 +160,10 @@ function M.inspect()
     table.insert(lines, "")
   end
 
-  if vim.api.nvim_buf_is_valid(current) then
-    append_buf_info(current)
-  end
+  append_buf_info(current)
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if buf ~= current and vim.api.nvim_buf_is_valid(buf) then
+    if buf ~= current then
       append_buf_info(buf)
     end
   end
