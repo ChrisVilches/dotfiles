@@ -17,7 +17,7 @@ local function lsp_status(buf)
       table.insert(names, client.name)
     end
   end
-  return #names > 0 and table.concat(names, ", ") or "none"
+  return table.concat(names, ", ")
 end
 
 local function missing_parsers(parser, buf)
@@ -202,12 +202,12 @@ function M.inspect()
 
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
     table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
-    table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
+    table.insert(lines, string.format("  Filetype:    %s", ft))
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
-    table.insert(lines, string.format("  Indent:      %s", indentexpr ~= "" and indentexpr or "none"))
+    table.insert(lines, string.format("  Indent:      %s", indentexpr))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
 
-    for _, line in ipairs(get_treesitter_display(buf) or { "  Treesitter:  none" }) do
+    for _, line in ipairs(get_treesitter_display(buf) or { "  Treesitter:" }) do
       table.insert(lines, line)
     end
 
