@@ -20,6 +20,15 @@ local function lsp_status(buf)
   return table.concat(names, ", ")
 end
 
+local function nvim_lint_plugin_status(buf)
+  local linters = require('lint').get_running(buf)
+  local result = {}
+  for _, linter in ipairs(linters) do
+    table.insert(result, linter)
+  end
+  return table.concat(result, ", ")
+end
+
 local function missing_parsers(parser, buf)
   local seen = {}
 
@@ -189,10 +198,13 @@ function M.inspect()
   local current = vim.api.nvim_get_current_buf()
   local lines = {}
 
+  local buffers_line_range = {}
+
   local function append_buf_info(buf)
     if not vim.api.nvim_buf_is_valid(buf) then
       return
     end
+    local start_line = #lines + 1
     local name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":.")
     local ft = vim.bo[buf].filetype
     local bt = vim.bo[buf].buftype
@@ -206,12 +218,17 @@ function M.inspect()
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
     table.insert(lines, string.format("  Indent:      %s", indentexpr))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
+    table.insert(lines, string.format("  nvim-lint:   %s", nvim_lint_plugin_status(buf)))
+
+    -- TODO: shellcheck should work in zsh (it doesn't now)
+    -- TODO: with rubocop, it disappears after a few seconds
 
     for _, line in ipairs(get_treesitter_display(buf) or { "  Treesitter:" }) do
       table.insert(lines, line)
     end
 
     table.insert(lines, "")
+    buffers_line_range[buf] = { start_line, #lines }
   end
 
   append_buf_info(current)
@@ -233,7 +250,7 @@ function M.inspect()
 
   local width = math.min(100, vim.o.columns - 4)
   local height = math.min(#lines, vim.o.lines - 4)
-  vim.api.nvim_open_win(bufnr, true, {
+  local winid = vim.api.nvim_open_win(bufnr, true, {
     relative = "editor",
     width = width,
     height = height,
@@ -249,6 +266,18 @@ function M.inspect()
   for _, k in pairs({ "q", "<esc>" }) do
     vim.keymap.set("n", k, "<cmd>close<cr>", { buffer = bufnr, silent = true, nowait = true })
   end
+
+  vim.keymap.set("n", "<CR>", function()
+    local lnum = vim.api.nvim_win_get_cursor(0)[1]
+    for buf, range in pairs(buffers_line_range) do
+      if range[1] <= lnum and lnum <= range[2] then
+        vim.api.nvim_win_close(winid, false)
+        local name = vim.api.nvim_buf_get_name(buf)
+        vim.cmd.edit(vim.fn.fnameescape(name))
+        break
+      end
+    end
+  end, { buffer = bufnr, silent = true, nowait = true })
 end
 
 return M
