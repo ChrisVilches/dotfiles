@@ -176,8 +176,8 @@ local function highlight_buffer_display(bufnr)
       })
     end
 
-    -- Highlight entire line if it starts with "Buffer"
-    if vim.startswith(line, "Buffer") then
+    -- Highlight entire line if it starts with "Buffer #"
+    if vim.startswith(line, "Buffer #") then
       vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, 0, {
         line_hl_group = "Visual",
       })
