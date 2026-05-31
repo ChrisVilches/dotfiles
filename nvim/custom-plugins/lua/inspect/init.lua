@@ -230,7 +230,6 @@ function M.inspect()
     title_pos = "center",
   })
 
-
   for _, k in pairs({ "q", "<esc>" }) do
     vim.keymap.set("n", k, "<cmd>close<cr>", { buffer = bufnr, silent = true, nowait = true })
   end
