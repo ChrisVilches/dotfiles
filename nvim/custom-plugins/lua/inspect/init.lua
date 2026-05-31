@@ -154,9 +154,8 @@ local function get_treesitter_display(buf)
   local tree_prefix = "  Treesitter:  "
   add_parser_tree(lines, parser, buf, tree_prefix, true)
 
-  local prefix = string.rep(" ", #tree_prefix)
   for _, lang in ipairs(missing_parsers(parser, buf)) do
-    table.insert(lines, string.format("%s! %s (not installed)", prefix, lang))
+    table.insert(lines, string.format("%s! %s (not installed)", string.rep(" ", #tree_prefix), lang))
   end
 
   return lines
