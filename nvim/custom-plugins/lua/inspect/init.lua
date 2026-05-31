@@ -104,7 +104,7 @@ local function highlights_active(buf)
   return vim.treesitter.highlighter.active[buf]
 end
 
-local function add_parser_tree(lines, parser, buf, display_prefix, is_root, child_indent)
+local function dfs_parser_tree(lines, parser, buf, display_prefix, is_root, child_indent)
   local lang = parser:lang()
   local suffix = ""
   if is_root and not highlights_active(buf) then
@@ -124,7 +124,7 @@ local function add_parser_tree(lines, parser, buf, display_prefix, is_root, chil
     local branch = is_last and "└─ " or "├─ "
     local child_display = child_indent .. branch
     local child_next_indent = child_indent .. (is_last and "   " or "│  ")
-    add_parser_tree(lines, children[child_lang], buf, child_display, false, child_next_indent)
+    dfs_parser_tree(lines, children[child_lang], buf, child_display, false, child_next_indent)
   end
 end
 
@@ -152,7 +152,7 @@ local function get_treesitter_display(buf)
   parser:parse(true)
 
   local tree_prefix = "  Treesitter:  "
-  add_parser_tree(lines, parser, buf, tree_prefix, true)
+  dfs_parser_tree(lines, parser, buf, tree_prefix, true)
 
   for _, lang in ipairs(missing_parsers(parser, buf)) do
     table.insert(lines, string.format("%s! %s (not installed)", string.rep(" ", #tree_prefix), lang))
