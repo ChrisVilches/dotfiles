@@ -1,9 +1,11 @@
 local M = {}
 
--- Note: nested (injection) parsers sometimes don't appear in the tree
--- unless the injected code regions have been scrolled into view.
--- If the parser tree looks incomplete, try scrolling through the file
--- and re-running the inspector.
+-- About parser:parse(true):
+-- Force a full recursive parse of the LanguageTree, including injections.
+-- According to the parse() docs, this updates the parser's cached internal
+-- state, so we do not need to use the returned trees directly. A single
+-- parse(true) on the root parser is sufficient; without it, some injected
+-- parsers may not be discovered and therefore won't appear in reports.
 
 local function lsp_status(buf)
   local clients = vim.lsp.get_clients { bufnr = buf }
@@ -90,6 +92,7 @@ function M.treesitter_ok(buf)
   if not parser then
     return false
   end
+  parser:parse(true)
   if not has_highlight_queries(parser:lang()) then
     return false
   end
@@ -134,6 +137,7 @@ function M.inspect()
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
     if parser then
+      parser:parse(true)
       local root_lang = parser:lang()
       local root_suffix = ""
 
