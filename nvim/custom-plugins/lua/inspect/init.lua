@@ -88,6 +88,18 @@ local function has_highlight_queries(lang)
   return ok and query ~= nil
 end
 
+local function all_parsers_have_highlights(parser)
+  if not has_highlight_queries(parser:lang()) then
+    return false
+  end
+  for _, child in pairs(parser:children()) do
+    if not all_parsers_have_highlights(child) then
+      return false
+    end
+  end
+  return true
+end
+
 local function add_parser_tree(lines, parser, prefix)
   prefix = prefix or "  "
   local children = parser:children() -- cache once
@@ -117,18 +129,7 @@ function M.treesitter_ok(buf)
     return false
   end
   parser:parse(true)
-  local function traverse(p)
-    if not has_highlight_queries(p:lang()) then
-      return false
-    end
-    for _, child in pairs(p:children()) do
-      if not traverse(child) then
-        return false
-      end
-    end
-    return true
-  end
-  if not traverse(parser) then
+  if not all_parsers_have_highlights(parser) then
     return false
   end
   if #missing_parsers(parser, buf) > 0 then
