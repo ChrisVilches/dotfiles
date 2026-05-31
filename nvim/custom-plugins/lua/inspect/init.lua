@@ -1,5 +1,7 @@
 local M = {}
 
+local ns = vim.api.nvim_create_namespace("buffer_inspector")
+
 -- About parser:parse(true):
 -- Force a full recursive parse of the LanguageTree, including injections.
 -- According to the parse() docs, this updates the parser's cached internal
@@ -162,8 +164,6 @@ local function get_treesitter_display(buf)
 end
 
 local function highlight_buffer_display(bufnr)
-  local ns = vim.api.nvim_create_namespace("buffer_inspector")
-
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
   for lnum, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
