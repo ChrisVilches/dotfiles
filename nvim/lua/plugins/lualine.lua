@@ -21,7 +21,7 @@ local function format_lsp_progress(messages)
   return table.concat(client_names, " ")
 end
 
-local last_check = 0
+local last_check = vim.loop.now() -- Initialize to avoid execution on startup
 local cached = ""
 
 local function get_treesitter_warning()
