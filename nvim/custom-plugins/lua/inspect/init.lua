@@ -138,6 +138,34 @@ function M.treesitter_ok(buf)
   return true
 end
 
+local function get_treesitter_display(buf)
+  local parser = vim.treesitter.get_parser(buf)
+  if not parser then
+    return nil
+  end
+
+  local lines = {}
+
+  parser:parse(true)
+  local root_lang = parser:lang()
+  local root_suffix = ""
+
+  if not highlights_active(buf) then
+    root_suffix = " (highlights disabled)"
+  elseif not has_highlight_queries(root_lang) then
+    root_suffix = " (no highlights)"
+  end
+  local tree_prefix = "  Treesitter:  "
+  table.insert(lines, string.format("%s%s%s", tree_prefix, root_lang, root_suffix))
+  local child_prefix = string.rep(" ", #tree_prefix)
+  add_parser_tree(lines, parser, child_prefix)
+  for _, lang in ipairs(missing_parsers(parser, buf)) do
+    table.insert(lines, string.format("%s! %s (not installed)", child_prefix, lang))
+  end
+
+  return lines
+end
+
 function M.inspect()
   local current = vim.api.nvim_get_current_buf()
   local lines = {}
@@ -151,29 +179,20 @@ function M.inspect()
     local bt = vim.bo[buf].buftype
     local loaded = vim.api.nvim_buf_is_loaded(buf) and "loaded" or "unloaded"
     local listed = vim.bo[buf].buflisted and "listed" or "unlisted"
-    local parser = vim.treesitter.get_parser(buf)
+    local indentexpr = vim.bo[buf].indentexpr
 
     table.insert(lines, string.format("Buffer #%d  [%s, %s]", buf, loaded, listed))
     table.insert(lines, string.format("  Name:        %s", name ~= "" and name or "[No Name]"))
     table.insert(lines, string.format("  Filetype:    %s", ft ~= "" and ft or "none"))
     table.insert(lines, string.format("  Buftype:     %s", bt ~= "" and bt or "normal"))
+    table.insert(lines, string.format("  Indent:      %s", indentexpr ~= "" and indentexpr or "none"))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
-    if parser then
-      parser:parse(true)
-      local root_lang = parser:lang()
-      local root_suffix = ""
 
-      if not highlights_active(buf) then
-        root_suffix = " (highlights disabled)"
-      elseif not has_highlight_queries(root_lang) then
-        root_suffix = " (no highlights)"
-      end
-      local tree_prefix = "  Treesitter:  "
-      table.insert(lines, string.format("%s%s%s", tree_prefix, root_lang, root_suffix))
-      local child_prefix = string.rep(" ", #tree_prefix)
-      add_parser_tree(lines, parser, child_prefix)
-      for _, lang in ipairs(missing_parsers(parser, buf)) do
-        table.insert(lines, string.format("%s! %s (not installed)", child_prefix, lang))
+    local ts_lines = get_treesitter_display(buf)
+
+    if ts_lines then
+      for _, line in ipairs(ts_lines) do
+        table.insert(lines, line)
       end
     else
       table.insert(lines, string.format("  Treesitter:  none"))
