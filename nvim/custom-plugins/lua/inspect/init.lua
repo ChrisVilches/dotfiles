@@ -117,14 +117,11 @@ function M.treesitter_ok(buf)
     return false
   end
   parser:parse(true)
-  if not has_highlight_queries(parser:lang()) then
-    return false
-  end
   local function traverse(p)
-    for lang, child in pairs(p:children()) do
-      if not has_highlight_queries(lang) then
-        return false
-      end
+    if not has_highlight_queries(p:lang()) then
+      return false
+    end
+    for _, child in pairs(p:children()) do
       if not traverse(child) then
         return false
       end
