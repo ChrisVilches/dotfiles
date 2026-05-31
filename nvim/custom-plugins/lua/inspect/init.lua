@@ -161,6 +161,30 @@ local function get_treesitter_display(buf)
   return lines
 end
 
+local function highlight_buffer_display(bufnr)
+  local ns = vim.api.nvim_create_namespace("buffer_inspector")
+
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+  for lnum, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+    -- Highlight from start of line through first ':'
+    local colon = line:find(":", 1, true)
+    if colon then
+      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, 0, {
+        end_col = colon, -- includes the colon
+        hl_group = "Title",
+      })
+    end
+
+    -- Highlight entire line if it starts with "Buffer"
+    if vim.startswith(line, "Buffer") then
+      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, 0, {
+        line_hl_group = "Visual",
+      })
+    end
+  end
+end
+
 function M.inspect()
   local current = vim.api.nvim_get_current_buf()
   local lines = {}
@@ -218,6 +242,8 @@ function M.inspect()
     title = " Buffer Inspector ",
     title_pos = "center",
   })
+
+  highlight_buffer_display(bufnr)
 
   for _, k in pairs({ "q", "<esc>" }) do
     vim.keymap.set("n", k, "<cmd>close<cr>", { buffer = bufnr, silent = true, nowait = true })
