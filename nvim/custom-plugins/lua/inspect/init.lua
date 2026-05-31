@@ -138,13 +138,8 @@ function M.treesitter_ok(buf)
     return false
   end
   parser:parse(true)
-  if not all_parsers_have_highlights(parser) then
-    return false
-  end
-  if #missing_parsers(parser, buf) > 0 then
-    return false
-  end
-  return true
+
+  return all_parsers_have_highlights(parser) and #missing_parsers(parser, buf) == 0
 end
 
 local function get_treesitter_display(buf)
