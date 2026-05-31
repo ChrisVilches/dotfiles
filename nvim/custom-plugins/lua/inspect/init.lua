@@ -184,14 +184,8 @@ function M.inspect()
     table.insert(lines, string.format("  Indent:      %s", indentexpr ~= "" and indentexpr or "none"))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
 
-    local ts_lines = get_treesitter_display(buf)
-
-    if ts_lines then
-      for _, line in ipairs(ts_lines) do
-        table.insert(lines, line)
-      end
-    else
-      table.insert(lines, string.format("  Treesitter:  none"))
+    for _, line in ipairs(get_treesitter_display(buf) or { "  Treesitter:  none" }) do
+      table.insert(lines, line)
     end
 
     table.insert(lines, "")
