@@ -37,6 +37,14 @@ local function get_treesitter_warning()
   return cached
 end
 
+local lint_progress = function()
+  local linters = require("lint").get_running()
+  if #linters == 0 then
+    return ""
+  end
+  return "󱉶 " .. table.concat(linters, ", ")
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   lazy = false,
@@ -83,6 +91,7 @@ return {
             return res
           end,
           get_treesitter_warning,
+          lint_progress,
         },
       },
     }

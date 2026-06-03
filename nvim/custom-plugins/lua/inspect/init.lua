@@ -21,7 +21,7 @@ local function lsp_status(buf)
 end
 
 local function nvim_lint_plugin_status(buf)
-  local linters = require('lint').get_running(buf)
+  local linters = require("lint").linters_by_ft[vim.bo[buf].filetype] or {}
   local result = {}
   for _, linter in ipairs(linters) do
     table.insert(result, linter)
@@ -219,9 +219,6 @@ function M.inspect()
     table.insert(lines, string.format("  Indent:      %s", indentexpr))
     table.insert(lines, string.format("  LSP:         %s", lsp_status(buf)))
     table.insert(lines, string.format("  nvim-lint:   %s", nvim_lint_plugin_status(buf)))
-
-    -- TODO: shellcheck should work in zsh (it doesn't now)
-    -- TODO: with rubocop, it disappears after a few seconds
 
     for _, line in ipairs(get_treesitter_display(buf) or { "  Treesitter:" }) do
       table.insert(lines, line)

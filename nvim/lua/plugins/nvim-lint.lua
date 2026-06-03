@@ -7,10 +7,9 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   config = function()
     require("lint").linters_by_ft = {
-      ruby = { "rubocop" },
-      kotlin = { "ktlint" },
       go = { "revive" },
       zsh = { "shellcheck" },
+      bash = { "shellcheck" },
     }
 
     vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
