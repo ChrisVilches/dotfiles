@@ -51,9 +51,9 @@ require("lazy").setup {
 require "options"
 require "autocmds"
 require "commands"
-require "mappings/editing"
-require "mappings/misc"
-require "mappings/navigation"
+require "mappings.editing"
+require "mappings.misc"
+require "mappings.navigation"
 require "mappings.pickers"
 
 -- This is mainly to ensure Language Server Protocol (LSP) features,
