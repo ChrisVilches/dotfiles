@@ -119,7 +119,7 @@ pacman -Ss ripgrep # search in all repos
 
 pacman -Qtd # orphaned dependencies (safe to review/remove)
 
-sudo pacman -Rns "$(pacman -Qdtq)" # Remove orphans
+sudo pacman -Rns $(pacman -Qdtq) # Remove orphans
 
 pactree neovim     # dependency tree
 pactree -r openssl # reverse deps (who needs it?)
