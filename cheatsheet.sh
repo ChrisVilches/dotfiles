@@ -149,4 +149,6 @@ tmux kill-session -t 1234 # tmux kill a session
 
 journalctl -xef # see and follow syslogs
 
+setxkbmap jp # switch keyboard layout to Japanese
+
 _dir="$(dirs -p | fzf --no-multi | sed "s|^~|$HOME|")" && cd "$_dir" # recent directory menu (quick list for recent folders/directories)
