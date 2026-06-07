@@ -152,5 +152,7 @@ journalctl -xef # see and follow syslogs
 setxkbmap jp # switch keyboard layout to Japanese
 ldd --version # show glibc version
 sudo pacman -Scc # clear pacman package cache
+du -sh ~/.cache/yay # check yay cache size
+yay -Scc # clear yay/AUR package cache
 
 _dir="$(dirs -p | fzf --no-multi | sed "s|^~|$HOME|")" && cd "$_dir" # recent directory menu (quick list for recent folders/directories)
