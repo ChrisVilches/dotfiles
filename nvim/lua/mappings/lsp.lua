@@ -16,7 +16,7 @@ return function(bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "List workspace folders")
 
-  map("n", "<leader>ds", function()
+  map("n", "<leader>dq", function()
     vim.diagnostic.setqflist { open = true }
   end, opts "Show diagnostics")
 

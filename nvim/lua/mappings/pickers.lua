@@ -7,6 +7,8 @@ local picker = require "snacks.picker"
 map("gs", picker.git_status, "git status")
 map("flb", picker.lsp_symbols, "see buffer LSP symbols")
 map("flw", picker.lsp_workspace_symbols, "see workspace LSP symbols")
+map("ds", picker.diagnostics, "Diagnostics")
+map("dS", picker.diagnostics_buffer, "Buffer Diagnostics")
 map("fh", picker.help, "help page")
 map("re", picker.registers, "see registers")
 map("<tab>", picker.buffers, "show current buffers")
