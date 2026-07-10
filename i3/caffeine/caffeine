@@ -11,6 +11,11 @@
 # The actual "keep awake" work: jiggles the cursor one pixel back and forth
 # forever. Kept isolated so its logic can be swapped without touching the block.
 blocking_process(){
+  if ! command -v xdotool >/dev/null 2>&1; then
+    echo "Error: xdotool is not installed or not in PATH." >&2
+    return 1
+  fi
+
   while true; do
     xdotool mousemove_relative -- -1 0
     sleep 2
@@ -51,11 +56,14 @@ stop_blocking() {
   fi
 }
 
-# If the worker wrote anything to stderr, record the first line as the error.
+# If the worker wrote anything to stderr, record the first line as the error
+# and immediately reap it: a failing worker is useless, and killing it now
+# clears bp_pid so later stop_blocking calls can't signal a stale/reused PID.
 # Only sets error_msg once so the original failure is preserved.
 check_error() {
   if [ -z "$error_msg" ] && [ -s "$err_file" ]; then
     error_msg="Caffeine error: $(head -n1 "$err_file")"
+    stop_blocking
   fi
 }
 
@@ -81,11 +89,19 @@ display() {
 }
 
 # Enable caffeine: start the timer, spawn the worker, clear any stale error.
+# The worker runs asynchronously, so briefly poll before the first render to
+# let a fast failure (e.g. missing xdotool) surface immediately instead of only
+# after the loop's 5s refresh. Stops as soon as the worker errors or exits.
 activate() {
   active=true
   start_time=$(date +%s)
   error_msg=""
   start_blocking
+  for _ in $(seq 1 10); do
+    [ -s "$err_file" ] && break
+    kill -0 "$bp_pid" 2>/dev/null || break
+    sleep 0.02
+  done
   display
 }
 
@@ -117,14 +133,19 @@ handle_click() {
 display
 
 # Main loop. While active, use a 5s read timeout so the elapsed timer refreshes
-# even without clicks; a timed-out read redraws the display. While inactive,
-# block indefinitely for a click, and exit cleanly if stdin closes.
+# even without clicks. read's exit code distinguishes the cases: 0 = a click,
+# >128 = timeout (redraw), anything else = EOF/closed stdin (exit). While
+# inactive, block indefinitely for a click and exit cleanly on EOF.
 while true; do
   if $active; then
-    if read -r -t 5 btn; then
+    read -r -t 5 btn
+    rc=$?
+    if [ "$rc" -eq 0 ]; then
       handle_click "$btn"
-    else
+    elif [ "$rc" -gt 128 ]; then
       display
+    else
+      break
     fi
   else
     if read -r btn; then
