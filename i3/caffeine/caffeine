@@ -10,7 +10,7 @@
 
 # The actual "keep awake" work: jiggles the cursor one pixel back and forth
 # forever. Kept isolated so its logic can be swapped without touching the block.
-blocking_process(){
+blocking_process() {
   if ! command -v xdotool >/dev/null 2>&1; then
     echo "Error: xdotool is not installed or not in PATH." >&2
     return 1
@@ -25,11 +25,11 @@ blocking_process(){
 }
 
 # --- Global state -----------------------------------------------------------
-active=false                          # whether caffeine is currently on
-start_time=0                          # epoch seconds when it was turned on
-bp_pid=""                             # PID of the running blocking_process
-error_msg=""                          # non-empty => blocking_process failed
-err_file="$(mktemp -t caffeine.XXXXXX)"  # captures blocking_process stderr
+active=false                            # whether caffeine is currently on
+start_time=0                            # epoch seconds when it was turned on
+bp_pid=""                               # PID of the running blocking_process
+error_msg=""                            # non-empty => blocking_process failed
+err_file="$(mktemp -t caffeine.XXXXXX)" # captures blocking_process stderr
 
 # Kill the worker and remove the temp file on any exit so we leave no orphans.
 cleanup() {
@@ -42,8 +42,8 @@ trap cleanup EXIT TERM INT
 # single group kill later reaps it and all its children (the sleeps). Its stderr
 # goes to err_file so failures (e.g. xdotool missing) can be detected.
 start_blocking() {
-  : > "$err_file"
-  setsid bash -c "$(declare -f blocking_process); blocking_process" 2> "$err_file" &
+  : >"$err_file"
+  setsid bash -c "$(declare -f blocking_process); blocking_process" 2>"$err_file" &
   bp_pid=$!
 }
 
@@ -69,7 +69,7 @@ check_error() {
 
 # Turn elapsed active time into an HH:MM:SS string.
 format_elapsed() {
-  local secs=$(( $(date +%s) - start_time ))
+  local secs=$(($(date +%s) - start_time))
   printf '%02d:%02d:%02d' $((secs / 3600)) $(((secs % 3600) / 60)) $((secs % 60))
 }
 
@@ -89,19 +89,15 @@ display() {
 }
 
 # Enable caffeine: start the timer, spawn the worker, clear any stale error.
-# The worker runs asynchronously, so briefly poll before the first render to
-# let a fast failure (e.g. missing xdotool) surface immediately instead of only
-# after the loop's 5s refresh. Stops as soon as the worker errors or exits.
+# The worker runs asynchronously, so pause briefly before the first render to
+# give a fast failure (e.g. missing xdotool) time to write its error, which
+# display picks up via check_error. Otherwise it'd only show on the 5s refresh.
 activate() {
   active=true
   start_time=$(date +%s)
   error_msg=""
   start_blocking
-  for _ in $(seq 1 10); do
-    [ -s "$err_file" ] && break
-    kill -0 "$bp_pid" 2>/dev/null || break
-    sleep 0.02
-  done
+  sleep 0.05
   display
 }
 
@@ -125,7 +121,7 @@ toggle() {
 # Map a mouse button number to an action; only left click toggles.
 handle_click() {
   case $1 in
-    1) toggle ;;
+  1) toggle ;;
   esac
 }
 
