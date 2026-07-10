@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# TODO: Needs to be tested a bit more.
+# TODO: Test the error logic.
+
+# i3blocks "persist" block that inhibits idle/hibernation by nudging the mouse.
+# It prints a status line to stdout on every state change and reads mouse click
+# button numbers (one per line) from stdin. Mouse button mapping:
+#   1 = Left, 2 = Middle, 3 = Right, 4 = WheelUp, 5 = WheelDown
+
+# The actual "keep awake" work: jiggles the cursor one pixel back and forth
+# forever. Kept isolated so its logic can be swapped without touching the block.
+blocking_process(){
+  while true; do
+    xdotool mousemove_relative -- -1 0
+    sleep 2
+    xdotool mousemove_relative -- 1 0
+    sleep 2
+  done
+}
+
+# --- Global state -----------------------------------------------------------
+active=false                          # whether caffeine is currently on
+start_time=0                          # epoch seconds when it was turned on
+bp_pid=""                             # PID of the running blocking_process
+error_msg=""                          # non-empty => blocking_process failed
+err_file="$(mktemp -t caffeine.XXXXXX)"  # captures blocking_process stderr
+
+# Kill the worker and remove the temp file on any exit so we leave no orphans.
+cleanup() {
+  stop_blocking
+  rm -f "$err_file"
+}
+trap cleanup EXIT TERM INT
+
+# Launch blocking_process in its own session (setsid => new process group) so a
+# single group kill later reaps it and all its children (the sleeps). Its stderr
+# goes to err_file so failures (e.g. xdotool missing) can be detected.
+start_blocking() {
+  : > "$err_file"
+  setsid bash -c "$(declare -f blocking_process); blocking_process" 2> "$err_file" &
+  bp_pid=$!
+}
+
+# Terminate the worker's whole process group; fall back to the bare PID if the
+# negative-PID group kill isn't applicable.
+stop_blocking() {
+  if [ -n "$bp_pid" ]; then
+    kill -TERM -"$bp_pid" 2>/dev/null || kill -TERM "$bp_pid" 2>/dev/null
+    bp_pid=""
+  fi
+}
+
+# If the worker wrote anything to stderr, record the first line as the error.
+# Only sets error_msg once so the original failure is preserved.
+check_error() {
+  if [ -z "$error_msg" ] && [ -s "$err_file" ]; then
+    error_msg="Caffeine error: $(head -n1 "$err_file")"
+  fi
+}
+
+# Turn elapsed active time into an HH:MM:SS string.
+format_elapsed() {
+  local secs=$(( $(date +%s) - start_time ))
+  printf '%02d:%02d:%02d' $((secs / 3600)) $(((secs % 3600) / 60)) $((secs % 60))
+}
+
+# Emit one i3blocks status line for the current state: an error (red) or the
+# elapsed timer when active, otherwise the inactive label.
+display() {
+  if $active; then
+    check_error
+    if [ -n "$error_msg" ]; then
+      echo "<span color=\"#ff0000\">$error_msg</span>"
+    else
+      echo "☕ Caffeine $(format_elapsed)"
+    fi
+  else
+    echo "Caffeine Inactive"
+  fi
+}
+
+# Enable caffeine: start the timer, spawn the worker, clear any stale error.
+activate() {
+  active=true
+  start_time=$(date +%s)
+  error_msg=""
+  start_blocking
+  display
+}
+
+# Disable caffeine: stop the worker and clear the error state.
+deactivate() {
+  active=false
+  stop_blocking
+  error_msg=""
+  display
+}
+
+# Flip between active and inactive.
+toggle() {
+  if $active; then
+    deactivate
+  else
+    activate
+  fi
+}
+
+# Map a mouse button number to an action; only left click toggles.
+handle_click() {
+  case $1 in
+    1) toggle ;;
+  esac
+}
+
+# Print the initial state before entering the event loop.
+display
+
+# Main loop. While active, use a 5s read timeout so the elapsed timer refreshes
+# even without clicks; a timed-out read redraws the display. While inactive,
+# block indefinitely for a click, and exit cleanly if stdin closes.
+while true; do
+  if $active; then
+    if read -r -t 5 btn; then
+      handle_click "$btn"
+    else
+      display
+    fi
+  else
+    if read -r btn; then
+      handle_click "$btn"
+    else
+      break
+    fi
+  fi
+done
