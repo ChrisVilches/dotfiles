@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# TODO: Needs to be tested a bit more.
-# TODO: Test the error logic.
-# TODO: Verify there are no busy pollings.
-
 # i3blocks "persist" block that inhibits idle/hibernation by nudging the mouse.
 # It prints a status line to stdout on every state change and reads mouse click
 # button numbers (one per line) from stdin. Mouse button mapping:
