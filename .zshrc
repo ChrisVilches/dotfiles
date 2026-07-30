@@ -127,7 +127,7 @@ setopt nobanghist
 # Display hidden files in the file completion selection menu. Use fzf-tab to quickly locate files.
 setopt GLOB_DOTS
 
-eval "$(fnm env --use-on-cd)"
+# eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
@@ -141,6 +141,7 @@ ZSHRC_DIR="${${(%):-%x}:A:h}"
 if [[ $- == *i* ]]; then
     source "$ZSHRC_DIR/zle-widgets-fzf.zsh"
     source "$ZSHRC_DIR/zle-widgets.zsh"
+    source "$ZSHRC_DIR/zsh-extra.zsh"
 fi
 
 PATH=$ZSHRC_DIR/scripts:$PATH
