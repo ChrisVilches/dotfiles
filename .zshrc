@@ -129,6 +129,7 @@ setopt GLOB_DOTS
 
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
+eval "$(fnm env --shell zsh)"
 
 # Make it the same as in bash
 # (kill-line is ^K by default)
