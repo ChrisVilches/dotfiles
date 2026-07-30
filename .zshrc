@@ -127,7 +127,6 @@ setopt nobanghist
 # Display hidden files in the file completion selection menu. Use fzf-tab to quickly locate files.
 setopt GLOB_DOTS
 
-# eval "$(fnm env --use-on-cd)"
 eval "$(rbenv init - zsh)"
 eval "$(zoxide init zsh)"
 
