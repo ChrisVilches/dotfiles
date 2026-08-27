@@ -5,7 +5,7 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel)
 repo_name=$(basename "$repo_root")
 timestamp=$(date +%Y-%m-%d-%H%M%S)
-hostname=$(hostname)
+hostname=$(hostnamectl hostname 2>/dev/null || hostname)
 archive_name="${repo_name}-${timestamp}-${hostname}.tar.gz"
 archive_path="/tmp/${archive_name}"
 
