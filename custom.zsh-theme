@@ -12,9 +12,11 @@ export ZSH_THEME_GIT_PROMPT_SUFFIX="%k%f"
 export ZSH_THEME_GIT_PROMPT_DIRTY=" %F{yellow}✗%f"
 export ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-ret_status="%(?:: %K{black}%F{red}%?)%k%f"
+ret_status="%(?:: %K{black}%F{red}%?%k%f)"
 # Add this for vim support \$(vi_mode_prompt_info)
 export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status
 "
 
 export PROMPT2="%B%F{yellow}%_> %k%f%b"
+
+export RPROMPT=$'%{\e[1A%}%F{black}%D{%H:%M:%S}%f%{\e[1B%}'
