@@ -12,11 +12,15 @@ export ZSH_THEME_GIT_PROMPT_SUFFIX="%k%f"
 export ZSH_THEME_GIT_PROMPT_DIRTY=" %F{yellow}✗%f"
 export ZSH_THEME_GIT_PROMPT_CLEAN=""
 
+# NOTE: When splitting a pane, the time may be re-rendered in a prompt that has
+# already been rendered. As a result, the displayed time may not be accurate in
+# all cases. I believe this only occurs when splitting panes and does not
+# happen under any other circumstances.
+
 ret_status="%(?:: %K{black}%F{red}%?%k%f)"
+time=$'%F{black}%D{%H:%M:%S}%f'
 # Add this for vim support \$(vi_mode_prompt_info)
-export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status
+export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status $time
 "
 
 export PROMPT2="%B%F{yellow}%_> %k%f%b"
-
-export RPROMPT=$'%{\e[1A%}%F{black}%D{%H:%M:%S}%f%{\e[1B%}'
