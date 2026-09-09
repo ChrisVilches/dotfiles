@@ -38,12 +38,6 @@ local function load_theme()
   vim.cmd.colorscheme(theme)
 end
 
-local function get_file_arglist()
-  local list = vim.fn.argv()
-  ---@cast list string[]
-  return list
-end
-
 -- Opens a list of file arguments in Neovim, editing the first and adding the rest to the buffer list.
 local function handle_file_arglist(file_arglist)
   for i, file in ipairs(file_arglist) do
@@ -57,7 +51,7 @@ end
 
 local function load_session()
   -- Save the argument list Neovim was opened with before the session file changes it when it's sourced.
-  local original_file_arglist = get_file_arglist()
+  local original_file_arglist = vim.fn.argv()
 
   vim.cmd("silent! source " .. vim.fn.fnameescape(session_path()))
 
