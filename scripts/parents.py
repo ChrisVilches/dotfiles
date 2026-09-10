@@ -69,9 +69,10 @@ def print_tree(processes, nodes, needle, pid, prefix="", connector=""):
                 prefix - indentation for the node's children,
                 connector - connector drawn before the node itself"""
     # This script always matches itself, since the needle is in its own args.
-    label = f" {DIM}(self){RESET}" if pid == os.getpid() else ""
+    is_self = pid == os.getpid()
+    head = f"{DIM}{pid} (self){RESET}" if is_self else str(pid)
 
-    print(f"{prefix}{connector}{pid}{label} -> "
+    print(f"{prefix}{connector}{head} "
           f"{highlight(processes[pid][1], needle)}")
 
     children = sorted(p for p in nodes if processes[p][0] == pid and p != pid)
