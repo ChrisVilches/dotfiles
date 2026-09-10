@@ -65,6 +65,7 @@ local custom_filetypes = {
   jbuilder = "ruby",
   tpp = "cpp",
   slim = "slim",
+  cir = "spice"
 }
 
 for ext, ft in pairs(custom_filetypes) do
