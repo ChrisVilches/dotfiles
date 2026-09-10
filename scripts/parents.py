@@ -11,6 +11,7 @@ import sys
 
 # Empty when the output is not a terminal, so the codes pass through harmlessly.
 HIGHLIGHT = "\033[1;31m" if sys.stdout.isatty() else ""
+DIM = "\033[2m" if sys.stdout.isatty() else ""
 RESET = "\033[0m" if sys.stdout.isatty() else ""
 
 
@@ -67,7 +68,11 @@ def print_tree(processes, nodes, needle, pid, prefix="", connector=""):
                 needle - string that was searched for, pid - node to print,
                 prefix - indentation for the node's children,
                 connector - connector drawn before the node itself"""
-    print(f"{prefix}{connector}{pid} -> {highlight(processes[pid][1], needle)}")
+    # This script always matches itself, since the needle is in its own args.
+    label = f" {DIM}(self){RESET}" if pid == os.getpid() else ""
+
+    print(f"{prefix}{connector}{pid}{label} -> "
+          f"{highlight(processes[pid][1], needle)}")
 
     children = sorted(p for p in nodes if processes[p][0] == pid and p != pid)
 
