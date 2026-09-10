@@ -34,6 +34,14 @@ git_insert_commit() {
 zle -N git_insert_commit
 bindkey '^Xc' git_insert_commit
 
+kill-WORD() {
+    local WORDCHARS=$WORDCHARS
+    WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    zle backward-kill-word
+}
+zle -N kill-WORD
+bindkey '^[^W' kill-WORD
+
 llm_system_prompt="You are helping a user inside an interactive shell.
 
 Rules:
