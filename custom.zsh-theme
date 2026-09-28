@@ -18,9 +18,10 @@ export ZSH_THEME_GIT_PROMPT_CLEAN=""
 # happen under any other circumstances.
 
 ret_status="%(?:: %K{black}%F{red}%?%k%f)"
+job_status="%(1j: %F{yello}•%f:)"
 time=$'%F{black}%D{%H:%M:%S}%f'
 # Add this for vim support \$(vi_mode_prompt_info)
-export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status $time
+export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status $time$job_status
 "
 
 export PROMPT2="%B%F{yellow}%_> %k%f%b"
