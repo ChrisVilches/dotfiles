@@ -18,6 +18,14 @@ syntax on
 nnoremap <silent> <leader>wt :set wrap!<CR>
 nnoremap <silent> <Esc> :nohlsearch<CR><Esc>
 
+" Explorer
+nnoremap <silent> <leader>e :Ex<CR>
+autocmd FileType netrw nnoremap <buffer> <Esc> <C-^>
+nnoremap <silent> <C-l> :bnext<CR>
+nnoremap <silent> <C-h> :bprevious<CR>
+autocmd FileType netrw nnoremap <buffer> l <Plug>NetrwLocalBrowseCheck
+autocmd FileType netrw nmap <buffer> h -
+
 " Copy whole file to clipboard
 nnoremap <C-c> :%y+<CR>
 
