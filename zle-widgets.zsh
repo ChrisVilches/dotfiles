@@ -36,7 +36,7 @@ bindkey '^Xc' git_insert_commit
 
 kill-WORD() {
     local WORDCHARS=$WORDCHARS
-    WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>"'\''`\:'
     zle backward-kill-word
 }
 zle -N kill-WORD
