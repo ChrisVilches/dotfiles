@@ -1,0 +1,56 @@
+# Alacritty configuration
+# Created to add padding around the window edges, and to keep that padding
+# when the window is maximized or put into fullscreen.
+[general]
+import = [
+  # theme.toml is a symlink to a theme file from this repository:
+  # https://github.com/alacritty/alacritty-theme
+  # Create it with scripts/alacritty-theme-select.sh, which browses the themes
+  # with fzf and repoints the symlink. Without fzf, link it by hand:
+  # ln -sfn ~/.config/alacritty-theme/themes/citylights.toml theme.toml
+  # If the file is missing, it errors silently, without crashing. (Use
+  # `alacritty -v` to see the warning)
+  "theme.toml",
+
+  # Some good themes:
+  # everforest_dark_hard.toml
+  # catppuccin_macchiato.toml
+  # duskfox.toml
+  # citylights.toml
+  # github_dark_default.toml
+]
+
+[window]
+# Padding is measured in logical pixels on each side of the grid.
+# 12px gives a comfortable margin that keeps text off the screen edges.
+startup_mode = "Maximized"
+padding = { x = 0, y = 0 }
+
+# This is the important one for fullscreen. When dynamic_padding is enabled
+# (the default), Alacritty removes the padding whenever the window is
+# resized to fill the screen -- which is exactly when the text was being
+# cut off at the borders. Disabling it keeps the padding in fullscreen.
+dynamic_padding = false
+
+[keyboard]
+bindings = [
+  { key = "Plus", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+]
+
+[font.normal]
+family = "RobotoMono Nerd Font Mono"
+style = "Regular"
+
+[font.bold]
+family = "RobotoMono Nerd Font Mono"
+style = "Bold"
+
+[font.italic]
+family = "RobotoMono Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "RobotoMono Nerd Font Mono"
+style = "Bold Italic"
+
