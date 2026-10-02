@@ -1,14 +1,7 @@
-# Place it in ~/.oh-my-zsh/custom/themes/
+# Place it in ~/.oh-my-zsh/custom/themes/ and set ZSH_THEME="custom"
 
-# This is for vim mode (unused)
-# export MODE_INDICATOR="%B%K{green}%F{black}NORMAL%b%k%f"
-# export MODE_INDICATOR=""
-# export INSERT_MODE_INDICATOR="%K{red}%F{black}INSERT%k%f"
-# export INSERT_MODE_INDICATOR=""
-# export RPROMPT=""
-
-export ZSH_THEME_GIT_PROMPT_PREFIX=" %K{black}%F{green}"
-export ZSH_THEME_GIT_PROMPT_SUFFIX="%k%f"
+export ZSH_THEME_GIT_PROMPT_PREFIX=" %F{green}"
+export ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
 export ZSH_THEME_GIT_PROMPT_DIRTY=" %F{yellow}✗%f"
 export ZSH_THEME_GIT_PROMPT_CLEAN=""
 
@@ -17,11 +10,13 @@ export ZSH_THEME_GIT_PROMPT_CLEAN=""
 # all cases. I believe this only occurs when splitting panes and does not
 # happen under any other circumstances.
 
-ret_status="%(?:: %K{black}%F{red}%?%k%f)"
-job_status="%(1j: %F{yello}•%f:)"
-time=$'%F{black}%D{%H:%M:%S}%f'
+ret_status="%(?:: %F{red}%?%f)"
+job_status="%(1j: %F{yellow}•%f:)"
+time=$'%F{blue}%D{%H:%M:%S}%f'
+#   108     = time (a muted sage green: still a real color, but quiet enough
+#             that it does not compete with the rest of the prompt)
 # Add this for vim support \$(vi_mode_prompt_info)
-export PROMPT="%K{black}%F{red}%n%k%f %K{black}%F{blue}%m%k%f %K{black}%F{yellow}%~%k%f\$(git_prompt_info)$ret_status $time$job_status
+export PROMPT="%F{magenta}%n%f %F{cyan}%m%f %F{yellow}%~%f\$(git_prompt_info)$ret_status $time$job_status
 "
 
-export PROMPT2="%B%F{yellow}%_> %k%f%b"
+export PROMPT2="%B%F{yellow}%_> %f%b"
