@@ -73,7 +73,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id ghostty -e tmux; workspace 1; move container to workspace 1
+bindsym $mod+Return exec --no-startup-id alacritty -e tmux; workspace 1; move container to workspace 1
 
 # Chrome no longer allows remote debugging on the default profile. Remote
 # debugging flags are ignored unless you launch Chrome with a custom user data
