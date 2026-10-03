@@ -152,3 +152,8 @@ return M
 -- TODO: Eventually this agi integration could incorporate using previous sessions and add
 -- more user prompts to continue them. That way it gets context so it knows the context of what
 -- the user is doing. But it's a bit hard to decide how to do it.
+-- Actually the session management can be done via this Neovim plugin. No need to modify agi.
+-- We can first create a folder, such as /tmp/nvim-agi-<some_identifier>-1 (or something unique, but
+-- we'll need to think how unique... per file? per Neovim session?, etc). Then we can just call that one.
+-- We may also add another command to clear the session, and always tell the user (via statusbar message,
+-- and via the agi result window) that the current run was from a session and not a fresh run.
