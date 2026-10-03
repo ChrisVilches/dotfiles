@@ -6,6 +6,19 @@
 #
 # "Permanent" means repointing the alacritty/theme.toml symlink of this
 # repository, which alacritty.toml imports.
+#
+# Moving that symlink is the whole mechanism, the preview included. Alacritty
+# watches its configuration file and everything it imports, so every window of
+# every running Alacritty reloads a few milliseconds after the link moves. That
+# reload re-reads the configuration from scratch, which is what keeps each theme
+# from being contaminated by the previous one.
+#
+# `alacritty msg config` is the other way to repaint a running window, and it is
+# the wrong one here: its overrides stack instead of replacing each other, and
+# each one only touches the keys it actually names. A theme that leaves the
+# cursor colors undefined would keep showing the previous theme's cursor colors.
+#
+# This needs live_config_reload, which is on by default.
 
 set -u
 
@@ -21,55 +34,6 @@ THEMES_DIR_CANDIDATES=(
   "$HOME/.local/share/alacritty-theme/themes"
   "/usr/share/alacritty-theme/themes"
 )
-
-# Every running Alacritty process has its own IPC socket, and `alacritty msg`
-# only talks to one of them (the one named by $ALACRITTY_SOCKET, which is
-# inherited from whichever window started this shell and can even be stale).
-# Sending the message to every socket is what makes the live preview reach all
-# the windows on screen instead of just one. Within a single process, `-w -1`
-# covers all of its windows.
-apply_to_all_windows() {
-  local socket
-
-  for socket in "${XDG_RUNTIME_DIR:-/tmp}"/Alacritty-*.sock; do
-    # A socket file can outlive the process that created it, in which case the
-    # message fails. That is expected, so the error is discarded.
-    alacritty msg -s "$socket" config -w -1 "$@" >/dev/null 2>&1
-  done
-}
-
-# Goes back to the selected theme, which is whatever theme.toml points at.
-#
-# `alacritty msg config --reset` cannot be used for this: it drops the runtime
-# configuration and leaves the configuration file as it was last loaded, which
-# is the theme each window started with rather than the one selected since then.
-restore_selected_theme() {
-  if [ -e "$THEME_LINK" ]; then
-    apply_to_all_windows "$(cat -- "$THEME_LINK")"
-  else
-    # No theme has ever been selected, so dropping the runtime configuration is
-    # the closest thing to going back.
-    apply_to_all_windows --reset
-  fi
-}
-
-# fzf runs this script again to preview a theme, so that the loop above lives in
-# a single place. The arguments are a marker file and the theme file.
-case "${1-}" in
---apply)
-  # fzf fires its focus event once as soon as the list shows up, before any
-  # movement. Applying that theme would repaint every window just for opening
-  # the picker, so the first event only leaves the marker behind and the colors
-  # start changing once something else is focused.
-  if [ ! -e "$2" ]; then
-    : >"$2"
-    exit 0
-  fi
-
-  apply_to_all_windows "$(cat -- "$3")"
-  exit 0
-  ;;
-esac
 
 THEMES_DIR=""
 
@@ -93,48 +57,74 @@ if [ -z "$THEMES_DIR" ]; then
   exit 1
 fi
 
-MARKER_DIR=$(mktemp -d)
-trap 'rm -rf -- "$MARKER_DIR"' EXIT
-MARKER="$MARKER_DIR/first-focus-seen"
+# Previewing moves the symlink, so wherever it pointed when the script started
+# is what leaving without choosing goes back to. Empty means no theme had been
+# selected yet.
+ORIGINAL_THEME=""
+
+if [ -e "$THEME_LINK" ]; then
+  ORIGINAL_THEME=$(readlink -f -- "$THEME_LINK")
+fi
+
+restore_original_theme() {
+  if [ -n "$ORIGINAL_THEME" ]; then
+    ln -sfn -- "$ORIGINAL_THEME" "$THEME_LINK"
+  else
+    # There was no theme to go back to, so the symlink should not exist at all.
+    # alacritty.toml imports it either way, and a missing import is ignored.
+    rm -f -- "$THEME_LINK"
+  fi
+}
+
+# This covers ESC, Ctrl-C and anything else that ends the script before a theme
+# has been chosen. It is dropped once a choice is made.
+trap restore_original_theme EXIT
 
 # fzf already quotes whatever replaces {}, so only the directory part is quoted
 # here.
 preview_command="cat \"$THEMES_DIR\"/{}"
-apply_command="\"$SCRIPT_PATH\" --apply \"$MARKER\" \"$THEMES_DIR\"/{}"
+apply_command="ln -sfn -- \"$THEMES_DIR\"/{} \"$THEME_LINK\""
 
 THEMES=$(find "$THEMES_DIR" -maxdepth 1 -type f -printf '%P\n')
 
 FZF_OPTIONS=(
   --preview "$preview_command"
+  # fzf fires a focus event on the first line as soon as the list shows up,
+  # before `load` has had the chance to jump to the theme that is already
+  # selected. Previewing that line would repaint every window just for opening
+  # the picker, so previewing only starts once the jump is done.
+  --bind "start:unbind(focus)"
   --bind "focus:execute-silent($apply_command)"
 )
 
-# Open the list on the theme that is currently selected, which is whatever
-# theme.toml points at. `pos` counts from 1 in the order the lines were fed to
-# fzf. If the selected theme is not in this folder (or nothing is selected yet),
-# the list just opens where fzf would open it anyway.
+# Open the list on the theme that is currently selected. `pos` counts from 1 in
+# the order the lines were fed to fzf. If the selected theme is not in this
+# folder (or nothing is selected yet), the list just opens where fzf would open
+# it anyway.
 #
 # This has to happen on the `load` event rather than on `start`, because `start`
 # runs before fzf has finished reading the list, and jumping to a position that
 # has not been read yet lands on whatever the last line read so far happens to
 # be. `load` runs once the whole list is in.
-if [ -e "$THEME_LINK" ]; then
-  CURRENT_THEME=$(basename -- "$(readlink -f -- "$THEME_LINK")")
+LOAD_ACTIONS="rebind(focus)"
+
+if [ -n "$ORIGINAL_THEME" ]; then
+  CURRENT_THEME=$(basename -- "$ORIGINAL_THEME")
   CURRENT_POSITION=$(printf '%s\n' "$THEMES" | grep -n -x -F -- "$CURRENT_THEME" | cut -d: -f1)
 
   if [ -n "$CURRENT_POSITION" ]; then
-    FZF_OPTIONS+=(--bind "load:pos($CURRENT_POSITION)")
+    LOAD_ACTIONS="pos($CURRENT_POSITION)+$LOAD_ACTIONS"
   fi
 fi
 
+FZF_OPTIONS+=(--bind "load:$LOAD_ACTIONS")
+
 if SELECTED=$(printf '%s\n' "$THEMES" | fzf "${FZF_OPTIONS[@]}"); then
 
+  # Previewing has already pointed the symlink here, except when the accepted
+  # theme was never focused, so this is what covers that case.
   ln -sfn -- "$THEMES_DIR/$SELECTED" "$THEME_LINK"
-
-  # Alacritty does not notice that a symlink now points somewhere else, so the
-  # open windows are told about the theme explicitly. This also covers accepting
-  # the theme that was focused first, which was never previewed.
-  restore_selected_theme
+  trap - EXIT
 
   echo "Theme selected: ${SELECTED}"
   echo
@@ -145,7 +135,6 @@ if SELECTED=$(printf '%s\n' "$THEMES" | fzf "${FZF_OPTIONS[@]}"); then
   echo
   echo "  alacritty.toml imports theme.toml, so whatever that symlink points at"
   echo "  is the current theme. Run this script again to point it somewhere else."
-else
-  # Nothing is printed here: seeing the colors go back is feedback enough.
-  restore_selected_theme
 fi
+# Nothing is printed when no theme is chosen: the EXIT trap puts the previous
+# one back, and seeing the colors go back is feedback enough.
