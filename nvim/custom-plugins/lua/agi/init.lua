@@ -12,9 +12,24 @@
 
 local M = {}
 
+-- Where this very file is. Lua marks a chunk loaded from a file with a source
+-- of "@" and the path it was loaded from, which is the one place that knows
+-- where the plugin ended up without anything having to agree on it beforehand:
+-- no directory named twice, nothing to keep in step when the plugin is moved,
+-- and no search of the runtimepath that a second copy of the plugin could win.
+-- It is made absolute here and not where it is used, because the path a chunk
+-- was loaded from can be relative to the working directory, and the working
+-- directory is the user's to change at any moment.
+local here = vim.fs.dirname(vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":p"))
+
 M.config = {
   -- Name or full path of the agi executable. A bare name is looked up in PATH.
   executable = "agi",
+
+  -- The system prompt agi runs on instead of its own generic one. It is part
+  -- of the plugin rather than something the user supplies, so it is kept
+  -- beside the code and found from there.
+  system_prompt = vim.fs.joinpath(here, "system-prompt.md"),
 }
 
 local function location_description(line1, line2)
@@ -63,7 +78,12 @@ end
 local function start(executable, path, line1, line2, task)
   status "agi: running..."
 
-  local command = { executable, build_prompt(path, line1, line2, task) }
+  local command = {
+    executable,
+    "--sys",
+    M.config.system_prompt,
+    build_prompt(path, line1, line2, task),
+  }
 
   vim.system(command, { text = true }, vim.schedule_wrap(function(result)
     status ""
