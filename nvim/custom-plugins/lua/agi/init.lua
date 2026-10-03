@@ -148,3 +148,7 @@ function M.run(opts)
 end
 
 return M
+
+-- TODO: Eventually this agi integration could incorporate using previous sessions and add
+-- more user prompts to continue them. That way it gets context so it knows the context of what
+-- the user is doing. But it's a bit hard to decide how to do it.
