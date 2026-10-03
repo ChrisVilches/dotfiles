@@ -30,6 +30,7 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
+    "nvim-lua/plenary.nvim",
     { "antosha417/nvim-lsp-file-operations", config = true },
     "williamboman/mason-lspconfig.nvim",
   },
@@ -38,7 +39,7 @@ return {
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
-        require "mappings.lsp"(args.buf)
+        require "mappings.lsp" (args.buf)
       end,
     })
 
