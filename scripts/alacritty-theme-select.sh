@@ -7,11 +7,10 @@
 # "Permanent" means repointing the alacritty/theme.toml symlink of this
 # repository, which alacritty.toml imports.
 #
-# Moving that symlink is the whole mechanism, the preview included. Alacritty
-# watches its configuration file and everything it imports, so every window of
-# every running Alacritty reloads a few milliseconds after the link moves. That
-# reload re-reads the configuration from scratch, which is what keeps each theme
-# from being contaminated by the previous one.
+# Moving that symlink is the whole mechanism, the preview included: Alacritty
+# reloads its configuration when the files it watches change, and that reload
+# re-reads everything from scratch, which is what keeps each theme from being
+# contaminated by the previous one.
 #
 # `alacritty msg config` is the other way to repaint a running window, and it is
 # the wrong one here: its overrides stack instead of replacing each other, and
@@ -25,6 +24,32 @@ set -u
 SCRIPT_PATH=$(readlink -f -- "$0")
 REPO_DIR=$(dirname -- "$(dirname -- "$SCRIPT_PATH")")
 THEME_LINK="$REPO_DIR/alacritty/theme.toml"
+CONFIG_FILE="$REPO_DIR/alacritty/alacritty.toml"
+
+# Points theme.toml at a theme file and makes the running windows notice.
+#
+# Moving the symlink is not enough on its own. Alacritty checks every filesystem
+# event against the exact paths it loaded the configuration from, and it knows
+# this symlink as ~/.config/alacritty/theme.toml, while the event arrives
+# spelled with this repository's path, because ~/.config/alacritty is a symlink
+# to it. The two spellings do not match, so the event is dropped. The main
+# configuration file is tracked by its resolved path, which does match, so
+# touching it is what triggers the reload -- and that reload follows the symlink
+# and picks up the theme.
+apply_theme() {
+  ln -sfn -- "$1" "$THEME_LINK"
+  touch -- "$CONFIG_FILE"
+}
+
+# fzf previews a theme by running this script again, so that the line above
+# stays the only place that knows how to apply one. This has to come before the
+# EXIT trap below, which a preview must not inherit.
+case "${1-}" in
+--apply)
+  apply_theme "$2"
+  exit 0
+  ;;
+esac
 
 # Where the "themes" folder of https://github.com/alacritty/alacritty-theme may
 # have been cloned to. The first one that exists wins.
@@ -68,11 +93,12 @@ fi
 
 restore_original_theme() {
   if [ -n "$ORIGINAL_THEME" ]; then
-    ln -sfn -- "$ORIGINAL_THEME" "$THEME_LINK"
+    apply_theme "$ORIGINAL_THEME"
   else
     # There was no theme to go back to, so the symlink should not exist at all.
     # alacritty.toml imports it either way, and a missing import is ignored.
     rm -f -- "$THEME_LINK"
+    touch -- "$CONFIG_FILE"
   fi
 }
 
@@ -83,7 +109,7 @@ trap restore_original_theme EXIT
 # fzf already quotes whatever replaces {}, so only the directory part is quoted
 # here.
 preview_command="cat \"$THEMES_DIR\"/{}"
-apply_command="ln -sfn -- \"$THEMES_DIR\"/{} \"$THEME_LINK\""
+apply_command="\"$SCRIPT_PATH\" --apply \"$THEMES_DIR\"/{}"
 
 THEMES=$(find "$THEMES_DIR" -maxdepth 1 -type f -printf '%P\n')
 
@@ -95,6 +121,11 @@ FZF_OPTIONS=(
   # the picker, so previewing only starts once the jump is done.
   --bind "start:unbind(focus)"
   --bind "focus:execute-silent($apply_command)"
+  # Typing narrows the list without moving the cursor, so the cursor can end up
+  # past the last match, and then there is nothing to accept: ENTER would close
+  # the picker having selected nothing. Going back to the first match on every
+  # keystroke keeps the cursor on something real.
+  --bind "change:first"
 )
 
 # Open the list on the theme that is currently selected. `pos` counts from 1 in
@@ -123,7 +154,7 @@ if SELECTED=$(printf '%s\n' "$THEMES" | fzf "${FZF_OPTIONS[@]}"); then
 
   # Previewing has already pointed the symlink here, except when the accepted
   # theme was never focused, so this is what covers that case.
-  ln -sfn -- "$THEMES_DIR/$SELECTED" "$THEME_LINK"
+  apply_theme "$THEMES_DIR/$SELECTED"
   trap - EXIT
 
   echo "Theme selected: ${SELECTED}"
