@@ -10,10 +10,12 @@ map("n", "<leader>q", "<cmd>:q<CR>", { desc = "quit the current window", noremap
 map("n", "<leader>Q", "<cmd>:qa<CR>", { desc = "quit all windows", noremap = true, silent = true })
 
 map("n", "<leader>e", function()
-  require "snacks.explorer"()
+  require "snacks.explorer" ()
 end, { desc = "File explorer" })
 
 map("n", "<leader>I", require("inspect").inspect, { desc = "Buffer Inspector" })
+map("n", "<leader>agi", "<cmd>Agi<CR>", { desc = "agi agent (current line)" })
+map("x", "<leader>agi", ":Agi<CR>", { desc = "agi agent (selected lines)", silent = true })
 
 -- Hover
 -- Fixes inconsistent hover behavior in some LSPs (e.g., Golang opens a window
