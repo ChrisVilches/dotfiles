@@ -101,13 +101,40 @@ local function location_description(line1, line2)
   return string.format("The user selected lines %d to %d.", line1, line2)
 end
 
-local function build_prompt(path, line1, line2, task)
-  return table.concat({
-    string.format("You will act on this file: %s.", path),
-    location_description(line1, line2),
-    "The task may span other lines: these line numbers are only an approximation of where the user wants to work on.",
-    string.format("The task the user defined is: %s", task),
-  }, " ")
+-- What the editor already knows about the file, told to the agent so that it
+-- does not have to work it out from the path or the contents. It is named as a
+-- Neovim filetype rather than as a language because that is what it is: the
+-- names are Neovim's own ("cpp", "sh"), and calling them languages would invite
+-- the agent to read them as something they only sometimes resemble. A buffer
+-- with no filetype has nothing to say here, and says nothing rather than
+-- claiming the file is of an unknown kind.
+local function metadata_description(filetype)
+  if filetype == "" then
+    return nil
+  end
+  return string.format("Its Neovim filetype is: %s.", filetype)
+end
+
+-- The sentences are added one at a time rather than written out as one table,
+-- because a sentence that is sometimes absent would leave a hole in the middle
+-- of a table written that way, and a table with a hole in it has no length
+-- anything can agree on.
+local function build_prompt(path, filetype, line1, line2, task)
+  local parts = { string.format("You will act on this file: %s.", path) }
+
+  local metadata = metadata_description(filetype)
+  if metadata then
+    table.insert(parts, metadata)
+  end
+
+  table.insert(parts, location_description(line1, line2))
+  table.insert(
+    parts,
+    "The task may span other lines: these line numbers are only an approximation of where the user wants to work on."
+  )
+  table.insert(parts, string.format("The task the user defined is: %s", task))
+
+  return table.concat(parts, " ")
 end
 
 -- Where a run's answer is kept. The answers of a conversation live together in
@@ -194,7 +221,7 @@ local function status(text)
   vim.api.nvim_echo({ { text } }, false, {})
 end
 
-local function start(executable, path, line1, line2, task)
+local function start(executable, path, filetype, line1, line2, task)
   status "agi: running..."
 
   -- Read before the agent is given the chance to edit the file, and held only
@@ -210,7 +237,7 @@ local function start(executable, path, line1, line2, task)
     M.config.system_prompt,
     "--session",
     session,
-    build_prompt(path, line1, line2, task),
+    build_prompt(path, filetype, line1, line2, task),
   }
 
   vim.system(command, { text = true }, vim.schedule_wrap(function(result)
@@ -268,20 +295,23 @@ function M.run(opts)
     return
   end
 
+  local filetype = vim.bo[buf].filetype
   local line1, line2 = opts.line1, opts.line2
 
   if vim.trim(opts.args) ~= "" then
-    start(executable, path, line1, line2, opts.args)
+    start(executable, path, filetype, line1, line2, opts.args)
     return
   end
 
   -- The lines are read before asking, because the prompt is answered later and
-  -- the cursor may have moved by then.
+  -- the cursor may have moved by then. The same goes for everything else read
+  -- off the buffer above: by the time the task comes back, the buffer the user
+  -- is in may not be the one the run is about.
   vim.ui.input({ prompt = "agi: " }, function(task)
     if task == nil or vim.trim(task) == "" then
       return
     end
-    start(executable, path, line1, line2, task)
+    start(executable, path, filetype, line1, line2, task)
   end)
 end
 
