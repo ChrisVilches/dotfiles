@@ -152,6 +152,15 @@ end
 -- file leaves the buffer in a real window for every step, so there is no such
 -- window to lose anything to.
 --
+-- That is not a hypothetical. A renderer that sets up only the windows holding
+-- the buffer at the moment it attaches -- Markview is one that works this way,
+-- and it is named here only as an example of the kind -- ends up half applied
+-- to a buffer that was never a file, leaving the markup it meant to hide in
+-- plain sight. Nothing here needs such a plugin or expects one to be installed,
+-- and no part of this file knows anything about any of them. Writing a real
+-- file is simply the form that the widest range of them, and none of them at
+-- all, can each do the right thing with.
+--
 -- The note belongs above the answer rather than in the message area, where it
 -- would be gone by the time the answer has been read. It names the directory so
 -- that the conversation, and the rest of what agi recorded there, can be opened
