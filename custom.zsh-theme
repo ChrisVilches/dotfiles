@@ -10,7 +10,7 @@ export ZSH_THEME_GIT_PROMPT_CLEAN=""
 # all cases. I believe this only occurs when splitting panes and does not
 # happen under any other circumstances.
 
-ret_status="%(?:: %F{red}%?%f)"
+ret_status="%(?:: %B%F{red}%?%f%b)"
 job_status="%(1j: %F{yellow}•%f:)"
 time=$'\x1b[2m%D{%H:%M:%S}\x1b[22m'
 #   108     = time (a muted sage green: still a real color, but quiet enough
