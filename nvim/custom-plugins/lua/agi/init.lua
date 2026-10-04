@@ -110,17 +110,18 @@ local function build_prompt(path, line1, line2, task)
   }, " ")
 end
 
--- The note belongs above the answer rather than in the message area, where it
--- would be gone by the time the answer has been read. It names the directory so
--- that the conversation, and the rest of what agi recorded there, can be opened
--- and looked at.
-local function show_answer(note, answer, diff)
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.bo[buf].buftype = "nofile"
-  vim.bo[buf].bufhidden = "wipe"
-  vim.bo[buf].swapfile = false
-  vim.bo[buf].filetype = "markdown"
+-- Where a run's answer is kept. The answers of a conversation live together in
+-- a directory of their own beside it, so that what was asked and what came back
+-- can be read side by side, and so that nothing here is mistaken for part of
+-- the record agi itself keeps. The name is the moment the answer arrived, which
+-- orders the files the way the conversation went.
+local function answer_path(session)
+  local dir = vim.fs.joinpath(session, "answers")
+  vim.fn.mkdir(dir, "p")
+  return vim.fs.joinpath(dir, os.date "%Y-%m-%d_%H-%M-%S" .. ".md")
+end
 
+local function answer_lines(note, answer, diff)
   local lines = { note, "" }
   vim.list_extend(lines, vim.split(vim.trim(answer), "\n", { plain = true }))
 
@@ -133,11 +134,42 @@ local function show_answer(note, answer, diff)
     vim.list_extend(lines, { "```" })
   end
 
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-  vim.bo[buf].modifiable = false
+  return lines
+end
 
-  vim.cmd.split()
-  vim.api.nvim_win_set_buf(0, buf)
+-- The answer is written to a file and that file is opened, rather than being
+-- poured into a scratch buffer. The point is to make no claim on the rest of
+-- the configuration: a markdown file opened the ordinary way is understood by
+-- whatever happens to be installed, this editor's own machinery included, and
+-- by nothing in particular if nothing is installed.
+--
+-- The difference is not only tidiness. A buffer that is given its filetype
+-- before it is shown has its FileType handled while it belongs to no window, so
+-- Neovim runs that handling in a scratch window of its own making and throws
+-- the window away afterwards. Buffer-local work survives that; window-local
+-- work does not, and 'conceallevel' is window-local, which is exactly what
+-- decides whether markup is rendered or left standing in the text. Opening a
+-- file leaves the buffer in a real window for every step, so there is no such
+-- window to lose anything to.
+--
+-- The note belongs above the answer rather than in the message area, where it
+-- would be gone by the time the answer has been read. It names the directory so
+-- that the conversation, and the rest of what agi recorded there, can be opened
+-- and looked at.
+local function show_answer(session, note, answer, diff)
+  local path = answer_path(session)
+  vim.fn.writefile(answer_lines(note, answer, diff), path)
+
+  -- No swapfile for a file that is written once and only read, and nothing in
+  -- the buffer list, as this is an answer rather than something being worked
+  -- on. It is left unmodifiable for the same reason: editing it would change
+  -- the record without changing anything it describes.
+  vim.cmd("noswapfile split " .. vim.fn.fnameescape(path))
+
+  local buf = vim.api.nvim_get_current_buf()
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].buflisted = false
+  vim.bo[buf].modifiable = false
   vim.wo[0].wrap = true
 
   for _, k in pairs { "q", "<esc>" } do
@@ -196,7 +228,7 @@ local function start(executable, path, line1, line2, task)
     -- mind; three lines is what diffs are usually read with.
     local diff = (before and after) and vim.diff(before, after, { ctxlen = 3 }) or ""
 
-    show_answer(note, result.stdout, diff)
+    show_answer(session, note, result.stdout, diff)
   end))
 end
 
