@@ -18,13 +18,26 @@ return {
     --   Alternative:
     --   "MeanderingProgrammer/render-markdown.nvim",
     branch = "main",
-    ft = { "markdown" },
+
+    -- Markview listens for the buffers it previews itself, and the event it
+    -- would be loaded on here is the one it has to have been listening for
+    -- already, so loading it lazily costs it the first buffer of a session
+    -- rather than saving anything. Said outright, because the global default
+    -- is the other way around.
+    lazy = false,
+
     opts = {
       preview = {
         -- filetypes = { "markdown", "Avante" },
+
+        -- Markview leaves "nofile" buffers alone by default, taking them for
+        -- scratch space rather than documents. The output windows of the
+        -- custom plugins here are nofile and are markdown meant to be read.
         ignore_buftypes = {},
+
+        -- Past this many lines Markview draws only what a window is showing.
+        max_buf_lines = 99999,
       },
-      max_length = 99999,
     },
   },
   {
