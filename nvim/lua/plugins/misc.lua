@@ -20,10 +20,10 @@ return {
     branch = "main",
     ft = { "markdown" },
     opts = {
-      -- preview = {
-      --   filetypes = { "markdown", "Avante" },
-      --   ignore_buftypes = {},
-      -- },
+      preview = {
+        -- filetypes = { "markdown", "Avante" },
+        ignore_buftypes = {},
+      },
       max_length = 99999,
     },
   },
