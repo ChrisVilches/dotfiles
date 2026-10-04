@@ -12,7 +12,7 @@ export ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 ret_status="%(?:: %F{red}%?%f)"
 job_status="%(1j: %F{yellow}•%f:)"
-time=$'%F{blue}%D{%H:%M:%S}%f'
+time=$'\x1b[2m%D{%H:%M:%S}\x1b[22m'
 #   108     = time (a muted sage green: still a real color, but quiet enough
 #             that it does not compete with the rest of the prompt)
 # Add this for vim support \$(vi_mode_prompt_info)
