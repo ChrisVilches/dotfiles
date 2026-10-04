@@ -9,6 +9,20 @@
 --
 -- Piped (which is what we do), agi writes only its final answer to stdout and
 -- its progress and errors to stderr.
+--
+-- Each file gets a conversation of its own, kept in a directory under the
+-- system's temporary one and named after the file's path, so that asking for
+-- one more thing about a file is asking it of an agent that remembers the last
+-- few. The conversation lasts as long as the Neovim it was begun in: the
+-- directory of a file first run on here is emptied before that run, whoever
+-- left it behind.
+--
+-- Known quirk: the name follows the path, so renaming or moving a file leaves
+-- its conversation behind under the old name, where nothing will look for it
+-- again and the next Neovim will not clear it either. The new path simply
+-- starts a conversation of its own, and the orphan stays until the temporary
+-- directory is cleared, which is left as it is rather than paid for with
+-- bookkeeping that would have to survive Neovim exiting.
 
 local M = {}
 
@@ -32,6 +46,54 @@ M.config = {
   system_prompt = vim.fs.joinpath(here, "system-prompt.md"),
 }
 
+-- The session directories handed out during this Neovim session, by file path.
+-- A directory is only prepared once here, and every later run on the same file
+-- continues the conversation already in it. A fresh Neovim gets a fresh table,
+-- which is what makes a restart begin the conversation again.
+local sessions = {}
+
+-- Where agi keeps the conversation about a file. The name is derived from the
+-- file's path alone, so the same file always lands on the same directory and a
+-- directory can be traced back to the file it belongs to. Only the beginning of
+-- the digest is used: the whole of it is far longer than this name has to be to
+-- stay free of collisions. The system's temporary directory is asked for rather
+-- than written down, as it is not /tmp everywhere.
+local function session_path(path)
+  return vim.fs.joinpath(vim.uv.os_tmpdir(), "nvim-agi-" .. vim.fn.sha256(path):sub(1, 12))
+end
+
+-- The directory to run agi in for a file, and whether the conversation in it
+-- begins here. Whatever an earlier Neovim left behind under the same name is
+-- removed before this one's first run on the file: agi reads an existing
+-- directory as a conversation to carry on, so starting from nothing means
+-- handing it an empty one.
+local function session_for(path)
+  local existing = sessions[path]
+  if existing then
+    return existing, false
+  end
+
+  local dir = session_path(path)
+  vim.fn.delete(dir, "rf")
+  vim.fn.mkdir(dir, "p")
+  sessions[path] = dir
+  return dir, true
+end
+
+-- The file as it is on disk, as the one string vim.diff() wants. The agent
+-- works on the file rather than on the buffer, so disk is the only place both
+-- the before and the after can be read from. Nothing is known here about the
+-- line endings a file had, and nothing has to be: both snapshots are read the
+-- same way, so whatever is lost is lost from both and never shows up as a
+-- difference. A file that cannot be read has no content to compare and says so
+-- with nil.
+local function snapshot(path)
+  if vim.fn.filereadable(path) == 0 then
+    return nil
+  end
+  return table.concat(vim.fn.readfile(path), "\n") .. "\n"
+end
+
 local function location_description(line1, line2)
   if line1 == line2 then
     return string.format("The user had the cursor on line %d.", line1)
@@ -48,14 +110,30 @@ local function build_prompt(path, line1, line2, task)
   }, " ")
 end
 
-local function show_answer(answer)
+-- The note belongs above the answer rather than in the message area, where it
+-- would be gone by the time the answer has been read. It names the directory so
+-- that the conversation, and the rest of what agi recorded there, can be opened
+-- and looked at.
+local function show_answer(note, answer, diff)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.bo[buf].buftype = "nofile"
   vim.bo[buf].bufhidden = "wipe"
   vim.bo[buf].swapfile = false
   vim.bo[buf].filetype = "markdown"
 
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(vim.trim(answer), "\n", { plain = true }))
+  local lines = { note, "" }
+  vim.list_extend(lines, vim.split(vim.trim(answer), "\n", { plain = true }))
+
+  -- Under the answer, where it reads as the evidence for what the answer says
+  -- was done, rather than above it as something to scroll past to reach the
+  -- answer. A run that changed nothing has nothing to show here.
+  if diff ~= "" then
+    vim.list_extend(lines, { "", "```diff" })
+    vim.list_extend(lines, vim.split(vim.trim(diff), "\n", { plain = true }))
+    vim.list_extend(lines, { "```" })
+  end
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.bo[buf].modifiable = false
 
   vim.cmd.split()
@@ -78,10 +156,19 @@ end
 local function start(executable, path, line1, line2, task)
   status "agi: running..."
 
+  -- Read before the agent is given the chance to edit the file, and held only
+  -- until the diff is computed from it when the run ends.
+  local before = snapshot(path)
+
+  local session, started = session_for(path)
+  local note = string.format("*%s: `%s`*", started and "new session started" or "continued session", session)
+
   local command = {
     executable,
     "--sys",
     M.config.system_prompt,
+    "--session",
+    session,
     build_prompt(path, line1, line2, task),
   }
 
@@ -99,7 +186,17 @@ local function start(executable, path, line1, line2, task)
 
     -- The agent may have edited files that are open, this one included.
     vim.cmd.checktime()
-    show_answer(result.stdout)
+
+    -- Only a run with both ends of the comparison in hand has anything to
+    -- compare; an unchanged file gives an empty diff, which the window treats
+    -- the same way as having none.
+    local after = snapshot(path)
+    -- vim.diff() gives no surrounding lines unless asked, and a hunk of bare
+    -- additions and removals is hard to place in a file one is not holding in
+    -- mind; three lines is what diffs are usually read with.
+    local diff = (before and after) and vim.diff(before, after, { ctxlen = 3 }) or ""
+
+    show_answer(note, result.stdout, diff)
   end))
 end
 
@@ -148,15 +245,3 @@ function M.run(opts)
 end
 
 return M
-
--- TODO: Eventually this agi integration could incorporate using previous
--- sessions and add more user prompts to continue them. That way it gets
--- context so it knows the context of what the user is doing. But it's a bit
--- hard to decide how to do it. Actually the session management can be done via
--- this Neovim plugin. No need to modify agi. We can first create a folder,
--- such as /tmp/nvim-agi-<some_identifier>-1 (or something unique, but we'll
--- need to think how unique... per file? per Neovim session?, etc). Then we can
--- just use that one with --session. We may also add another command to clear
--- the session, and always tell the user (via statusbar message, and via the
--- agi result window) that the current run was from a session and not a fresh
--- run.
