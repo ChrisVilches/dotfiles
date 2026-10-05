@@ -154,13 +154,13 @@ cheatsheet_picker() {
 
 
     # NOTE: I'm not sure what some of these options are, but it works fine.
-    local opts="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index $FZF_CTRL_R_OPTS +m"
+    local opts="--height 80% $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index $FZF_CTRL_R_OPTS +m"
 
     grep -Ev '^\s*($|#)' "$CHEATSHEET" | \
         tr -s ' ' | \
         bat --color=always --plain --language=zsh | \
         format_cheatsheet_entries | \
-        FZF_DEFAULT_OPTS="$opts" fzf --expect=ctrl-x,enter --ansi --delimiter='\t' --with-nth=1 --preview-window right:wrap --preview "$preview_cmd" | \
+        FZF_DEFAULT_OPTS="$opts" fzf --expect=ctrl-x,enter --ansi --delimiter='\t' --with-nth=1 --preview-window down:35%:wrap --preview "$preview_cmd" | \
         awk -F'\t' 'NR==2 { print $2; next } { print }'
 }
 
