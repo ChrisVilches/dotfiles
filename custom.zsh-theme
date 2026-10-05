@@ -2,7 +2,7 @@
 
 export ZSH_THEME_GIT_PROMPT_PREFIX=" %F{green}"
 export ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
-export ZSH_THEME_GIT_PROMPT_DIRTY=" %F{yellow}✗%f"
+export ZSH_THEME_GIT_PROMPT_DIRTY=" %F{yellow}✖%f"
 export ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # NOTE: When splitting a pane, the time may be re-rendered in a prompt that has
@@ -15,7 +15,7 @@ job_status="%(1j: %F{yellow}•%f:)"
 time=$'\x1b[2m%D{%H:%M:%S}\x1b[22m'
 
 # Add this for vim support \$(vi_mode_prompt_info)
-export PROMPT="%F{magenta}%n%f %F{cyan}%m%f %F{yellow}%~%f\$(git_prompt_info)$ret_status $time$job_status
+export PROMPT="%F{red}%n%f %F{cyan}%m%f %F{yellow}%~%f\$(git_prompt_info)$ret_status $time$job_status
 "
 
 export PROMPT2="%B%F{yellow}%_> %f%b"
