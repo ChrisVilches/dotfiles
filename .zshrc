@@ -77,7 +77,7 @@ export ZSH_THEME="custom"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-export plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf-tab)
+export plugins=(git zsh-autosuggestions zsh-syntax-highlighting fzf-tab dirhistory)
 
 source "$ZSH/oh-my-zsh.sh"
 
@@ -96,12 +96,12 @@ export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='vim'
-else
-    export EDITOR='nvim'
-fi
+# Neovim is too slow when a program asks you to edit a file.
+# Also, the ZLE widget edit-command-line works better with vim (neovim opens
+# other tabs and creates/opens a session in that directory, which is
+# undesired).
+export VISUAL=vim
+export EDITOR=vim
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -157,7 +157,7 @@ alias lll='ll | less -R'
 alias oc='opencode'
 alias occ='opencode --continue'
 e() {
-    "$EDITOR" "$@"
+    nvim "$@"
 }
 
 # Git Status + fzf + read files/diff
