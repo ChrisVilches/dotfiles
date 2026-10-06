@@ -13,6 +13,7 @@ set ignorecase
 set smartcase
 set showmatch
 set clipboard=unnamedplus
+set shortmess-=S
 syntax on
 
 nnoremap <silent> <leader>wt :set wrap!<CR>
