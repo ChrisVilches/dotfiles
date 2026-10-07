@@ -225,24 +225,6 @@ leet() {
     listen "$2" "leetcode.py $1 $2 $src $ans && $run"
 }
 
-# randtime <start_hour> <end_hour>
-# Generates a random time in HH:MM:SS format.
-# Arguments:
-#   start_hour - the first hour (0–23) of the range
-#   end_hour   - the last hour (0–23) of the range
-randtime() {
-    local start_hour=$1
-    local end_hour=$2
-    if [[ -z $start_hour || -z $end_hour || $start_hour -gt $end_hour ]]; then
-        echo "Usage: randtime <start_hour> <end_hour>" >&2
-        return 1
-    fi
-    hour=$((RANDOM % (end_hour - start_hour + 1) + start_hour))
-    min=$((RANDOM % 60))
-    sec=$((RANDOM % 60))
-    printf "%02d:%02d:%02d\n" "$hour" "$min" "$sec"
-}
-
 n() {
     local prev
     prev="$(pwd)"
@@ -279,9 +261,5 @@ wn() {
     if [[ -z "$1" ]]; then return 1; fi
     cd ~/memos || return 1
     n "work/$(date '+%Y-%m-%d')-$1.md"
-}
-
-get_unattached_sessions() {
-    tmux ls | awk -F':| ' '$NF != "(attached)" {print $1}'
 }
 
