@@ -53,3 +53,6 @@ xnoremap <C-k> 6k
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Cursor
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
