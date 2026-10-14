@@ -56,3 +56,6 @@ vnoremap K :m '<-2<CR>gv=gv
 " Cursor
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+
+" Neovim behavior
+nnoremap Y y$
