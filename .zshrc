@@ -141,27 +141,6 @@ e() {
     nvim "$@"
 }
 
-# Git Status + fzf + read files/diff
-gz() {
-    git status --porcelain |
-    fzf -m |
-    while IFS= read -r line; do
-        local st file
-
-        st=${line[1,2]}
-        file=${line[4,-1]}
-
-        case "$st" in
-            M*|*M)
-                git diff -- "$file"
-                ;;
-            '??')
-                bat -- "$file" 2>/dev/null || cat -- "$file"
-                ;;
-        esac
-    done
-}
-
 listen() {
     local dir filename
     dir=$(dirname -- "$1")
