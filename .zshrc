@@ -226,22 +226,16 @@ leet() {
 }
 
 n() {
-    local prev
-    prev="$(pwd)"
+  (
     cd ~/memos || return 1
 
     local init_code='
-           vim.g.todo_grep_globs = { "!archived/" }
-           require("nvim_utils")
+    vim.g.todo_grep_globs = { "!archived/" }
+    require("nvim_utils")
     '
-    if [ -n "$1" ]; then
-        nvim "$1" -c "lua $init_code"
-    else
-        nvim -c "lua $init_code"
-    fi
-
+    nvim -c "lua $init_code" "$@"
     bash ./sync-git.sh
-    cd "$prev" || return 1
+  )
 }
 
 qn() {
