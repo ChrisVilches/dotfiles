@@ -1,6 +1,8 @@
 -- Each plugin file may also have some mappings.
 local map = vim.keymap.set
 
+map('n', 'zm', 'zszH', { desc = "Horizontally center cursor" })
+
 map("n", "<leader>wt", "<cmd>set wrap!<CR>", { desc = "wrap toggle" })
 
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
