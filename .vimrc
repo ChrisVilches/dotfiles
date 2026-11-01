@@ -60,3 +60,6 @@ let &t_SR = "\e[4 q"
 
 " Neovim behavior
 nnoremap Y y$
+
+" Horizontally center cursor
+nnoremap <silent> zm zszH
