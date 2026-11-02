@@ -166,6 +166,16 @@ n() {
   (
     cd ~/memos || return 1
 
+    if ! git diff --quiet; then
+      echo "There are unstaged changes."
+      return 1
+    fi
+
+    if ! git pull origin main; then
+      echo "Can't git pull"
+      return 1
+    fi
+
     local init_code='
     vim.g.todo_grep_globs = { "!archived/" }
     require("nvim_utils")
