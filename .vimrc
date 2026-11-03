@@ -16,7 +16,7 @@ set clipboard=unnamedplus
 set shortmess-=S
 syntax on
 
-noremap <silent> <leader>wt :set wrap!<CR>
+noremap <silent> <leader>wt :<C-u>set wrap!<CR>gv
 nnoremap <silent> <Esc> :nohlsearch<CR><Esc>
 
 " Explorer
