@@ -11,7 +11,7 @@ export ZSH_THEME_GIT_PROMPT_CLEAN=""
 # happen under any other circumstances.
 
 ret_status="%(?:: %B%F{red}%?%f%b)"
-job_status="%(1j: %F{yellow}•%f:)"
+job_status="%(1j: %F{yellow}[%1j %(2j:jobs:job)]%f:)"
 time=$'\x1b[2m%D{%H:%M:%S}\x1b[22m'
 
 # Add this for vim support \$(vi_mode_prompt_info)
