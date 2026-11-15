@@ -13,7 +13,6 @@ The two sections that matter most are
 | File | Role |
 |---|---|
 | `tmux.conf` | Main config. `~/.tmux.conf` is a symlink to it. |
-| `themes.conf` | Sourced by `tmux.conf`. Loads the remembered theme and creates the prefix T menu. |
 | `theme.sh` | Builds and applies themes, and creates the menu. All the logic is here. |
 | `theme-NAME.sh` | One theme: bash variable assignments, nothing else. |
 | `current-theme.conf` | Generated, gitignored. The built config of the theme that was picked. |
@@ -26,7 +25,7 @@ The two sections that matter most are
 1. `tmux.conf` resolves its own folder through the `~/.tmux.conf` symlink
    (`readlink -f`) and stores it in the `@tmux_dir` option. `#{d:current_file}`
    would give `~`, because `current_file` is the symlink.
-2. `tmux.conf` sources `themes.conf`, which:
+2. `tmux.conf` then:
    - sources `current-theme.conf` if it exists (`-q`: a missing file is fine and
      means tmux's default look);
    - runs `theme.sh --menu`, which binds prefix T.

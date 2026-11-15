@@ -3,13 +3,13 @@
 # Apply a tmux theme: `theme.sh NAME` builds tmux config from theme-NAME.sh and
 # loads it. A theme file only holds data (its colours, as bash variables), and
 # build() below turns it into tmux options, so every theme shares one layout.
-# The config is saved in the gitignored current-theme.conf, which themes.conf
+# The config is saved in the gitignored current-theme.conf, which tmux.conf
 # sources at startup, so editing a theme file takes effect once the theme is
 # applied again. Without a NAME it removes current-theme.conf, which leaves
 # tmux's own default look.
 #
 # `theme.sh --menu` binds prefix T to a menu of the themes, which calls this
-# script. themes.conf runs it at startup.
+# script. tmux.conf runs it at startup.
 
 dir=$(dirname "$(readlink -f "$0")")
 
