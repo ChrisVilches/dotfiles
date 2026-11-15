@@ -68,6 +68,15 @@ build() {
   activity_style= bell_style= clock_color=
   source "$dir/theme-$1.sh"
 
+  # A colour the theme forgot would be an empty string, which tmux ignores in
+  # formats without a word, so the theme would just look slightly off.
+  local name
+  for name in bar_bg bar_fg program_fg program_bg program_prefix_bg window_fg \
+      current_fg current_bg border_fg label_fg label_active_fg message_bg \
+      message_fg command_bg command_fg mode_bg; do
+    [ -n "${!name}" ] || { echo "theme-$1.sh doesn't set $name" >&2; return 1; }
+  done
+
   local b= path='#{s|^$HOME|~|:pane_current_path}'
   [ "$bold" = yes ] && b=,bold
   local zoomed="#{?window_zoomed_flag, $zoom,}"
@@ -143,8 +152,14 @@ if [ -n "$1" ] && [ ! -f "$dir/theme-$1.sh" ]; then
   exit 1
 fi
 
-rm -f "$dir/current-theme.conf"
-[ -n "$1" ] && build "$1" > "$dir/current-theme.conf"
+# Built before current-theme.conf is touched, so a theme that fails the check
+# in build() leaves the current one in place.
+if [ -n "$1" ]; then
+  config=$(build "$1") || exit 1
+  echo "$config" > "$dir/current-theme.conf"
+else
+  rm -f "$dir/current-theme.conf"
+fi
 
 # The unsetting and the new theme go to tmux as one piece of config on stdin
 # (`source-file -` reads from stdin, though the man page doesn't say so).
