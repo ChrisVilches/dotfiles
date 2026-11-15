@@ -22,13 +22,17 @@ The two sections that matter most are
 
 ### At tmux startup
 
-1. `tmux.conf` resolves its own folder through the `~/.tmux.conf` symlink
-   (`readlink -f`) and stores it in the `@tmux_dir` option. `#{d:current_file}`
-   would give `~`, because `current_file` is the symlink.
-2. `tmux.conf` then:
-   - sources `current-theme.conf` if it exists (`-q`: a missing file is fine and
-     means tmux's default look);
-   - runs `theme.sh --menu`, which binds prefix T.
+`tmux.conf` resolves its own folder through the `~/.tmux.conf` symlink
+(`readlink -f`; `#{d:current_file}` would give `~`, because `current_file` is
+the symlink) and runs `theme.sh --init` from it. That:
+
+- binds prefix T to the menu (see below);
+- unsets the options and sources `current-theme.conf`, the same way as picking
+  a theme but without building it again. Without the file, tmux keeps its
+  default look.
+
+`run` without `-b` waits for the script, so the rest of `tmux.conf` loads after
+the theme.
 
 ### Picking a theme (prefix T, or `theme.sh NAME` from a shell)
 
@@ -56,7 +60,7 @@ applying B. That's also why a forgotten colour can't carry over from the
 previous theme: `theme.sh` is a new process each time, and every option starts
 from tmux's default.
 
-### The menu (`theme.sh --menu`)
+### The menu
 
 It goes through `theme-*.sh` in glob (alphabetical) order. It sources each file
 in a subshell to read its `menu_key`, then calls `tmux bind T display-menu …`,
@@ -80,7 +84,7 @@ command_fg mode_bg`
 
 | Setting | Meaning |
 |---|---|
-| `menu_key` | Key in the prefix T menu. Read by `--menu`, not by `build()`. |
+| `menu_key` | Key in the prefix T menu. Read for the menu, not by `build()`. |
 | `shape` | `block` (padded blocks, the default) or `pill` (rounded ends, needs a Nerd Font). |
 | `bold` | `yes` (default) or `no`. Applies to the program block, current window and active pane label. |
 | `zoom` | Marker after a zoomed window's path [`[Z]`]. Themes can use `$zoom_arrow`. |
@@ -136,7 +140,7 @@ Things to be careful about:
   `$zoom_arrow` is the exception: it's a variable from `theme.sh`, so it must
   not be single-quoted.
 - **A theme file must only assign variables.** It's sourced once by `build()`
-  and once by `--menu` (at every tmux start), so commands in it would run both
+  and once for the menu (at every tmux start), so commands in it would run both
   times.
 - **Misspelled settings aren't caught.** `bar_gb='#111'` is silently ignored. If
   it was meant to be a required setting, the check reports the correct name as

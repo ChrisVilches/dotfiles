@@ -8,7 +8,8 @@
 # applied again. Without a NAME it removes current-theme.conf, which leaves
 # tmux's own default look.
 #
-# `theme.sh --menu` binds prefix T to a menu of the themes, which calls this
+# `theme.sh --init` applies current-theme.conf as it is (or the default look
+# without one) and binds prefix T to a menu of the themes, which calls this
 # script. tmux.conf runs it at startup.
 
 dir=$(dirname "$(readlink -f "$0")")
@@ -139,14 +140,31 @@ EOF
 
 # The menu has one item per theme file, under the key the file sets as
 # menu_key, and a last item for tmux's default look.
-if [ "$1" = --menu ]; then
-  items=()
+bind_menu() {
+  local items=() file name key
   for file in "$dir"/theme-*.sh; do
     name=${file##*/theme-} name=${name%.sh}
     key=$(source "$file"; echo "$menu_key")
     items+=("$name" "$key" "run '$dir/theme.sh $name'")
   done
   tmux bind T display-menu -T Theme "${items[@]}" tmux t "run '$dir/theme.sh'"
+}
+
+# The unsetting and current-theme.conf go to tmux as one piece of config on
+# stdin (`source-file -` reads from stdin, though the man page doesn't say so).
+# source-file reads all of it before running any command, so the commands run
+# back to back and tmux has no chance to redraw in between and show its default
+# look for a moment, as it can when they come from separate tmux calls.
+apply() {
+  {
+    printf 'set -gu %s\n' "${options[@]}"
+    cat "$dir/current-theme.conf" 2>/dev/null
+  } | tmux source-file -
+}
+
+if [ "$1" = --init ]; then
+  bind_menu
+  apply
   exit
 fi
 
@@ -164,12 +182,4 @@ else
   rm -f "$dir/current-theme.conf"
 fi
 
-# The unsetting and the new theme go to tmux as one piece of config on stdin
-# (`source-file -` reads from stdin, though the man page doesn't say so).
-# source-file reads all of it before running any command, so the commands run
-# back to back and tmux has no chance to redraw in between and show its default
-# look for a moment, as it can when they come from separate tmux calls.
-{
-  printf 'set -gu %s\n' "${options[@]}"
-  cat "$dir/current-theme.conf" 2>/dev/null
-} | tmux source-file -
+apply
