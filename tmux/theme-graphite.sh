@@ -1,15 +1,15 @@
-# Graphite theme: like minimal, but with dark greys on near-black and high
-# contrast, so the current window stands out as an inverted light grey block.
-# The program block matches the current window, and turns near-white while the
-# prefix key is pressed.
+# Graphite theme: warm dark greys in the spirit of Perplexity's dark mode. The
+# current window and the program block are light text on a slightly lighter
+# grey surface, and Perplexity's turquoise is the only accent: the program
+# block turns turquoise while the prefix key is pressed.
 
 menu_key=g
-bar_bg='#111111' bar_fg='#707070'
-program_fg='#111111' program_bg='#747474' program_prefix_bg='#e6e6e6'
-window_fg='#707070'
-current_fg='#111111' current_bg='#747474'
-border_fg='#333333'
-label_fg='#707070' label_active_fg='#e6e6e6'
-message_bg='#2a2a2a' message_fg='#ffffff'
-command_bg='#2a2a2a' command_fg='#ffffff'
-mode_bg='#333333'
+bar_bg='#191a1a' bar_fg='#8d9191'
+program_fg='#e8e8e6' program_bg='#2d2f2f' program_prefix_bg='#20808d'
+window_fg='#8d9191'
+current_fg='#e8e8e6' current_bg='#2d2f2f'
+border_fg='#2d2f2f'
+label_fg='#8d9191' label_active_fg='#e8e8e6'
+message_bg='#202222' message_fg='#e8e8e6'
+command_bg='#202222' command_fg='#20808d'
+mode_bg='#2d2f2f'
