@@ -53,7 +53,7 @@ zoom_arrow=$'\363\260\201\214'
 #                      window ID (@1, @2, ...), which never changes, so a window
 #                      keeps its colour when windows are moved or renumbered.
 #                      Themes use it as '#{E:@window_color}'.
-#   zoom               marker shown after a zoomed window's path
+#   zoom               marker shown after a zoomed window's name
 #   border_lines border_fg
 #                      pane borders (border_lines is single, double, heavy, ...)
 #   label_fg label_active_fg label_active_bg
@@ -79,6 +79,9 @@ build() {
 
   local b= path='#{s|^$HOME|~|:pane_current_path}'
   [ "$bold" = yes ] && b=,bold
+  # A window's tab shows the name it was given with prefix , or rename-window
+  # (which turns automatic-rename off for that window), or else its path.
+  local title="#{?automatic-rename,$path,#{window_name}}"
   local zoomed="#{?window_zoomed_flag, $zoom,}"
   local program="#{?client_prefix,$program_prefix_bg,$program_bg}"
 
@@ -86,14 +89,14 @@ build() {
   if [ "$shape" = pill ]; then
     separator=' '
     right="#[fg=$program,bg=default]$pill_left#[fg=$program_fg,bg=$program$b]#{pane_current_command}#[nobold,fg=$program,bg=default]$pill_right"
-    current="#[fg=$current_bg,bg=default]$pill_left#[fg=$current_fg,bg=$current_bg$b]$path$zoomed#[nobold,fg=$current_bg,bg=default]$pill_right"
+    current="#[fg=$current_bg,bg=default]$pill_left#[fg=$current_fg,bg=$current_bg$b]$title$zoomed#[nobold,fg=$current_bg,bg=default]$pill_right"
   else
     separator=''
     right="#[fg=$program_fg,bg=$program$b] #{pane_current_command} "
     if [ -n "$current_marker" ]; then
-      current="#[fg=$current_marker_fg,bg=$current_bg]$current_marker#[fg=$current_fg$b]$path$zoomed "
+      current="#[fg=$current_marker_fg,bg=$current_bg]$current_marker#[fg=$current_fg$b]$title$zoomed "
     else
-      current="#[fg=$current_fg,bg=$current_bg$b] $path$zoomed "
+      current="#[fg=$current_fg,bg=$current_bg$b] $title$zoomed "
     fi
   fi
 
@@ -116,7 +119,7 @@ set -g status-right-length 80
 set -g status-right "$right"
 
 set -g window-status-separator "$separator"
-set -g window-status-format " #[fg=$window_fg]$path$zoomed "
+set -g window-status-format " #[fg=$window_fg]$title$zoomed "
 set -g window-status-current-format "$current"
 set -g window-status-current-style "default"
 

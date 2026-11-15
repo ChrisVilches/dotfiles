@@ -98,8 +98,11 @@ What the output contains:
   `#{?client_prefix,PREFIX_BG,BG}` inside its style, so it changes colour while
   the prefix key is pressed.
 - **Window tabs**: inactive windows are coloured text, and the current window
-  is a block or pill. Both show the path with `$HOME` shortened to `~`, plus the
-  zoom marker. Inactive windows keep the same width as the current one, so the
+  is a block or pill. Each shows the window's name if it was renamed (prefix
+  `,` or `rename-window`, which turns `automatic-rename` off for that window),
+  or else its path with `$HOME` shortened to `~`, plus the zoom marker. Running
+  `tmux set -w automatic-rename on` in a window brings its path back. Renaming
+  it to an empty name doesn't, because that still counts as a rename. Inactive windows keep the same width as the current one, so the
   list doesn't shift when switching.
 - **Pane labels** (`pane-border-format`): `#P: path`, centred, with the active
   one highlighted.
