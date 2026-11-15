@@ -20,7 +20,7 @@ dir=$(dirname "$(readlink -f "$0")")
 # theme's value. So all of these are unset with `set -gu`, which brings back
 # tmux's built-in value, before the new theme sets its own.
 options=(
-  status-style status-left status-right-length status-right
+  status-style status-right-length status-right
   window-status-separator window-status-format window-status-current-format
   window-status-current-style window-status-activity-style
   window-status-bell-style pane-border-lines pane-border-style
@@ -115,7 +115,6 @@ build() {
   # Commas inside a #{?...} condition are escaped as #, in the pane label.
   cat <<EOF
 set -g status-style "bg=$bar_bg,fg=$bar_fg"
-set -g status-left ""
 set -g status-right-length 80
 set -g status-right "$right"
 

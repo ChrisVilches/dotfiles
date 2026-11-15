@@ -96,7 +96,7 @@ command_fg mode_bg`
 
 What the output contains:
 
-- **Status bar**: bar style, empty `status-left`, and the program block on the
+- **Status bar**: bar style and the program block on the
   right (`#{pane_current_command}`). The program block's background is
   `#{?client_prefix,PREFIX_BG,BG}` inside its style, so it changes colour while
   the prefix key is pressed.
@@ -219,3 +219,8 @@ Things to be careful about:
   a window has more than one pane, so the pane labels from
   `pane-border-format` only appear then. It uses `if-shell -F`, which checks a
   format without starting a shell.
+- `status-left` is set in `tmux.conf`, not by the themes: a white on red
+  `detached: NAME…` block while any session has no client attached, and empty
+  otherwise. Its colours are hardcoded, background included, so it doesn't
+  depend on the theme's bar colour. It looks the same in every theme and in tmux's default look.
+  It isn't in `options`, so applying a theme leaves it alone.
