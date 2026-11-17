@@ -1,0 +1,183 @@
+#!/bin/sh
+
+# Tints the screen red by scaling down the green and blue channels with ./set-gamma.
+# Redshift also sets the gamma, so if it is running it will overwrite this.
+#
+# The level is the amount of blue light: 100% is the normal screen and 0% is fully red.
+#
+# Usage: redness-mouse [<night start> <night end>], e.g. `redness-mouse 21:00 07:00`.
+# Without arguments, the level only changes with the mouse. With them, when night starts the
+# level is set to 0%, and when it ends to 100%. In between, the level can be changed with the
+# mouse, and it is kept until the next start or end.
+
+# Calibrate manually.
+step=10
+max_level=100
+
+# Seconds between checks of the clock. Sleeping until the next start or end instead would not
+# be accurate, because sleep doesn't count the time the laptop is suspended.
+poll_interval=300
+
+# The level, and the period (see current_period) it was set in, are saved here so they survive
+# reloading i3. /tmp is cleared on reboot.
+state_file=/tmp/redness-mouse-blue-light
+
+night_start=$1
+night_end=$2
+
+valid_time() {
+  case $1 in
+    [01][0-9]:[0-5][0-9] | 2[0-3]:[0-5][0-9]) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+if [ $# -gt 0 ] && { [ $# -ne 2 ] || ! valid_time "$night_start" || ! valid_time "$night_end" || [ "$night_start" = "$night_end" ]; }; then
+  echo "<span color=\"#FF0000\">redness-mouse: invalid night times '$*' (expected nothing, or two different HH:MM, e.g. 21:00 07:00)</span>"
+  exec sleep infinity
+fi
+
+# Minutes since midnight for an HH:MM time. The leading zeros are removed so that "08" isn't
+# read as octal.
+minutes() {
+  h=${1%:*}
+  m=${1#*:}
+  echo $((${h#0} * 60 + ${m#0}))
+}
+
+# Prints the current period as "night-<date>" or "day-<date>", where <date> is the day the
+# period started. The night can span midnight. The date tells apart two days (or nights) when
+# a whole night (or day) passed unseen, e.g. while the laptop was suspended.
+current_period() {
+  set -- $(date '+%H:%M %F')
+  now=$(minutes $1)
+  today=$2
+  start=$(minutes $night_start)
+  end=$(minutes $night_end)
+  if [ $start -lt $end ]; then
+    [ $now -ge $start ] && [ $now -lt $end ] && kind=night || kind=day
+  else
+    [ $now -ge $start ] || [ $now -lt $end ] && kind=night || kind=day
+  fi
+
+  # A period lasts less than 24 hours, so if its first minute hasn't been reached yet today,
+  # it started yesterday.
+  if [ $kind = night ]; then
+    first=$start
+  else
+    first=$end
+  fi
+  if [ $now -ge $first ]; then
+    echo $kind-$today
+  else
+    echo $kind-$(date -d "$today -1 day" +%F)
+  fi
+}
+
+# Channel factors (red green blue) for the current level. At 0, green is 0.65 and blue 0.35,
+# which is roughly the color of a 2500K light.
+factors() {
+  awk -v l=$level -v m=$max_level 'BEGIN { r = (m - l) / m; printf "1 %.3f %.3f", 1 - 0.35 * r, 1 - 0.65 * r }'
+}
+
+# The mouse events and the schedule run in separate processes, so the state file is what
+# they share. There is no locking: if one reads the file at the exact moment the other is
+# writing it, the read can come back empty and that one change uses a wrong level. This is
+# rare enough to ignore.
+load() {
+  read level period < $state_file
+}
+
+# The tint is only set on the screens connected at this moment. A screen connected later stays
+# untinted until the next change (a click, or the next start or end of the night).
+apply() {
+  "$(dirname "$0")/set-gamma" $(factors)
+  echo "$level $period" > $state_file
+  display
+}
+
+display() {
+  echo "<span color=\"#FF4500\">🌙</span> $level%"
+}
+
+set_scheduled_level() {
+  if [ "${period%%-*}" = night ]; then
+    level=0
+  else
+    level=$max_level
+  fi
+}
+
+turn_down() {
+  load
+  level=$((level - step))
+  if [ "$level" -lt 0 ]; then
+    level=0
+  fi
+  apply
+}
+
+turn_up() {
+  load
+  level=$((level + step))
+  if [ "$level" -gt $max_level ]; then
+    level=$max_level
+  fi
+  apply
+}
+
+reset() {
+  load
+  level=$max_level
+  apply
+}
+
+handle_change() {
+    case $1 in
+        1) turn_down ;;
+        2) reset ;;
+        3) turn_up ;;
+        4) turn_up ;;
+        5) turn_down ;;
+    esac
+}
+
+read_mouse_events() {
+  while IFS= read -r line; do
+    handle_change $line
+  done
+}
+
+# Only changes the level when the period changes, so mouse changes are kept until then.
+# Stops when the main process ($$) exits, e.g. when i3 reloads.
+follow_schedule() {
+  while sleep $poll_interval && kill -0 $$ 2>/dev/null; do
+    load
+    now_period=$(current_period)
+    if [ "$now_period" != "$period" ]; then
+      period=$now_period
+      set_scheduled_level
+      apply
+    fi
+  done
+}
+
+if [ $# -eq 0 ]; then
+  load 2>/dev/null || level=$max_level
+  period=
+  apply
+else
+  # Initial check. A saved level is kept if it was set in the current period; otherwise the
+  # period changed while this wasn't running (or there is no saved level), so the schedule
+  # wins.
+  now_period=$(current_period)
+  if ! load 2>/dev/null || [ "$period" != "$now_period" ]; then
+    period=$now_period
+    set_scheduled_level
+  fi
+  apply
+
+  follow_schedule &
+fi
+
+read_mouse_events

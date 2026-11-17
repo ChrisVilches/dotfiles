@@ -26,9 +26,6 @@ default_border pixel 0
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
 
-# Red tint.
-exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
-
 # For Japanese/Chinese input (fcitx5, config in input-method/fcitx5).
 # Known limitation: the switching bindings below don't work in Alacritty (the same
 # happened with ibus). Alacritty only supports input methods through XIM, and it

@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+# Usage: set-gamma <red> <green> <blue>
+#
+# Multiplies each color channel of every screen by the given factor (0.0 to 1.0), e.g.
+# `set-gamma 1 0.8 0.6` for a warm tint and `set-gamma 1 1 1` to reset.
+#
+# The channels are scaled linearly, by writing the CRTC gamma ramps through libXrandr.
+# `xrandr --gamma` can't be used for this because it applies an exponent instead, which
+# darkens the midtones much more than the highlights and makes the screen look brown.
+
+import ctypes
+import sys
+
+x11 = ctypes.CDLL("libX11.so.6")
+xrandr = ctypes.CDLL("libXrandr.so.2")
+
+
+class ScreenResources(ctypes.Structure):
+    _fields_ = [
+        ("timestamp", ctypes.c_ulong),
+        ("configTimestamp", ctypes.c_ulong),
+        ("ncrtc", ctypes.c_int),
+        ("crtcs", ctypes.POINTER(ctypes.c_ulong)),
+        # Remaining fields are not used.
+    ]
+
+
+class CrtcGamma(ctypes.Structure):
+    _fields_ = [
+        ("size", ctypes.c_int),
+        ("red", ctypes.POINTER(ctypes.c_ushort)),
+        ("green", ctypes.POINTER(ctypes.c_ushort)),
+        ("blue", ctypes.POINTER(ctypes.c_ushort)),
+    ]
+
+
+x11.XOpenDisplay.restype = ctypes.c_void_p
+x11.XOpenDisplay.argtypes = [ctypes.c_char_p]
+x11.XDefaultRootWindow.restype = ctypes.c_ulong
+x11.XDefaultRootWindow.argtypes = [ctypes.c_void_p]
+x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+xrandr.XRRGetScreenResourcesCurrent.restype = ctypes.POINTER(ScreenResources)
+xrandr.XRRGetScreenResourcesCurrent.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+xrandr.XRRFreeScreenResources.argtypes = [ctypes.POINTER(ScreenResources)]
+xrandr.XRRGetCrtcGammaSize.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+xrandr.XRRAllocGamma.restype = ctypes.POINTER(CrtcGamma)
+xrandr.XRRAllocGamma.argtypes = [ctypes.c_int]
+xrandr.XRRSetCrtcGamma.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.POINTER(CrtcGamma)]
+xrandr.XRRFreeGamma.argtypes = [ctypes.POINTER(CrtcGamma)]
+
+red, green, blue = (float(arg) for arg in sys.argv[1:4])
+
+display = x11.XOpenDisplay(None)
+resources = xrandr.XRRGetScreenResourcesCurrent(display, x11.XDefaultRootWindow(display))
+
+for c in range(resources.contents.ncrtc):
+    crtc = resources.contents.crtcs[c]
+    size = xrandr.XRRGetCrtcGammaSize(display, crtc)
+    if size < 2:
+        continue
+    gamma = xrandr.XRRAllocGamma(size)
+    for i in range(size):
+        value = 65535 * i / (size - 1)
+        gamma.contents.red[i] = int(value * red)
+        gamma.contents.green[i] = int(value * green)
+        gamma.contents.blue[i] = int(value * blue)
+    xrandr.XRRSetCrtcGamma(display, crtc, gamma)
+    xrandr.XRRFreeGamma(gamma)
+
+xrandr.XRRFreeScreenResources(resources)
+x11.XCloseDisplay(display)
