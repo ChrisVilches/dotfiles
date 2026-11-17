@@ -42,6 +42,12 @@ Symlink the **directory**, not the individual files: fcitx5 saves by writing a t
 ln -s ~/dev/dotfiles/input-method/fcitx5 ~/.config/fcitx5
 ```
 
+fcitx5 rewrites `DefaultIM=` in `profile` with whichever input method was used last. `input-method/.gitattributes` runs `profile` through a git filter that pins that line, so the change doesn't show up in `git status`. The filter itself lives in the local git config, not in the repo, so set it once per clone:
+
+```sh
+git -C ~/dev/dotfiles config filter.fcitx5-profile.clean "sed 's/^DefaultIM=.*/DefaultIM=keyboard-jp/'"
+```
+
 Check that these already point into the repo (create them if not):
 
 ```sh

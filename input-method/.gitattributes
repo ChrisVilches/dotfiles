@@ -1,0 +1,3 @@
+# fcitx5 rewrites DefaultIM with the last used input method. The filter
+# (set up in INSTALL.md) pins it so git ignores that churn.
+fcitx5/profile filter=fcitx5-profile
