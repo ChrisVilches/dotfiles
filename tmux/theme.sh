@@ -54,7 +54,7 @@ zoom_arrow=$'\363\260\201\214'
 #                      window ID (@1, @2, ...), which never changes, so a window
 #                      keeps its colour when windows are moved or renumbered.
 #                      Themes use it as '#{E:@window_color}'.
-#   zoom               marker shown after a zoomed window's name
+#   zoom               marker shown after a zoomed window's path
 #   border_lines border_fg
 #                      pane borders (border_lines is single, double, heavy, ...)
 #   label_fg label_active_fg label_active_bg
