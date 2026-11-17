@@ -45,7 +45,7 @@ exec --no-startup-id setxkbmap -layout jp
 exec --no-startup-id fcitx5 -d
 
 # Go straight to an input method instead of cycling.
-bindsym $win+e exec --no-startup-id fcitx5-remote -s pinyin
+bindsym $mod+z exec --no-startup-id fcitx5-remote -s pinyin
 
 # Toggle English/Japanese. Anything other than English (including Chinese) goes to English.
 bindsym Zenkaku_Hankaku exec --no-startup-id sh -c '[ "$(fcitx5-remote -n)" = keyboard-jp ] && fcitx5-remote -s anthy || fcitx5-remote -s keyboard-jp'
