@@ -30,7 +30,7 @@ display() {
 }
 
 reset() {
-  echo $max_value | sudo $tee $dir/brightness
+  echo $max_value | sudo $tee $dir/brightness > /dev/null
 }
 
 turn_down() {
@@ -38,7 +38,7 @@ turn_down() {
   if [ "$new_val" -lt $min_value ]; then
     new_val=$min_value
   fi
-  echo $new_val | sudo $tee $dir/brightness
+  echo $new_val | sudo $tee $dir/brightness > /dev/null
 }
 
 turn_up() {
@@ -46,7 +46,7 @@ turn_up() {
   if [ "$new_val" -gt $max_value ]; then
     new_val=$max_value
   fi
-  echo $new_val | sudo $tee $dir/brightness
+  echo $new_val | sudo $tee $dir/brightness > /dev/null
 }
 
 handle_change() {
