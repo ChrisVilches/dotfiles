@@ -1,0 +1,25 @@
+# Switching is done by i3 bindings that call `fcitx5-remote -s <im>` (see
+# i3/config), so all of fcitx5's own toggle/cycle hotkeys are cleared. An
+# empty section overrides the default key list.
+
+[Hotkey/TriggerKeys]
+
+[Hotkey/AltTriggerKeys]
+
+[Hotkey/EnumerateForwardKeys]
+
+[Hotkey/EnumerateBackwardKeys]
+
+[Hotkey/EnumerateGroupForwardKeys]
+
+[Hotkey/EnumerateGroupBackwardKeys]
+
+[Hotkey/ActivateKeys]
+
+[Hotkey/DeactivateKeys]
+
+[Behavior]
+# One input method for all windows, instead of one per window.
+ShareInputState=All
+# Show a popup with the input method name when it changes.
+ShowInputMethodInformation=True

@@ -29,15 +29,18 @@ default_border pixel 0
 # Red tint.
 exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
 
-# For Japanese/Chinese input.
-# Setting the layout first is necessary because otherwise ibus may not recognize
-# the key "Zenkaku_Hankaku" which I use to toggle languages (I saw this error in the
-# verbose logs once).
+# For Japanese/Chinese input (fcitx5, config in input-method/fcitx5).
 # Debug using:
-# ibus-daemon -rx --verbose
+# fcitx5 -r --verbose '*=5'
+# fcitx5-remote -n (prints the current input method)
 # setxkbmap -query
 exec --no-startup-id setxkbmap -layout jp
-exec --no-startup-id ibus-daemon -drx
+exec --no-startup-id fcitx5 -d
+
+# Go straight to an input method instead of cycling.
+bindsym $win+q exec --no-startup-id fcitx5-remote -s keyboard-jp
+bindsym $win+w exec --no-startup-id fcitx5-remote -s anthy
+bindsym $win+e exec --no-startup-id fcitx5-remote -s pinyin
 
 # dunst - a customizable and lightweight notification-daemon
 # To show notify-send messages.

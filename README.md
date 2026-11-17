@@ -46,6 +46,10 @@ Setup a custom shortcut using `CTRL+ALT+T` (e.g. in Gnome):
 | Gnome Terminal | ❌ | ✅ | gnome-terminal -- bash -c "exec tmux" |
 | xfce4-terminal | ✅ | ❌ | (Don't use) |
 
+## Input method
+
+fcitx5 with English, Japanese (Anthy) and Chinese (Pinyin). See `input-method/INSTALL.md`.
+
 ## Keyd
 
 Keyboard mapping.

@@ -1,3 +1,9 @@
 # This allows i3 config to reference scripts.
 # It seems it also helps tmux (config file) reference scripts. But it may not work if X (i3) isn't used.
 export PATH="$HOME/programs/scripts:$PATH"
+
+# Make GTK, Qt, plain X and SDL apps send keyboard input through fcitx5.
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
