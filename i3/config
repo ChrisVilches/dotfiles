@@ -30,6 +30,13 @@ default_border pixel 0
 exec --no-startup-id redshift -x && redshift -t 6500:3500 -l 35.682839:139.759455
 
 # For Japanese/Chinese input (fcitx5, config in input-method/fcitx5).
+# Known limitation: the switching bindings below don't work in Alacritty (the same
+# happened with ibus). Alacritty only supports input methods through XIM, and it
+# recreates its XIM connection whenever i3 grabs the keyboard for a binding, so a
+# switch that runs immediately is lost. Prefixing the command with e.g. `sleep 0.3`
+# works around it, but it's not worth it: typing Japanese/Chinese in a terminal
+# (Neovim) is uncomfortable anyway, since going back to normal mode first requires
+# switching to English. Use another app (e.g. gedit) for that.
 # Debug using:
 # fcitx5 -r --verbose '*=5'
 # fcitx5-remote -n (prints the current input method)
