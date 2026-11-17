@@ -2,6 +2,12 @@
 
 Instructions for an agent setting up input methods on this machine (Arch Linux, X11, i3 started by `ly`).
 
+## Where this setup applies
+
+This setup is meant only for i3 (X11) machines, because it relies on i3 to start fcitx5 and to hold the switching keybindings. It is not meant to be used uniformly on every machine where the dotfiles are installed.
+
+On desktops that come with their own input method integration, such as GNOME (e.g. Ubuntu), don't install any of this. Keep using whatever input method the desktop already provides (on GNOME, its built-in ibus, configured through its Settings), and don't link `input-method/fcitx5/`. If you are an agent and the machine isn't running i3, stop and tell the user instead of following the steps below.
+
 Result: fcitx5 with English, Japanese and Chinese input methods. Each one has an i3 keybinding that switches straight to it (no cycling).
 
 Files involved (all in this repo):
