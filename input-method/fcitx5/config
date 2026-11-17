@@ -19,7 +19,9 @@
 [Hotkey/DeactivateKeys]
 
 [Behavior]
-# One input method for all windows, instead of one per window.
-ShareInputState=All
+# Each window remembers whether the input method is on or off (off = first
+# input method in the profile). Which non-first input method "on" means is
+# shared by all windows.
+ShareInputState=No
 # Show a popup with the input method name when it changes.
 ShowInputMethodInformation=True

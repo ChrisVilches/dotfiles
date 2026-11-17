@@ -42,6 +42,9 @@ bindsym $win+q exec --no-startup-id fcitx5-remote -s keyboard-jp
 bindsym $win+w exec --no-startup-id fcitx5-remote -s anthy
 bindsym $win+e exec --no-startup-id fcitx5-remote -s pinyin
 
+# Toggle English/Japanese. Anything other than Japanese (including Chinese) goes to Japanese.
+bindsym Zenkaku_Hankaku exec --no-startup-id sh -c '[ "$(fcitx5-remote -n)" = anthy ] && fcitx5-remote -s keyboard-jp || fcitx5-remote -s anthy'
+
 # dunst - a customizable and lightweight notification-daemon
 # To show notify-send messages.
 exec --no-startup-id dunst
