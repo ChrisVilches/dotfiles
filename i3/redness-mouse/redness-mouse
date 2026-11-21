@@ -96,8 +96,16 @@ apply() {
   display
 }
 
+# The icon is the color of the light: blue, a mix (purple), or red.
 display() {
-  echo "<span color=\"#FF4500\">🌙</span> $level%"
+  if [ "$level" -gt 66 ]; then
+    icon=🔵
+  elif [ "$level" -gt 33 ]; then
+    icon=🟣
+  else
+    icon=🔴
+  fi
+  echo "$icon $level%"
 }
 
 set_scheduled_level() {
